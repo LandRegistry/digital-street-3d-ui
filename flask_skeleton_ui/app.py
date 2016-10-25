@@ -19,12 +19,3 @@ def before_request():
     # receive it. These lines can be removed if the app will not make requests to other LR APIs!
     g.requests = requests.Session()
     g.requests.headers.update({'X-Trace-ID': trace_id})
-
-
-@app.after_request
-def after_request(response):
-    # Add the API version (as in the interface spec, not the app) to the header. Semantic versioning applies - see the
-    # API manual. A major version update will need to go in the URL. All changes should be documented though, for
-    # reusing teams to take advantage of.
-    response.headers["X-API-Version"] = "1.0.0"
-    return response
