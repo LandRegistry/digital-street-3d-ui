@@ -2,3 +2,8 @@ css_main:
   output: .dist/css/main.css
   contents:
     - .dist/css/main.css
+
+js_main:
+  output: .dist/javascript/main.js
+  contents:
+    - .dist/javascript/main.js

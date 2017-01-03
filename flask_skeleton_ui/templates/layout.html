@@ -11,5 +11,7 @@
 
   <body>
     {% block body %}{% endblock %}
+
+    {% assets "js_main" %}<script src="{{ ASSET_URL }}"></script>{% endassets %}
   </body>
 </html>
