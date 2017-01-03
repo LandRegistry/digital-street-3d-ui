@@ -61,6 +61,11 @@ All registration methods described in the following sections are called from `ma
 `main.py` also imports from `app.py` in order to trigger the setup of the app and it's extensions.
 
 
+### Building frontend assets (CSS, JS etc)
+
+CSS and JS is built using [gulp](http://gulpjs.com/).
+
+
 ### Blueprints / Health route
 
 Routes are logically segregated into separate files within `/views`. By default a `general.py` is provided that creates a basic `/health` route that returns a standardised set of JSON fields. Note how the app name is retrieved using the APP_NAME config variable (which in turn comes from the environment).
