@@ -9,6 +9,7 @@ var autoprefixer = require('autoprefixer')
 var rollup = require('rollup-stream')
 var source = require('vinyl-source-stream')
 var buffer = require('vinyl-buffer')
+var uglify = require('rollup-plugin-uglify')
 
 var assetsPath = './flask_skeleton_ui/assets'
 var sassPath = 'src/styles/*.scss'
@@ -28,7 +29,10 @@ gulp.task('sass', function () {
 gulp.task('js', function() {
   return rollup({
       entry: path.join(assetsPath, 'src/javascript/main.js'),
-      sourceMap: true
+      sourceMap: true,
+      plugins: [
+        uglify()
+      ]
     })
     .pipe(source('main.js', path.join(assetsPath, 'src/javascript')))         // point to the entry file.
     .pipe(buffer())                           // buffer the output. most gulp plugins, including gulp-sourcemaps, don't support streams.
