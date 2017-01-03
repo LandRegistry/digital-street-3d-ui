@@ -4,6 +4,8 @@
     <title>{% block title %}{% endblock %}</title>
     <meta charset="utf-8" />
 
+    {% assets "css_main" %}<link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">{% endassets %}
+
     {% block head %}{% endblock %}
   </head>
 

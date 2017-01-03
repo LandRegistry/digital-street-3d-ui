@@ -4,7 +4,6 @@ var gulp = require('gulp');
 var sass = require('gulp-sass');
 
 var assetsPath = './flask_skeleton_ui/assets'
-
 var sassPath = 'src/styles/*.scss'
 
 gulp.task('sass', function () {
@@ -13,7 +12,7 @@ gulp.task('sass', function () {
     .pipe(gulp.dest(path.join(assetsPath, 'static/.dist/css')));
 });
 
-gulp.task('sass:watch', function () {
+gulp.task('watch', function () {
   gulp.watch(path.join(assetsPath, sassPath), ['sass']);
 });
 
