@@ -1,14 +1,24 @@
 from flask import Flask, g, request
 import uuid
 import requests
+from .landregistry_flask import LandRegistryFlask
+from .static_asset_helpers import gzip, dated_url_for
 
-app = Flask(__name__,
-            template_folder='templates',
-            static_folder='assets/dist',
-            static_url_path='/static'
-            )
+app = LandRegistryFlask(__name__,
+                        template_folder='templates',
+                        static_folder='assets/dist',
+                        static_url_path='/static'
+                        )
 
 app.config.from_pyfile("config.py")
+
+gzip(app)
+
+
+@app.context_processor
+def override_url_for():
+    return dict(url_for=dated_url_for)
+
 
 @app.before_request
 def before_request():
