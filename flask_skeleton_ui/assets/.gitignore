@@ -1,1 +1,2 @@
-static/.dist
+src/scss/vendor/govuk-elements
+.dist

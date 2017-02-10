@@ -63,7 +63,7 @@ All registration methods described in the following sections are called from `ma
 
 ### Building frontend assets (CSS, JS etc)
 
-CSS and JS is built using [gulp](http://gulpjs.com/).
+See [flask_skeleton_ui/assets](flask_skeleton_ui/assets)
 
 
 ### Blueprints / Health route

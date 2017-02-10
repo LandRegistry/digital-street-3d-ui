@@ -1,18 +1,14 @@
 from flask import Flask, g, request
-from flask_assets import Environment, Bundle
-from webassets.loaders import YAMLLoader
 import uuid
 import requests
 
-app = Flask(__name__, static_folder='assets/static')
+app = Flask(__name__,
+            template_folder='templates',
+            static_folder='assets/dist',
+            static_url_path='/static'
+            )
 
 app.config.from_pyfile("config.py")
-
-# Register assets
-assets = Environment(app)
-bundles = YAMLLoader('flask_skeleton_ui/assets/bundles.yml').load_bundles()
-[assets.register(name, bundle) for name, bundle in bundles.items()]
-
 
 @app.before_request
 def before_request():
