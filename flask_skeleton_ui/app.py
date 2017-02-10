@@ -1,8 +1,10 @@
-from flask import Flask, g, request
-import uuid
+from flask import g
+from flask import request
+from flask import url_for
+from flask_skeleton_ui.landregistry_flask import LandRegistryFlask
+import os
 import requests
-from .landregistry_flask import LandRegistryFlask
-from .static_asset_helpers import gzip, dated_url_for
+import uuid
 
 app = LandRegistryFlask(__name__,
                         template_folder='templates',
@@ -11,13 +13,6 @@ app = LandRegistryFlask(__name__,
                         )
 
 app.config.from_pyfile("config.py")
-
-gzip(app)
-
-
-@app.context_processor
-def override_url_for():
-    return dict(url_for=dated_url_for)
 
 
 @app.before_request
@@ -32,3 +27,25 @@ def before_request():
     # receive it. These lines can be removed if the app will not make requests to other LR APIs!
     g.requests = requests.Session()
     g.requests.headers.update({'X-Trace-ID': trace_id})
+
+
+def dated_url_for(endpoint, **values):
+    """Cachebusting
+
+    Use the last updated timestamp from the file on disk to perform cachebusting duties.
+    This forces browsers to download new versions of files when they change.
+    """
+    if endpoint == 'static':
+        filename = values.get('filename', None)
+
+        if filename:
+            file_path = os.path.join(app.root_path, app.static_folder, filename)
+
+            values['cache'] = int(os.stat(file_path).st_mtime)
+
+    return url_for(endpoint, **values)
+
+
+@app.context_processor
+def override_url_for():
+    return dict(url_for=dated_url_for)

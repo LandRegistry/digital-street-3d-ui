@@ -1,20 +1,29 @@
-from flask_logconfig import LogConfig
-import logging
-import json
-import traceback
-from flask import g, ctx
 import collections
+from flask import ctx
+from flask import g
+from flask import request
+from flask_compress import Compress
+from flask_logconfig import LogConfig
+import json
+import logging
+import traceback
+from werkzeug.contrib.cache import FileSystemCache
 
 # Create empty extension objects here
 logger = LogConfig()
+compress = Compress()
 
 
 def register_extensions(app):
-    """
-    Adds any previously created extension objects into the app, and does any further setup they need.
-    """
+    """Adds any previously created extension objects into the app, and does any further setup they need."""
     # Logging
     logger.init_app(app)
+
+    # Gzip compression with Flask-Compress
+    app.config['COMPRESS_MIMETYPES'] = ['text/css', 'application/javascript']
+    app.config['COMPRESS_CACHE_BACKEND'] = gzip_cache
+    app.config['COMPRESS_CACHE_KEY'] = gzip_cache_key
+    compress.init_app(app)
 
     # Along with the default flask logger (app.logger) define a new one specifically for audit. To use this logger
     # just add app.audit_logger.info("an audit point").
@@ -29,7 +38,7 @@ def register_extensions(app):
 
 class ContextualFilter(logging.Filter):
     def filter(self, log_record):
-        """ Provide some extra variables to be placed into the log message """
+        """Provide some extra variables to be placed into the log message """
 
         # If we have an app context (because we're servicing an http request) then get the trace id we have
         # set in g (see app.py)
@@ -68,3 +77,15 @@ class JsonAuditFormatter(logging.Formatter):
              ('message', record.msg % record.args)])
 
         return json.dumps(log_entry)
+
+
+def gzip_cache():
+    """Set up a caching system for the gzipped assets"""
+    cache = FileSystemCache(cache_dir='.cache/gzip')
+    cache.clear()
+    return cache
+
+
+def gzip_cache_key(response):
+    """Gzip cache key"""
+    return request.path + response.headers['ETag']
