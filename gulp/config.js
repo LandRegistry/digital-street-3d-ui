@@ -3,7 +3,8 @@ var path = require('path')
 var config = {
   'applicationPath': './flask_skeleton_ui',
   'assetsPath': 'assets',
-  'sassPath': 'src/scss/*.scss'
+  'sassPath': 'src/scss/*.scss',
+  'localhost': 'localhost:9996'
 }
 
 config.assetsPath = path.join(config.applicationPath, config.assetsPath)
