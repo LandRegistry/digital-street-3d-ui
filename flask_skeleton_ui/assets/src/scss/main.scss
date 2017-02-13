@@ -1,1 +1,13 @@
-@import 'vendor/govuk-elements/govuk-elements';
+body {
+  max-width: 600px;
+  margin: 80px auto;
+
+  &::after {
+    content: 'CSS is loaded';
+    color: #008000;
+  }
+}
+
+.css-not-loaded {
+  display: none;
+}

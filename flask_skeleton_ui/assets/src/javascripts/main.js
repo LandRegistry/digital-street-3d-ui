@@ -1,4 +1,7 @@
-import 'jquery'
-import { helloWorld } from './modules/example.js'
+var p = document.createElement('p')
+p.style.color = 'green'
+p.textContent = 'JavaScript is running'
+document.body.appendChild(p)
 
-helloWorld()
+var jsNotLoaded = document.querySelector('.js-not-loaded')
+jsNotLoaded.parentNode.removeChild(jsNotLoaded)

@@ -3,9 +3,9 @@ from flask import current_app
 import json
 
 # This is the blueprint object that gets registered into the app in blueprints.py.
-example = Blueprint('example', __name__)
+index = Blueprint('index', __name__)
 
 
-@example.route("/")
-def index():
-    return render_template('example.html', title='Example', content='<p>Hello</p>')
+@index.route("/")
+def index_page():
+    return render_template('index.html')

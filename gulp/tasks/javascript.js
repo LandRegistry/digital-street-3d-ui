@@ -11,13 +11,6 @@ var nodeResolve = require('rollup-plugin-node-resolve')
 var config = require('../config')
 
 gulp.task('js', function () {
-  // Set up context for each module
-  // Commonly used for modules that expect "this" to resolve to the window object
-  // In ES6 modules, using "this" at the top level always resolves to undefined
-  // hence the need to override it here
-  var moduleContext = {}
-  moduleContext[path.relative(process.cwd(), require.resolve('jquery'))] = 'window'
-
   var promises = []
 
   // Loop over all our entrypoints
@@ -35,7 +28,7 @@ gulp.task('js', function () {
         entry: entrypoint,
         sourceMap: true,
         legacy: true,
-        moduleContext: moduleContext,
+        moduleContext: config.moduleContext,
         plugins: [
           nodeResolve(),
           uglify({
