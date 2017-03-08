@@ -7,6 +7,7 @@ var buffer = require('vinyl-buffer')
 var uglify = require('rollup-plugin-uglify')
 var sourcemaps = require('gulp-sourcemaps')
 var nodeResolve = require('rollup-plugin-node-resolve')
+var commonjs = require('rollup-plugin-commonjs')
 
 var config = require('../config')
 
@@ -31,6 +32,9 @@ gulp.task('js', function () {
         moduleContext: config.moduleContext,
         plugins: [
           nodeResolve(),
+          commonjs({
+            include: 'node_modules/**'
+          }),
           uglify({
             compress: {
               screw_ie8: false
@@ -43,7 +47,7 @@ gulp.task('js', function () {
             }
           })
         ],
-        format: 'es'
+        format: 'iife'
       })
       .pipe(source(name, path.join(config.assetsPath, 'src/javascripts')))
       .pipe(buffer())                           // buffer the output. most gulp plugins, including gulp-sourcemaps, don't support streams.

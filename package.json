@@ -11,8 +11,7 @@
     "type": "git",
     "url": "git@192.168.249.38:skeletons/flask-skeleton-ui.git"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "autoprefixer": "^6.7.2",
     "browser-sync": "^2.18.7",
@@ -31,6 +30,7 @@
     "rollup-stream": "^1.19.0",
     "run-sequence": "^1.2.2",
     "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0",
+    "webpack": "^2.2.1"
   }
 }
