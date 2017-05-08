@@ -13,7 +13,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "landregistry-gulp-tasks": "git+ssh://git@192.168.249.38:common/gulp-tasks.git",
+    "land-registry-gulp-tasks": "LandRegistry/land-registry-gulp-tasks",
     "gulp": "^3.9.1"
   }
 }
