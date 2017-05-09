@@ -1,5 +1,6 @@
 from flask import current_app
 from flask import url_for
+import hashlib
 import os
 
 
@@ -17,14 +18,14 @@ class CachebustStaticAssets(object):
 
         @app.context_processor
         def override_url_for():
-            return dict(url_for=dated_url_for)
+            return dict(url_for=hashed_url_for)
 
 
-def dated_url_for(endpoint, **values):
+def hashed_url_for(endpoint, **values):
 
     """Cachebusting
 
-    Use the last updated timestamp from the file on disk to perform cachebusting duties.
+    Use the md5 hash of the file on disk to perform cachebusting duties.
     This forces browsers to download new versions of files when they change.
     """
     if endpoint == 'static':
@@ -33,15 +34,32 @@ def dated_url_for(endpoint, **values):
         if filename:
             file_path = os.path.join(current_app.root_path, current_app.static_folder, filename)
 
-            # Store the last changed timestamp in a dict so that on subsequent
-            # requests we don't have to hit the disk to stat the file
-            cached_last_changed = cache_busting_values.get(file_path)
+            # Store the hashes in a dict so that on subsequent
+            # requests we don't have to md5 the file every time
+            cached_hash = cache_busting_values.get(file_path)
 
-            if cached_last_changed:
-                values['cache'] = cached_last_changed
+            if cached_hash:
+                values['cache'] = cached_hash
             else:
-                last_changed = int(os.stat(file_path).st_mtime)
-                cache_busting_values[file_path] = last_changed
-                values['cache'] = last_changed
+                file_hash = md5_for_file(file_path, hexdigest=True)
+                cache_busting_values[file_path] = file_hash
+                values['cache'] = file_hash
 
     return url_for(endpoint, **values)
+
+
+def md5_for_file(path, block_size=256*128, hexdigest=False):
+    """Calculate an md5 hash for a file
+
+    Block size directly depends on the block size of your filesystem
+    to avoid performances issues
+    Here I have blocks of 4096 octets (Default NTFS)
+    """
+
+    md5 = hashlib.md5()
+    with open(path, 'rb') as f:
+        for chunk in iter(lambda: f.read(block_size), b''):
+            md5.update(chunk)
+    if hexdigest:
+        return md5.hexdigest()
+    return md5.digest()
