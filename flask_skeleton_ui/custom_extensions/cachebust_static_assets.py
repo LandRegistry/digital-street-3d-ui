@@ -6,7 +6,7 @@ import os
 cache_busting_values = {}
 
 
-class Cachebusting(object):
+class CachebustStaticAssets(object):
 
     def __init__(self, app=None):
         self.app = app
