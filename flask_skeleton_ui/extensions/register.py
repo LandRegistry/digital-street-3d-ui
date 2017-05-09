@@ -1,6 +1,6 @@
-from flask_skeleton_ui.custom_extensions.cachebust_static_assets import CachebustStaticAssets
-from flask_skeleton_ui.custom_extensions.enhanced_logging import EnhancedLogging
-from flask_skeleton_ui.custom_extensions.gzip_static_assets import GzipStaticAssets
+from flask_skeleton_ui.extensions.cachebust_static_assets.main import CachebustStaticAssets
+from flask_skeleton_ui.extensions.enhanced_logging.main import EnhancedLogging
+from flask_skeleton_ui.extensions.gzip_static_assets.main import GzipStaticAssets
 
 
 # Create empty extension objects here
