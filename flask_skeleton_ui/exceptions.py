@@ -1,38 +1,59 @@
-from flask import Response, current_app
-import json
+from flask import jsonify
+from flask import render_template
+from flask_skeleton_ui import utils
+from werkzeug.exceptions import default_exceptions
+from werkzeug.exceptions import HTTPException
 
 
-class ApplicationError(Exception):
-    """
+GENERIC_ERROR_TITLE = 'Sorry, we are experiencing technical difficulties.'
+GENERIC_ERROR_DESCRIPTION = 'Please try again in a few moments.'
 
-    This class is to be raised when the application identifies that there's been a problem
-    and that the client should be informed.
-
-    Example:
-        raise ApplicationError("Title number invalid", "E102", 400)
-
-    The handler method will then create the response body in a standard structure so clients
-    will always know what to parse.
-
-    """
-    def __init__(self, message, code, http_code=500):
-        Exception.__init__(self)
-        self.message = message
-        self.http_code = http_code
-        self.code = code
-
-
-def unhandled_exception(e):
-    current_app.logger.exception('Unhandled Exception: %s', repr(e))
-    return Response(response=json.dumps({"error_message": "Unexpected error.", "error_code": "XXX"}), status=500)
+ERROR_RESPONSES = {
+    404: {
+        'title': 'Page not found',
+        'description': 'If you entered a web address please check it was correct.'
+    },
+    429: {
+        'title': 'Too many requests',
+        'description': 'The maximum rate allowed is {description}.'
+    },
+    403: {
+        'title': 'Access denied',
+        'description': 'You do not have permission to access the requested resource.'
+    }
+}
 
 
-def application_error(e):
-    return Response(response=json.dumps({"error_message": e.message, "error_code": e.code}), status=e.http_code)
+def error_handler(error):
+    if isinstance(error, HTTPException):
+        code = error.code
+        error_title = GENERIC_ERROR_TITLE
+        error_description = GENERIC_ERROR_DESCRIPTION
+
+        error_response = ERROR_RESPONSES.get(code, False)
+        if(error_response):
+            error_title = error_response.get('title', GENERIC_ERROR_TITLE)
+            error_description = error_response.get('description', GENERIC_ERROR_DESCRIPTION).format(**error.__dict__)
+    else:
+        code = 500
+        error_title = GENERIC_ERROR_TITLE
+        error_description = GENERIC_ERROR_DESCRIPTION
+
+    # Negotiate based on the Accept header
+    if utils.request_wants_json():
+        return jsonify({'message': '{} - {}'.format(error_title, error_description)}), code
+    else:
+        return render_template("error.html",
+                               title=error_title,
+                               code=code,
+                               description=error_description
+                               ), code
 
 
 def register_exception_handlers(app):
-    app.register_error_handler(ApplicationError, application_error)
-    app.register_error_handler(Exception, unhandled_exception)
 
+    for exception in default_exceptions:
+        app.register_error_handler(exception, error_handler)
+
+    app.register_error_handler(Exception, error_handler)
     app.logger.info("Exception handlers registered")
