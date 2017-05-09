@@ -1,17 +1,18 @@
 import collections
 from flask import ctx
 from flask import g
-from flask import request
-from flask_compress import Compress
 from flask_logconfig import LogConfig
+from flask_skeleton_ui.custom_extensions.cachebusting import Cachebusting
+from flask_skeleton_ui.custom_extensions.gzip_static_assets import GzipStaticAssets
 import json
 import logging
 import traceback
-from werkzeug.contrib.cache import FileSystemCache
+
 
 # Create empty extension objects here
 logger = LogConfig()
-compress = Compress()
+cachebusting = Cachebusting()
+gzip_static_assets = GzipStaticAssets()
 
 
 def register_extensions(app):
@@ -19,18 +20,13 @@ def register_extensions(app):
     # Logging
     logger.init_app(app)
 
-    # Gzip compression with Flask-Compress
-    app.config['COMPRESS_MIMETYPES'] = ['text/css', 'application/javascript']
-    app.config['COMPRESS_CACHE_BACKEND'] = gzip_cache
-    app.config['COMPRESS_CACHE_KEY'] = gzip_cache_key
-    compress.init_app(app)
-
     # Along with the default flask logger (app.logger) define a new one specifically for audit. To use this logger
     # just add app.audit_logger.info("an audit point").
     app.audit_logger = logging.getLogger("audit")
 
-    # Using SQLAlchemy? An example can be found at
-    # http://192.168.249.38/gadgets/gadget-api/blob/master/gadget_api/extensions.py
+    # cachebusting.init_app(app)
+
+    gzip_static_assets.init_app(app)
 
     # All done!
     app.logger.info("Extensions registered")
@@ -77,15 +73,3 @@ class JsonAuditFormatter(logging.Formatter):
              ('message', record.msg % record.args)])
 
         return json.dumps(log_entry)
-
-
-def gzip_cache():
-    """Set up a caching system for the gzipped assets"""
-    cache = FileSystemCache(cache_dir='.cache/gzip')
-    cache.clear()
-    return cache
-
-
-def gzip_cache_key(response):
-    """Gzip cache key"""
-    return request.path + response.headers['ETag']
