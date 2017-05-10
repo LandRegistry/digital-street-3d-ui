@@ -1,7 +1,6 @@
-from flask import request, Blueprint, Response, render_template
-from flask import current_app
-import json
-from jinja2 import TemplateNotFound
+from flask import Blueprint
+from flask import render_template
+
 
 # This is the blueprint object that gets registered into the app in blueprints.py.
 index = Blueprint('index', __name__)
