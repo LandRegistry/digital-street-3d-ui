@@ -13,7 +13,7 @@ class SecurityHeaders(object):
 
         @app.after_request
         def security_headers(response):
-            response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+            response.headers['X-Frame-Options'] = 'DENY'
             response.headers['Strict-Transport-Security'] = 'max-age=31536000'  # 1 year
             response.headers['X-XSS-Protection'] = '1; mode=block'
             response.headers['X-Content-Type-Options'] = 'nosniff'
