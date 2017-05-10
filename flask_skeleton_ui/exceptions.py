@@ -4,6 +4,7 @@ from flask import render_template
 from flask_skeleton_ui import utils
 from jinja2 import TemplateNotFound
 from werkzeug.exceptions import default_exceptions
+from werkzeug.exceptions import HTTPException
 
 
 class ApplicationError(Exception):
@@ -47,7 +48,7 @@ def http_exception(e):
 
     # Restrict error codes to a subset so that we don't inadvertently expose
     # internal system information via error codes
-    if e.code in [500, 404, 403, 429]:
+    if isinstance(e, HTTPException) and e.code in [500, 404, 403, 429]:
         http_code = e.code
     else:
         http_code = 500
