@@ -11,11 +11,16 @@ class SecurityHeaders(object):
 
     def init_app(self, app):
 
+        app.config.setdefault('X_FRAME_OPTIONS', 'DENY')
+        app.config.setdefault('STRICT_TRANSPORT_SECURITY', 'max-age=31536000')  # 1 year
+        app.config.setdefault('X_XSS_PROTECTION', '1; mode=block')
+        app.config.setdefault('X_CONTENT_TYPE_OPTIONS', 'nosniff')
+
         @app.after_request
         def security_headers(response):
-            response.headers['X-Frame-Options'] = 'DENY'
-            response.headers['Strict-Transport-Security'] = 'max-age=31536000'  # 1 year
-            response.headers['X-XSS-Protection'] = '1; mode=block'
-            response.headers['X-Content-Type-Options'] = 'nosniff'
+            response.headers['X-Frame-Options'] = app.config.get('X_FRAME_OPTIONS')
+            response.headers['Strict-Transport-Security'] = app.config.get('STRICT_TRANSPORT_SECURITY')
+            response.headers['X-XSS-Protection'] = app.config.get('X_XSS_PROTECTION')
+            response.headers['X-Content-Type-Options'] = app.config.get('X_CONTENT_TYPE_OPTIONS')
 
             return response

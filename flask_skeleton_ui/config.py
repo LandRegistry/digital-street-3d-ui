@@ -18,7 +18,7 @@ APP_NAME = os.environ['APP_NAME']
 
 MAX_HEALTH_CASCADE = os.environ['MAX_HEALTH_CASCADE']
 # Following is an example of building the dependency structure used by the cascade route
-# SELF can be used to demonstrate how it works (i.e. it will call it's own casecade
+# SELF can be used to demonstrate how it works (i.e. it will call it's own cascade
 # route until MAX_HEALTH_CASCADE is hit)
 # SELF = "http://localhost:8080"
 # DEPENDENCIES = {"SELF": SELF}
