@@ -7,6 +7,7 @@ compress = Compress()
 
 
 class GzipStaticAssets(object):
+    """Gzip compression with Flask-Compress"""
 
     def __init__(self, app=None):
         self.app = app
@@ -15,12 +16,9 @@ class GzipStaticAssets(object):
 
     def init_app(self, app):
 
-        # Gzip compression with Flask-Compress
-        app.config.update(
-                          COMPRESS_MIMETYPES=['text/css', 'application/javascript'],
-                          COMPRESS_CACHE_BACKEND=gzip_cache,
-                          COMPRESS_CACHE_KEY=gzip_cache_key
-                        )
+        app.config.setdefault('COMPRESS_MIMETYPES', ['text/css', 'application/javascript'])
+        app.config.setdefault('COMPRESS_CACHE_BACKEND', gzip_cache)
+        app.config.setdefault('COMPRESS_CACHE_KEY', gzip_cache_key)
 
         compress.init_app(app)
 
