@@ -38,7 +38,7 @@ def unhandled_exception(e):
     if utils.request_wants_json():
         return jsonify({}), http_code
     else:
-        return render_template('errors/unhandled.html',
+        return render_template('app/errors/unhandled.html',
                                http_code=http_code,
                                ), http_code
 
@@ -57,7 +57,7 @@ def http_exception(e):
     if utils.request_wants_json():
         return jsonify({}), http_code
     else:
-        return render_template('errors/unhandled.html',
+        return render_template('app/errors/unhandled.html',
                                http_code=http_code,
                                ), http_code
 
@@ -81,13 +81,13 @@ def application_error(e):
                        }), http_code
     else:
         try:
-            return render_template('errors/application/{}.html'.format(e.code),
+            return render_template('app/errors/application/{}.html'.format(e.code),
                                    description=e.message,
                                    code=e.code,
                                    http_code=http_code
                                    ), http_code
         except TemplateNotFound:
-            return render_template('errors/application.html',
+            return render_template('app/errors/application.html',
                                    description=e.message,
                                    code=e.code,
                                    http_code=http_code
