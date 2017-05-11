@@ -6,6 +6,8 @@ import os
 # app starting.
 # 3. This is the only file in the app where os.environ should be used.
 
+DEBUG = os.environ['DEBUG'] == 'True'
+
 # For logging
 FLASK_LOG_LEVEL = os.environ['LOG_LEVEL']
 

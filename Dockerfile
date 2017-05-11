@@ -10,6 +10,7 @@ FROM hmlandregistry/dev_base_python_flask:3
 # Any unique environment variables your config.py needs should also be added as ENV entries here
 
 ENV APP_NAME=flask-skeleton-ui
+ENV DEBUG='True'
 ENV MAX_HEALTH_CASCADE 6
 
 # ----
