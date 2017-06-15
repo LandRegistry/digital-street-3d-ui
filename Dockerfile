@@ -1,6 +1,10 @@
 # Set the base image to the base image
 FROM hmlandregistry/dev_base_python_flask:3
 
+RUN curl -SLO "https://nodejs.org/dist/v8.1.1/node-v8.1.1-linux-x64.tar.xz"
+RUN tar -xJf "node-v8.1.1-linux-x64.tar.xz" -C /usr/local --strip-components=1
+RUN ln -s /usr/local/bin/node /usr/local/bin/nodejs
+
 # Using SQLAlchemy/Postgres?
 # See how the required env vars are set here:
 # http://192.168.249.38/gadgets/gadget-api/blob/master/Dockerfile
@@ -24,3 +28,10 @@ ADD requirements_test.txt requirements_test.txt
 ADD requirements.txt requirements.txt
 RUN pip3 install -q -r requirements.txt && \
   pip3 install -q -r requirements_test.txt
+
+RUN rm -rf node_modules
+ADD package*.json ./
+RUN npm install
+
+CMD ["./run.sh"]
+
