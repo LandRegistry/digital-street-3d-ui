@@ -7,7 +7,7 @@ var config = {
   'applicationPath': './flask_skeleton_ui',
   'assetsPath': 'assets',
   'sassPath': 'src/scss/*.scss',
-  'localhost': 'localhost:9996'
+  'localhost': 'localhost:8080'
 }
 
 // Set up context for each module
