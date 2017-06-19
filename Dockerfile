@@ -29,8 +29,8 @@ ADD requirements.txt requirements.txt
 RUN pip3 install -q -r requirements.txt && \
   pip3 install -q -r requirements_test.txt
 
-RUN rm -rf node_modules
 ADD package*.json ./
+RUN rm -rf node_modules
 RUN npm install
 
 CMD ["./run.sh"]
