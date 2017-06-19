@@ -3,7 +3,7 @@
 from flask_skeleton_ui.app import app
 from flask_skeleton_ui.blueprints import register_blueprints
 from flask_skeleton_ui.exceptions import register_exception_handlers
-from flask_skeleton_ui.extensions.register import register_extensions
+from flask_skeleton_ui.extensions import register_extensions
 
 # Now we register any extensions we use into the app
 register_extensions(app)

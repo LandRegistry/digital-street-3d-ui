@@ -21,15 +21,15 @@ class EnhancedLogging(object):
             'disable_existing_loggers': False,
             'formatters': {
                 'simple': {
-                    '()': 'flask_skeleton_ui.extensions.enhanced_logging.formatters.JsonFormatter'
+                    '()': 'flask_skeleton_ui.custom_extensions.enhanced_logging.formatters.JsonFormatter'
                 },
                 'audit': {
-                    '()': 'flask_skeleton_ui.extensions.enhanced_logging.formatters.JsonAuditFormatter'
+                    '()': 'flask_skeleton_ui.custom_extensions.enhanced_logging.formatters.JsonAuditFormatter'
                 }
             },
             'filters': {
                 'contextual': {
-                    '()': 'flask_skeleton_ui.extensions.enhanced_logging.filters.ContextualFilter'
+                    '()': 'flask_skeleton_ui.custom_extensions.enhanced_logging.filters.ContextualFilter'
                 }
             },
             'handlers': {
