@@ -31,7 +31,8 @@ RUN pip3 install -q -r requirements.txt && \
 
 ADD package*.json ./
 RUN rm -rf node_modules && \
-npm install
+npm install && \
+cp package-lock.json /tmp/package-lock.json
 
 CMD ["./run.sh"]
 
