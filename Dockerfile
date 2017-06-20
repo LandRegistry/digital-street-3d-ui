@@ -30,7 +30,7 @@ RUN pip3 install -q -r requirements.txt && \
   pip3 install -q -r requirements_test.txt
 
 ADD package*.json ./
-RUN rm -rf node_modules && \
+RUN rm -rf node_modules/* && \
 npm install && \
 cp package-lock.json /tmp/package-lock.json
 
