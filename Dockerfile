@@ -1,9 +1,9 @@
 # Set the base image to the base image
 FROM hmlandregistry/dev_base_python_flask:3
 
-RUN curl -SLO "https://nodejs.org/dist/v8.1.1/node-v8.1.1-linux-x64.tar.xz"
-RUN tar -xJf "node-v8.1.1-linux-x64.tar.xz" -C /usr/local --strip-components=1
-RUN ln -s /usr/local/bin/node /usr/local/bin/nodejs
+RUN curl -SLO "https://nodejs.org/dist/v8.1.1/node-v8.1.1-linux-x64.tar.xz" && \
+tar -xJf "node-v8.1.1-linux-x64.tar.xz" -C /usr/local --strip-components=1 && \
+ln -s /usr/local/bin/node /usr/local/bin/nodejs
 
 # Using SQLAlchemy/Postgres?
 # See how the required env vars are set here:
