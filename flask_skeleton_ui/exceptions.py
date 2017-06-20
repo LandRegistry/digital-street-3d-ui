@@ -34,13 +34,17 @@ def unhandled_exception(e):
 
     http_code = 500
 
-    # Negotiate based on the Accept header
-    if utils.request_wants_json():
-        return jsonify({}), http_code
-    else:
-        return render_template('app/errors/unhandled.html',
-                               http_code=http_code,
-                               ), http_code
+    try:
+        # Negotiate based on the Accept header
+        if utils.request_wants_json():
+            return jsonify({}), http_code
+        else:
+            return render_template('app/errors/unhandled.html',
+                                   http_code=http_code,
+                                   ), http_code
+    except:
+        # Ultimate fallback handler, such as if jinja templates are missing
+        return 'Internal server error', 500
 
 
 def http_exception(e):
