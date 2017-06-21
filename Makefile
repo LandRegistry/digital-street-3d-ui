@@ -8,7 +8,4 @@ integrationtest:
 	py.test --junitxml=test-output/integration-test-output.xml integration_tests
 
 run:
-	make build && python3 manage.py runserver
-
-build:
-	npm run build
+	python3 manage.py runserver
