@@ -1,28 +1,41 @@
-# Frontend
+# Frontend assets
 
-A GOV frontend is comprised of three things:
+Frontend dependencies are managed using `npm` and are tracked in `package.json`. These are pulled together by a [Gulp](http://gulpjs.com/) build process to generate the CSS output for this service.
 
-- `govuk_template_jinja` - Provides the header, footer and site wrapper
-- `govuk_frontend_toolkit` - Provides various reusable mixins and utilities
-- `govuk-elements-sass` - Applies the mixins from the toolkit to generate CSS
+------
 
-These dependencies are managed using `npm` and are tracked in `package.json`. These are pulled together by a [Gulp](http://gulpjs.com/) build process to generate the CSS output for this service.
+## Building the frontend assets
 
-## Requirements
+The gulp build process is encapsulated in the `Gulpfile.js` in the root directory. This is a simple wrapper around [https://github.com/LandRegistry/land-registry-gulp-tasks](https://github.com/LandRegistry/land-registry-gulp-tasks) where the gulp tasks are stored. This is done for simplicity of keeping them up to date (Since they are simply a dependency of the project)
 
-You will need to install Node.JS on your local machine (Not in the vagrant environment). It is highly recommended that you do this using `nvm`. Follow the steps below:
+### Running the gulp tasks
 
-1. Install `nvm` from https://github.com/creationix/nvm
-2. Navigate to the application directory (Where the package.json lives)
-3. Type `nvm use`. This will look at the `.nvmrc` file in the application directory and install the specified version.
-4. Type `npm install`
+The build tasks run inside the docker container. To run them you can either user `docker exec` to run a command inside the container, or more simply, just `bashin` to the container like `bashin your-app-name-here`. Once you are in the container, type `npm run build` to do a one off build of the assets.
 
-You then have 2 options. You can
+Alternatively, you can type `npm run dev` if you are going to be working on the CSS/JS repeatedly. This will watch your files for changes and rebuild the assets as necessary. It will also start a "browsersync" server which will live-reload CSS changes. This is on port 3000 inside the docker container, but is mapped to another port outside the container. This should be done in your app's docker fragment.
+
+### Overriding Gulp tasks
+
+If you need to override the provided Gulp tasks, you can do so as follows. If you store a reference to the original task, you can call it in addition to your modifications if you wish.
+
+```
+var existingWatch = gulp.tasks.watch.fn
+
+gulp.task('watch', function () {
+  gulp.watch(path.join('src/**/*.scss'), ['sass', 'sass-lint'])
+  gulp.watch(path.join('src/**/*.js'), ['js', 'standardjs'])
+  existingWatch()
+})
+```
+
+### Decoupling from the `land-registry-gulp-tasks` repository entirely
+
+If you need to do anything "unusual" and decouple from the `land-registry-gulp-tasks`, you could copy these into your project and start modifying from there
 
 1. Do a one off build by typing `npm run build`
 2. Watch the SCSS and JS files and run a build every time they are updated by typing `npm run dev`
 
-At the time of writing, the build does not run in the pipeline and must be run on the developer's laptop. This means that the build artefacts need to be committed into the repository. The following files need to be committed in, but _should not be manually modified_
+At the time of writing, the build does not run in the pipeline and must be run on the developer's laptop. This means that the build artefacts need to be committed into the repository. The following files would need to be committed in, but _should not be manually modified_
 
 - `application/assets/dist/**/*.*`
 - `application/templates/govuk_template.html` (This file is copied from the `govuk_template_jinja` module in `node_modules`. It is checked into the repository, but should not be modified manually.)
@@ -39,8 +52,6 @@ These top levels bundles can be used to `import` files from the `modules` subfol
 
 ### CSS (SCSS)
 
-CSS is organised into application specific and vendor code. At build time, the govuk elements will be copied into the vendor folder ready for use, but it should not be committed into the repository.
-
 Similarly to the JavaScript, the files directly in the `scss` folder represent entry points / bundles, and they import files from the subdirectories. Additional entry points can be created as necessary, but no actual CSS should be written in them.
 
 ## Sourcemaps
@@ -56,22 +67,3 @@ Run `npm test` to run the linter.
 JavaScript is linted with [standardjs](http://standardjs.com/) which is intentionally unconfigurable ([No semicolons - it's fine. Really!](https://github.com/feross/standard#the-rules)) This is gaining widespread adoption including by GOV.UK.
 
 SCSS is linted with [sass-lint](https://github.com/sasstools/sass-lint) but is configured to disable some of the more onerous rules.
-
-## Updating gov.uk elements
-
-The Gov.uk kit versions are maintained as NodeJS dependencies. The versions are tracked in `package.json` but also in `npm-shrinkwrap.json`. To update these, you need to explicitly install the new versions, for example:
-
-- `npm install govuk-elements-sass@2.2.1`
-- `npm install govuk_frontend_toolkit@5.0.3`
-- `npm install govuk_template_jinja@0.19.2`
-
-This will update `package.json` as well as `npm-shrinkwrap.json`. You should commit these into Git.
-
-Once the packages are updated, run `npm run build`. If nothing significant has changed, then you are done. But there may be errors if they have changed things upstream in an incompatible way. To resolve this, you should read the release notes to see if this helps. If errors occur beyond that, it is a case of traditional debugging.
-
-It is worth noting that new releases often include small markup changes, and sometimes new JavaScript files etc. Reading the release notes thoroughly will reveal anything like this that might be necessary.
-
-### Gov.uk release notes:
-- https://github.com/alphagov/govuk_elements/releases
-- https://github.com/alphagov/govuk_template/releases
-
