@@ -1,6 +1,6 @@
 # Frontend assets
 
-Frontend dependencies are managed using `npm` and are tracked in `package.json`. These are pulled together by a [Gulp](http://gulpjs.com/) build process to generate the CSS output for this service.
+Frontend dependencies are managed using `npm` and are tracked in `package.json`. These are pulled together by a [Gulp](http://gulpjs.com/) build process to generate the CSS output for this service. _Note: Where npm, node or Gulp command line tools are discussed below, they should be run inside the docker container_
 
 ------
 
