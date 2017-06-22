@@ -1,8 +1,6 @@
 # Set the base image to the base image
 FROM hmlandregistry/dev_base_python_flask:3
 
-VOLUME /tmp
-
 RUN curl -SLO "https://nodejs.org/dist/v8.1.1/node-v8.1.1-linux-x64.tar.xz" && \
 tar -xJf "node-v8.1.1-linux-x64.tar.xz" -C /usr/local --strip-components=1 && \
 ln -s /usr/local/bin/node /usr/local/bin/nodejs
@@ -32,10 +30,10 @@ RUN rm -rf node_modules/* && \
 npm install
 
 # Add various files that the Gulp build task needs
-ADD flask_skeleton_ui/assets/src flask_skeleton_ui/assets/src
 ADD check-node-version.js check-node-version.js
 ADD browserslist browserslist
 ADD Gulpfile.js Gulpfile.js
+ADD flask_skeleton_ui/assets/src flask_skeleton_ui/assets/src
 
 # Run the gulp build task
 # We copy the resulting output into a temporary directory since the filesystem at this point is transitory
