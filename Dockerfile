@@ -43,7 +43,7 @@ ADD Gulpfile.js Gulpfile.js
 RUN npm run build && \
 rm -rf /tmp/flask-skeleton-ui && \
 mkdir -p /tmp/flask-skeleton-ui/flask_skeleton_ui/assets/dist && \
-cp package-lock.json /tmp/flask-skeleton-ui/package-lock.json && \
+cp package-lock.json /tmp/flask-skeleton-ui/package-lock.json | true && \
 cp -r flask_skeleton_ui/assets/dist/* /tmp/flask-skeleton-ui/flask_skeleton_ui/assets/dist
 
 CMD ["./run.sh"]
