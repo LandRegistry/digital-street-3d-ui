@@ -1,0 +1,11 @@
+{% extends "app/base.html" %}
+
+{% block page_title %}An error has occured{% endblock %}
+
+{% block content %}
+  <h1>An error has occured</h1>
+  {% if code %}
+    <p><strong>Error code:</strong> {{code}}</p>
+  {% endif %}
+  <p>{{description}}</p>
+{% endblock %}

@@ -1,21 +1,28 @@
-from flask import Response, current_app
-import json
+from flask import current_app
+from flask import jsonify
+from flask import render_template
+from flask_skeleton_ui import utils
+from jinja2 import TemplateNotFound
+from werkzeug.exceptions import default_exceptions
+from werkzeug.exceptions import HTTPException
 
 
 class ApplicationError(Exception):
     """
-
     This class is to be raised when the application identifies that there's been a problem
-    and that the client should be informed.
+    and that the user should be informed.
+
+    This should only be used for absolute edge case exceptions.
+    As a matter of course, exceptions should be caught and dealt with higher up
+    in the flow and users should be given a decent onward journey.
+
+    Consider security issues when writing messages - what information might you
+    be revealing to potential attackers?
 
     Example:
-        raise ApplicationError("Title number invalid", "E102", 400)
-
-    The handler method will then create the response body in a standard structure so clients
-    will always know what to parse.
-
+        raise ApplicationError('Friendly message here', 'E102', 400)
     """
-    def __init__(self, message, code, http_code=500):
+    def __init__(self, message, code=None, http_code=500):
         Exception.__init__(self)
         self.message = message
         self.http_code = http_code
@@ -24,15 +31,79 @@ class ApplicationError(Exception):
 
 def unhandled_exception(e):
     current_app.logger.exception('Unhandled Exception: %s', repr(e))
-    return Response(response=json.dumps({"error_message": "Unexpected error.", "error_code": "XXX"}), status=500)
+
+    http_code = 500
+
+    try:
+        # Negotiate based on the Accept header
+        if utils.request_wants_json():
+            return jsonify({}), http_code
+        else:
+            return render_template('app/errors/unhandled.html',
+                                   http_code=http_code,
+                                   ), http_code
+    except:
+        # Ultimate fallback handler, such as if jinja templates are missing
+        return 'Internal server error', 500
+
+
+def http_exception(e):
+    current_app.logger.exception('HTTP Exception: %s', repr(e))
+
+    # Restrict error codes to a subset so that we don't inadvertently expose
+    # internal system information via error codes
+    if isinstance(e, HTTPException) and e.code in [500, 404, 403, 429]:
+        http_code = e.code
+    else:
+        http_code = 500
+
+    # Negotiate based on the Accept header
+    if utils.request_wants_json():
+        return jsonify({}), http_code
+    else:
+        return render_template('app/errors/unhandled.html',
+                               http_code=http_code,
+                               ), http_code
 
 
 def application_error(e):
-    return Response(response=json.dumps({"error_message": e.message, "error_code": e.code}), status=e.http_code)
+    current_app.logger.debug('Application Exception: %s', repr(e), exc_info=True)
+
+    # ApplicationError allows developers to specify an HTTP code.
+    # This will be written to the logs correctly, but we don't want to allow
+    # this code through to the user as it may expose internal workings of the system
+    # (See OWASP guidelines on error handling)
+    if e.http_code in [500, 404, 403, 429]:
+        http_code = e.http_code
+    else:
+        http_code = 500
+
+    if utils.request_wants_json():
+        return jsonify({
+                       'message': e.message,
+                       'code': e.code
+                       }), http_code
+    else:
+        try:
+            return render_template('app/errors/application/{}.html'.format(e.code),
+                                   description=e.message,
+                                   code=e.code,
+                                   http_code=http_code
+                                   ), http_code
+        except TemplateNotFound:
+            return render_template('app/errors/application.html',
+                                   description=e.message,
+                                   code=e.code,
+                                   http_code=http_code
+                                   ), http_code
 
 
 def register_exception_handlers(app):
     app.register_error_handler(ApplicationError, application_error)
     app.register_error_handler(Exception, unhandled_exception)
 
-    app.logger.info("Exception handlers registered")
+    # Register all default HTTP exceptions from werkzeug
+    for exception in default_exceptions:
+        app.register_error_handler(exception, http_exception)
+
+    app.logger.info('Exception handlers registered')

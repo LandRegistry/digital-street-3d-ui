@@ -1,70 +1,22 @@
-from flask_logconfig import LogConfig
-import logging
-import json
-import traceback
-from flask import g, ctx
-import collections
+from flask_skeleton_ui.custom_extensions.cachebust_static_assets.main import CachebustStaticAssets
+from flask_skeleton_ui.custom_extensions.enhanced_logging.main import EnhancedLogging
+from flask_skeleton_ui.custom_extensions.gzip_static_assets.main import GzipStaticAssets
+from flask_skeleton_ui.custom_extensions.security_headers.main import SecurityHeaders
+
 
 # Create empty extension objects here
-logger = LogConfig()
+cachebust_static_assets = CachebustStaticAssets()
+enhanced_logging = EnhancedLogging()
+gzip_static_assets = GzipStaticAssets()
+security_headers = SecurityHeaders()
 
 
 def register_extensions(app):
-    """
-    Adds any previously created extension objects into the app, and does any further setup they need.
-    """
-    # Logging
-    logger.init_app(app)
-
-    # Along with the default flask logger (app.logger) define a new one specifically for audit. To use this logger
-    # just add app.audit_logger.info("an audit point").
-    app.audit_logger = logging.getLogger("audit")
-
-    # Using SQLAlchemy? An example can be found at
-    # http://192.168.249.38/gadgets/gadget-api/blob/master/gadget_api/extensions.py
+    """Adds any previously created extension objects into the app, and does any further setup they need."""
+    enhanced_logging.init_app(app)
+    cachebust_static_assets.init_app(app)
+    gzip_static_assets.init_app(app)
+    security_headers.init_app(app)
 
     # All done!
     app.logger.info("Extensions registered")
-
-
-class ContextualFilter(logging.Filter):
-    def filter(self, log_record):
-        """ Provide some extra variables to be placed into the log message """
-
-        # If we have an app context (because we're servicing an http request) then get the trace id we have
-        # set in g (see app.py)
-        if ctx.has_app_context():
-            log_record.trace_id = g.trace_id
-        else:
-            log_record.trace_id = 'N/A'
-        return True
-
-
-class JsonFormatter(logging.Formatter):
-    def format(self, record):
-        if record.exc_info:
-            exc = traceback.format_exception(*record.exc_info)
-        else:
-            exc = None
-
-        # Timestamp must be first (webops request)
-        log_entry = collections.OrderedDict(
-            [('timestamp', self.formatTime(record)),
-             ('level', record.levelname),
-             ('traceid', record.trace_id),
-             ('message', record.msg % record.args),
-             ('exception', exc)])
-
-        return json.dumps(log_entry)
-
-
-class JsonAuditFormatter(logging.Formatter):
-    def format(self, record):
-        # Timestamp must be first (webops request)
-        log_entry = collections.OrderedDict(
-            [('timestamp', self.formatTime(record)),
-             ('level', 'AUDIT'),
-             ('traceid', record.trace_id),
-             ('message', record.msg % record.args)])
-
-        return json.dumps(log_entry)
