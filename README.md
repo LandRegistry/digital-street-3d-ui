@@ -2,6 +2,8 @@
 
 This repository contains a flask application structured in the way that all Land Registry flask user interfaces should be structured going forwards.
 
+**Note: If you are building a GOV.UK styled frontend - the best point of reference is [gadget-govuk-ui](http://192.168.249.38/gadgets/gadget-govuk-ui), not this skeleton**
+
 ## Usage
 
 You can use this to create your own app.
