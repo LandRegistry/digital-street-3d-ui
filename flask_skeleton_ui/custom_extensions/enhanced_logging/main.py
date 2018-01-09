@@ -2,6 +2,7 @@ from flask import g
 from flask import request
 from flask_logconfig import LogConfig
 from pathlib import Path
+
 import requests
 import uuid
 
@@ -28,19 +29,19 @@ class EnhancedLogging(object):
         app.before_request(before_request)
 
         # Let's get the app's base package name so we can set the correct formatter, filter and logger names
-        app_module = Path(__file__).resolve().parents[2].parts[-1]
+        app_module_name = Path(__file__).resolve().parents[2].parts[-1]
 
         logconfig = {
             'version': 1,
             'disable_existing_loggers': False,
             'formatters': {
                 'simple': {
-                    '()': app_module + '.custom_extensions.enhanced_logging.formatters.JsonFormatter'
+                    '()': app_module_name + '.custom_extensions.enhanced_logging.formatters.JsonFormatter'
                 }
             },
             'filters': {
                 'contextual': {
-                    '()': app_module + '.custom_extensions.enhanced_logging.filters.ContextualFilter'
+                    '()': app_module_name + '.custom_extensions.enhanced_logging.filters.ContextualFilter'
                 }
             },
             'handlers': {
@@ -52,7 +53,11 @@ class EnhancedLogging(object):
                 }
             },
             'loggers': {
-                app_module: {
+                app_module_name: {
+                    'handlers': ['console'],
+                    'level': app.config['FLASK_LOG_LEVEL']
+                },
+                app_module_name.replace("_", "-"): {
                     'handlers': ['console'],
                     'level': app.config['FLASK_LOG_LEVEL']
                 }
