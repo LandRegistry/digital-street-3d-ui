@@ -1,5 +1,6 @@
 from flask import current_app
 from flask import jsonify
+from flask import request
 from flask import render_template
 from flask_skeleton_ui import utils
 from jinja2 import TemplateNotFound
@@ -48,7 +49,7 @@ def unhandled_exception(e):
 
 
 def http_exception(e):
-    current_app.logger.exception('HTTP Exception: %s', repr(e))
+    current_app.logger.exception('HTTP Exception at %s:  %s', request.full_path, repr(e))
 
     # Restrict error codes to a subset so that we don't inadvertently expose
     # internal system information via error codes
