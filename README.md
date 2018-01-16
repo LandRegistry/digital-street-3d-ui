@@ -92,7 +92,7 @@ To run the integration tests if you are using the common dev-env you can run `do
 
 Although you should inspect every file and understand how the app is put together, here is a high level list of how the [Application Framework](http://techdocs.dev.ctp.local/index.php/Application_Framework) standard structure and behaviours are implemented:
 
-### Universal Development Envionment support
+### Universal Development Environment support
 
 Provided via `configuration.yml`, `Dockerfile` and `fragments/docker-compose-fragment.yml`.
 
@@ -155,3 +155,11 @@ Blueprints are registered in the `register_blueprints` method in `blueprints.py`
 ### Concise and clear requirements management
 
 The only (non-test related) requirements that should be changed by hand are those in `requirements.in`. They are the top -level requirements that are directly used by the application. When one of these is updated, the tool `pip-compile` should be used to generate a full requirements.txt that contains all sub-dependencies, pinned to whatever version is available at the time. Both files should be in source control. See [TechDocs](http://techdocs.dev.ctp.local/index.php/Requirements_management) for further explanation.
+
+
+## Other useful documentation
+
+### ADFS authentication
+If you are looking to use ADFS for authenticating users, see this section on techdocs:
+
+[OAuth2 for Internal Users via ADFS - Implementation Guide](http://techdocs.dev.ctp.local/index.php/OAuth2_for_Internal_Users_via_ADFS_-_Implementation_Guide)
