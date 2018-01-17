@@ -38,6 +38,7 @@ In order to use the toolkit elsewhere you therefore need to stop using these. Th
 
 - Make your own copy of govuk_template.html (Don't edit the one that's already there - this one will be overwritten when updating the GOV kit)
 - Find code that looks like the following blocks and delete them:
+
   ```
   <!--[if IE 8]><link rel="stylesheet" media="all" href="{{ asset_path }}stylesheets/fonts-ie8.css?0.23.0"/><![endif]-->
   <!--[if gte IE 9]><!--><link rel="stylesheet" media="all" href="{{ asset_path }}stylesheets/fonts.css?0.23.0"/><!--<![endif]-->
@@ -57,11 +58,14 @@ In order to use the toolkit elsewhere you therefore need to stop using these. Th
 
   
 - Create a new favicon for your app in `flask_skeleton_ui/assets/src/images` and re-point the shortcut icon to point to it as follows:
+
   ```
   <link rel="shortcut icon" href="{{ url_for('static', filename='images/app/favicon.ico') }}" type="image/x-icon" />
   ```
+
 - Modify the `<div class="header-logo">` to be a Land Registry logo or whatever is appropriate.
 - Add the following code to the top of your `main.scss` file, above the `govuk-elements` import:
+
   ```
   $toolkit-font-stack: 'HelveticaNeue', 'Helvetica Neue', 'Arial', 'Helvetica', sans-serif;
   $toolkit-font-stack-tabular: 'HelveticaNeue', 'Helvetica Neue', 'Arial', 'Helvetica', sans-serif;
