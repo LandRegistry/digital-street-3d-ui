@@ -2,8 +2,6 @@
 
 This repository contains a flask application structured in the way that all Land Registry flask user interfaces should be structured going forwards.
 
-**Note: If you are building a GOV.UK styled frontend - the best point of reference is [gadget-govuk-ui](http://192.168.249.38/gadgets/gadget-govuk-ui), not this skeleton**
-
 ## Usage
 
 You can use this to create your own app.
@@ -12,6 +10,19 @@ Take a copy of all the files, and change all occurences of `flask-skeleton-ui` a
 ## Building frontend assets (CSS, JS etc)
 
 See [flask_skeleton_ui/assets](flask_skeleton_ui/assets)
+
+## Removing the GOV.UK frontend code
+
+If you want to remove the GOV.UK frontend code in order to do something else such as Bootstrap or just custom stuff, you will need to make the following changes:
+
+- Remove the reference to `land-registry-elements` from the `sassIncludePaths` array in `Gulpfile.js`
+- Remove references to GOV.UK from `flask_skeleton_ui/.gitignore`
+- Remove `govuk_elements_jinja_macros` and `land_registry_elements` from the template `PrefixLoader` in `flask_skeleton_ui/app.py`
+- Remove any references to GOV.UK from your app's SCSS and JS files
+- Change `flask_skeleton_ui/custom_extensions/jinja_markdown_filter/main.py` to use `misaka.HtmlRenderer` instead of the custom `GovRenderer` and update the unit tests to suit.
+- Remove the references to GOV.UK from `flask_skeleton_ui/templates/layout.html` and implement your own base layout template.
+- Remove `govuk-elements-sass`, `govuk_frontend_toolkit`, `govuk_template_jinja` and `land-registry-elements` from `package.json` and regenerate your `package-lock.json`
+- Remove `govuk-elements-jinja-macros` and `land-registry-elements` dependencies from `pipcompilewrapper.sh`
 
 ## Quick start
 

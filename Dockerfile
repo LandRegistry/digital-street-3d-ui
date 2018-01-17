@@ -1,6 +1,8 @@
 # Set the base image to the base image
 FROM hmlandregistry/dev_base_python_flask:3
 
+RUN yum install -y -q libffi-devel
+
 # Using SQLAlchemy/Postgres?
 # See how the required env vars are set here:
 # http://192.168.249.38/gadgets/gadget-api/blob/master/Dockerfile
@@ -11,6 +13,7 @@ FROM hmlandregistry/dev_base_python_flask:3
 
 ENV APP_NAME=flask-skeleton-ui
 ENV MAX_HEALTH_CASCADE=6
+ENV SECRET_KEY='ABC'
 
 # ----
 
