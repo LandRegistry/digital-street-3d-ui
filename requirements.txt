@@ -26,5 +26,5 @@ requests==2.18.4
 urllib3==1.22             # via requests
 werkzeug==0.14.1          # via flask
 wtforms==2.1              # via flask-wtf
-https://github.com/LandRegistry/govuk-elements-jinja-macros/archive/v1.0.1.zip
-https://github.com/LandRegistry/land-registry-elements/archive/v2.1.7.zip
+https://github.com/LandRegistry/govuk-elements-jinja-macros/archive/v1.0.7.zip
+https://github.com/LandRegistry/land-registry-elements/archive/v2.1.13.zip
