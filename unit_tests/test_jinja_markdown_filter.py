@@ -18,7 +18,7 @@ class TestJinjaMarkdownFilter(object):
         }
 
         for markdown in markdown_to_html:
-            with app.test_request_context('/search/search term'):
+            with app.test_request_context('/'):
                 assert render_template_string('{{contents|markdown}}',
                                               contents=markdown) == markdown_to_html.get(markdown)
 
@@ -30,6 +30,6 @@ class TestJinjaMarkdownFilter(object):
         }
 
         for markdown in markdown_to_html:
-            with app.test_request_context('/search/search term'):
+            with app.test_request_context('/'):
                 assert render_template_string('{{contents|markdown}}',
                                               contents=markdown) == markdown_to_html.get(markdown)
