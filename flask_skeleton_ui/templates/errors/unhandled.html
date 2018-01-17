@@ -1,4 +1,4 @@
-{% extends "app/base.html" %}
+{% extends "app/layout.html" %}
 
 {% if http_code == 404 %}
   {% set title="Page not found" %}
@@ -8,10 +8,10 @@
   {% set title="Sorry, we are experiencing technical difficulties." %}
 {% endif %}
 
-{% block page_title %}{{title}}{% endblock %}
+{% block title %}{{title}}{% endblock %}
 
-{% block content %}
-  <h1>{{title}}</h1>
+{% block inner_content %}
+  <h1 class="heading-large">{{title}}</h1>
 
   {% if http_code == 404 %}
     <p>If you entered a web address please check it was correct.</p>

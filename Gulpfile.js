@@ -6,6 +6,9 @@ var config = {
   'sourcePath': './flask_skeleton_ui/assets/src',
   'destinationPath': './flask_skeleton_ui/assets/dist',
   'sassPath': 'scss/*.scss',
+  'sassIncludePaths': [
+    'node_modules/land-registry-elements/src'
+  ],
   'localhost': 'localhost:8080',
   'browsersyncPort': 3996
 }
