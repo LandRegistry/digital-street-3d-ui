@@ -70,6 +70,7 @@ In order to use the toolkit elsewhere you therefore need to stop using these. Th
   $toolkit-font-stack: 'HelveticaNeue', 'Helvetica Neue', 'Arial', 'Helvetica', sans-serif;
   $toolkit-font-stack-tabular: 'HelveticaNeue', 'Helvetica Neue', 'Arial', 'Helvetica', sans-serif;
   ```
+- Rebuild your CSS by running `npm run build`
 
 ## Quick start
 
