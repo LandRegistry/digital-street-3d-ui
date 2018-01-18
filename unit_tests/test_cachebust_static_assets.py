@@ -3,13 +3,19 @@ from unittest import mock
 import os
 
 from flask_skeleton_ui.main import app
-from flask_skeleton_ui.custom_extensions.cachebust_static_assets.main import md5_for_file
 from flask import render_template_string
+from flask_skeleton_ui.custom_extensions.cachebust_static_assets.main import md5_for_file
+from flask_skeleton_ui.custom_extensions.cachebust_static_assets.main import CachebustStaticAssets
 
 
 class TestCachebustStaticAssets(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client()
+
+    @mock.patch('flask_skeleton_ui.custom_extensions.cachebust_static_assets.main.CachebustStaticAssets.init_app')
+    def test_extension_alternative_init(self, mock_init_app):
+        CachebustStaticAssets('foo')
+        mock_init_app.assert_called_once_with('foo')
 
     def test_md5_for_file_generates_same_value_repeatedly(self):
         hash_one = md5_for_file('./README.md')
