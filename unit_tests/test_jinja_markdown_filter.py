@@ -7,6 +7,12 @@ class TestJinjaMarkdownFilter(object):
     def setup_method(self, method):
         self.app = app.test_client()
 
+    def check_rendering(self, markdown_to_html):
+        for markdown in markdown_to_html:
+            with app.test_request_context('/'):
+                assert render_template_string('{{contents|markdown}}',
+                                              contents=markdown).strip() == markdown_to_html.get(markdown)
+
     def test_render_returns_govuk_html_for_headings(self):
         markdown_to_html = {
             '# 1': '<h1 class="heading-xlarge">1</h1>',
@@ -17,10 +23,7 @@ class TestJinjaMarkdownFilter(object):
             '###### 6': '<h6 class="heading-small">6</h6>'
         }
 
-        for markdown in markdown_to_html:
-            with app.test_request_context('/'):
-                assert render_template_string('{{contents|markdown}}',
-                                              contents=markdown) == markdown_to_html.get(markdown)
+        self.check_rendering(markdown_to_html)
 
     def test_render_returns_govuk_html_for_lists(self):
         markdown_to_html = {
@@ -29,7 +32,12 @@ class TestJinjaMarkdownFilter(object):
                                          '<li>Foo</li>\n<li>Bar</li>\n<li>Wibble</li>\n</ol>'
         }
 
-        for markdown in markdown_to_html:
-            with app.test_request_context('/'):
-                assert render_template_string('{{contents|markdown}}',
-                                              contents=markdown) == markdown_to_html.get(markdown)
+        self.check_rendering(markdown_to_html)
+
+    def test_render_returns_govuk_html_for_double_emphasis(self):
+        markdown_to_html = {
+            '**Foo**': '<p><strong class="bold">Foo</strong></p>',
+            '**Foo** **bar**': '<p><strong class="bold">Foo</strong> <strong class="bold">bar</strong></p>'
+        }
+
+        self.check_rendering(markdown_to_html)
