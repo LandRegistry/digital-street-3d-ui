@@ -3,16 +3,17 @@ from unittest import mock
 import logging
 import json
 from freezegun import freeze_time
-
 from flask_skeleton_ui.main import app
 from flask_skeleton_ui.custom_extensions.enhanced_logging.main import EnhancedLogging
 
 
 @freeze_time("2017-01-18")
-def test_log_output(capfd):
+def test_log_output(pytestconfig):
+    capmanager = pytestconfig.pluginmanager.getplugin('capturemanager')
     logger = logging.getLogger('flask-skeleton-ui')
     logger.info('Foo')
-    out, err = capfd.readouterr()
+    out, err = capmanager.suspend_global_capture(in_=True)
+    capmanager.resume_global_capture()
 
     record = json.loads(out)
 
