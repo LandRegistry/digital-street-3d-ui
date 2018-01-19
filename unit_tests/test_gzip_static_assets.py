@@ -1,6 +1,9 @@
 import unittest
 from unittest import mock
 import os
+import gzip
+from werkzeug import Headers
+from flask_compress import Compress
 
 from flask_skeleton_ui.main import app
 from flask_skeleton_ui.custom_extensions.gzip_static_assets.main import GzipStaticAssets
@@ -10,7 +13,7 @@ from flask_skeleton_ui.custom_extensions.gzip_static_assets.main import gzip_cac
 
 class TestGzipStaticAssets(unittest.TestCase):
     def setUp(self):
-        self.app = app.test_client()
+        self.client = app.test_client()
 
     @mock.patch('flask_skeleton_ui.custom_extensions.gzip_static_assets.main.GzipStaticAssets.init_app')
     def test_extension_alternative_init(self, mock_init_app):
@@ -18,28 +21,82 @@ class TestGzipStaticAssets(unittest.TestCase):
         mock_init_app.assert_called_once_with('foo')
 
     def test_setting_up_cache_directory(self):
-        gzip_cache()
+        cache = gzip_cache()
 
         # Check that the directory exists
         self.assertTrue(os.path.exists('.cache/gzip'))
 
-        # And that it's empty
-        print(os.listdir('.cache/gzip'))
-        file_count = len([name for name in os.listdir('.cache/gzip') if os.path.isfile(name)])
-        self.assertEqual(file_count, 1)
+        # And that it's empty. Note - don't use os.listdir because the FileSystemCache actually stores
+        # a count of the files in a file! So the number of files on disk will always be 1 more than the number
+        # of cache entries that we might expect
+        file_count = len(cache._list_dir())
+        self.assertEqual(file_count, 0)
 
     def test_gzip_cache_key_format(self):
-        # gzip_cache_key
-        pass
+        with app.test_request_context('/foo?cachebuster=123'):
+            response = mock.MagicMock(headers=Headers([('ETag', 'bar')]))
+            key = gzip_cache_key(response)
+
+        self.assertEqual(key, '/foobar')
 
     def test_gzipped_response(self):
         # Create test file
-        # Request it and check response is valid gzip
+        filename = 'flask_skeleton_ui/assets/dist/stylesheets/gzip-test.css'
+        file_contents = "* { content: 'Test. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip.'; }"   # noqa: E501
+        with open(filename, 'w+') as test_file:
+            test_file.write(file_contents)
+
+        response = self.client.get('/static/stylesheets/gzip-test.css', headers=Headers([('Accept-encoding', 'gzip')]))
+
+        # Check the response reports itself as gzip
+        self.assertEqual(response.content_encoding, 'gzip')
+
+        # And that we haven't just received the original contents
+        self.assertNotEqual(response.data, file_contents)
+
         # Unzip it, check the contents is the same as the original
-        pass
+        self.assertEqual(gzip.decompress(response.data).decode('utf-8'), file_contents)
+
+        os.remove(filename)
 
     def test_html_is_not_gzipped(self):
-        pass
+        response = self.client.get('/')
 
+        self.assertIsNone(response.content_encoding)
+        self.assertIn('<h1 class="heading-large">flask-skeleton-ui</h1>', response.data.decode('utf-8'))
+
+    # @mock.patch.object(Compress, 'compress', wraps=Compress.compress)
     def test_repeated_requests_returns_cached_value(self):
-        pass
+        # Start with a clean cache
+        cache = gzip_cache()
+        cache.clear()
+
+        # Create test file
+        filename = 'flask_skeleton_ui/assets/dist/stylesheets/gzip-test.css'
+        file_contents = "* { content: 'Test. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip.'; }"   # noqa: E501
+        with open(filename, 'w+') as test_file:
+            test_file.write(file_contents)
+
+        compress_instance = Compress()
+        with mock.patch.object(Compress, 'compress', wraps=compress_instance.compress) as mock_compress:
+            # Do a first request to get the gzipped response
+            response = self.client.get('/static/stylesheets/gzip-test.css',
+                                       headers=Headers([('Accept-encoding', 'gzip')]))
+
+            # Check that flask-compress was invoked
+            self.assertEqual(mock_compress.call_count, 1)
+
+            # Check the response reports itself as gzip
+            self.assertEqual(response.content_encoding, 'gzip')
+
+            # Do a second request to get the gzipped response
+            response = self.client.get('/static/stylesheets/gzip-test.css',
+                                       headers=Headers([('Accept-encoding', 'gzip')]))
+
+            # Check that flask-compress was *not* invoked again
+            self.assertEqual(mock_compress.call_count, 1)
+
+            # Check the response reports itself as gzip
+            self.assertEqual(response.content_encoding, 'gzip')
+
+        os.remove(filename)
