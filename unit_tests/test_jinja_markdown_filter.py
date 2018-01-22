@@ -1,8 +1,11 @@
+import unittest
+from unittest import mock
 from flask_skeleton_ui.main import app
 from flask import render_template_string
+from flask_skeleton_ui.custom_extensions.jinja_markdown_filter.main import JinjaMarkdownFilter
 
 
-class TestJinjaMarkdownFilter(object):
+class TestJinjaMarkdownFilter(unittest.TestCase):
 
     def setup_method(self, method):
         self.app = app.test_client()
@@ -12,6 +15,11 @@ class TestJinjaMarkdownFilter(object):
             with app.test_request_context('/'):
                 assert render_template_string('{{contents|markdown}}',
                                               contents=markdown).strip() == markdown_to_html.get(markdown)
+
+    @mock.patch('flask_skeleton_ui.custom_extensions.jinja_markdown_filter.main.JinjaMarkdownFilter.init_app')
+    def test_extension_alternative_init(self, mock_init_app):
+        JinjaMarkdownFilter('foo')
+        mock_init_app.assert_called_once_with('foo')
 
     def test_render_returns_govuk_html_for_headings(self):
         markdown_to_html = {
