@@ -1,5 +1,7 @@
 # Set the base image to the base image
-FROM hmlandregistry/dev_base_python_flask:3
+
+FROM hmlandregistry/dev_base_python_flask:4
+
 
 RUN yum install -y -q libffi-devel
 
