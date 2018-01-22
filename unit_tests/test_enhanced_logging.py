@@ -29,6 +29,7 @@ def parse_log_output(capmanager):
                         "Captured stderr was:"
                         "\n-------\n{}-------".format(out, err))
 
+
 @freeze_time("2017-01-18")
 def test_log_output_in_json_format(pytestconfig):
     capmanager = pytestconfig.pluginmanager.getplugin('capturemanager')

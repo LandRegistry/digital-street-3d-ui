@@ -1,6 +1,7 @@
 import unittest
 from unittest import mock
 import os
+from freezegun import freeze_time
 
 from flask_skeleton_ui.main import app
 from flask import render_template_string
@@ -90,3 +91,29 @@ class TestCachebustStaticAssets(unittest.TestCase):
             output = render_template_string("{{ url_for('index.index_page') }}")
 
         self.assertNotIn('?cache', output)
+
+    @freeze_time("2017-01-18")
+    def test_far_future_expiry_headers_for_css_file(self):
+        filename = 'flask_skeleton_ui/assets/dist/test.css'
+        with open(filename, 'w+') as file:
+            file.write('Hello')
+
+        response = self.app.get('/static/test.css')
+
+        expires = response.headers.get('Expires')
+        self.assertEqual(expires, 'Mon, 18 Jan 2027 10:12:00 GMT')
+
+        os.remove(filename)
+
+    @freeze_time("2017-01-18")
+    def test_far_future_expiry_headers_for_txt_file(self):
+        filename = 'flask_skeleton_ui/assets/dist/test.txt'
+        with open(filename, 'w+') as file:
+            file.write('Hello')
+
+        response = self.app.get('/static/test.txt')
+
+        expires = response.headers.get('Expires')
+        self.assertEqual(expires, 'Wed, 18 Jan 2017 12:00:00 GMT')
+
+        os.remove(filename)
