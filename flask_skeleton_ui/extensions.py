@@ -21,6 +21,5 @@ def register_extensions(app):
     security_headers.init_app(app)
     jinja_markdown_filter.init_app(app)
 
-
     # All done!
     app.logger.info("Extensions registered")
