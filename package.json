@@ -29,6 +29,6 @@
   "devDependencies": {
     "semver": "^5.3.0",
     "gulp": "^3.9.1",
-    "land-registry-gulp-tasks": "git+https://github.com/LandRegistry/land-registry-gulp-tasks.git#v2.2.1"
+    "land-registry-gulp-tasks": "git+https://github.com/LandRegistry/land-registry-gulp-tasks.git#v2.3.0"
   }
 }
