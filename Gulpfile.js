@@ -1,4 +1,5 @@
 var gulp = require('gulp')
+var path = require('path')
 var landRegistryGulpTasks = require('land-registry-gulp-tasks')
 
 var config = {
@@ -7,7 +8,7 @@ var config = {
   'destinationPath': './flask_skeleton_ui/assets/dist',
   'sassPath': 'scss/*.scss',
   'sassIncludePaths': [
-    'node_modules/land-registry-elements/src'
+    path.join(path.dirname(require.resolve('land-registry-elements/README.md')), 'src')
   ],
   'localhost': 'localhost:8080',
   'browsersyncPort': 3996
