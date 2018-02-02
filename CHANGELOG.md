@@ -4,6 +4,8 @@ Note that requirements updates are not listed here unless they result in more ch
 
 | Date | Summary | Comparison to previous |
 |---|---|---|
+| 2018-02-02 | nodejs/gulp frontend build process now back in Dockerfile                                                                      | [Here](!15) |
+| 2018-02-02 | Many unit tests added                                                                                                          | [Here](!14) |
 | 2018-01-17 | GOV.UK kit now included in the skeleton (Previously had been demoed in gadget-govuk-ui)                                        | [Here](!12) |
 |            | Jinja markdown filter now available to generate GOV.UK compatible html from markdown                                           |             |
 |            | pip-compile should now be run via ./pipcompilewrapper.sh in order to pick up git dependencies in requirements.txt              |             |
