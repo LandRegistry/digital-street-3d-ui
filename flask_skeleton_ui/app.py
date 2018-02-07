@@ -6,7 +6,7 @@ from jinja2 import PrefixLoader
 app = LandRegistryFlask(__name__,
                         template_folder='templates',
                         static_folder='assets/dist',
-                        static_url_path='/static'
+                        static_url_path='/ui'
                         )
 
 # Set Jinja up to be able to load templates from packages (See gadget-govuk-ui for a full example)
