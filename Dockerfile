@@ -6,7 +6,8 @@ RUN yum install -y -q libffi-devel
 
 RUN curl -SLO "https://nodejs.org/dist/v8.9.4/node-v8.9.4-linux-x64.tar.xz" && \
 tar -xJf "node-v8.9.4-linux-x64.tar.xz" -C /usr/local --strip-components=1 && \
-ln -s /usr/local/bin/node /usr/local/bin/nodejs
+ln -s /usr/local/bin/node /usr/local/bin/nodejs && \
+rm "node-v8.9.4-linux-x64.tar.xz"
 
 
 # Using SQLAlchemy/Postgres?
