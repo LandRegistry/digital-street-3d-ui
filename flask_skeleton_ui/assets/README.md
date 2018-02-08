@@ -78,3 +78,9 @@ Run `npm test` to run the linter.
 JavaScript is linted with [standardjs](http://standardjs.com/) which is intentionally unconfigurable ([No semicolons - it's fine. Really!](https://github.com/feross/standard#the-rules)) This is gaining widespread adoption including by GOV.UK.
 
 SCSS is linted with [sass-lint](https://github.com/sasstools/sass-lint) but is configured to disable some of the more onerous rules.
+
+## browserslist
+
+A [browserslist](https://github.com/ai/browserslist) file in the root of the repository is used to automatically add CSS vendor prefixes (Via [postcss/autoprefixer](https://github.com/postcss/autoprefixer)) and any JS transformations required (Via [babel-preset-env](https://github.com/babel/babel/tree/master/packages/babel-preset-env)).
+
+If you do not wish to support the same browsers as the defaults, feel free to edit this file.
