@@ -36,6 +36,8 @@
   <main role="main" id="content">
     {{ phase_banner('beta', 'This is a new service – your <a href="#" target="_blank">feedback</a> will help us to improve it.'|safe) }}
 
+    {% include 'app/includes/flashed_messages.html' %}
+
     {% block inner_content %}{% endblock %}
   </main>
 {% endblock %}

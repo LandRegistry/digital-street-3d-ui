@@ -1,5 +1,7 @@
-$path: '/static/images/';
+$path: '/ui/images/';
 
 @import 'vendor/govuk-elements/govuk-elements';
 
-// See gadget-govuk-ui for examples of how to import additional css
+@import 'land_registry_elements/media/style';
+@import 'land_registry_elements/spacing/style';
+@import 'land_registry_elements/warning/style';
