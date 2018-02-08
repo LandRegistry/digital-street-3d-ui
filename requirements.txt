@@ -4,7 +4,7 @@
 #
 #    ./pipcompilewrapper.sh
 #
-certifi==2017.11.5        # via requests
+certifi==2018.1.18        # via requests
 cffi==1.11.4              # via misaka
 chardet==3.0.4            # via requests
 click==6.7                # via flask
