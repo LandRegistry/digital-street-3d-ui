@@ -11,67 +11,6 @@ Take a copy of all the files, and change all occurences of `flask-skeleton-ui` a
 
 See [flask_skeleton_ui/assets](flask_skeleton_ui/assets)
 
-## Removing the GOV.UK frontend code
-
-If you want to remove the GOV.UK frontend code in order to do something else such as Bootstrap or just custom stuff, you will need to make the following changes:
-
-- Remove the reference to `land-registry-elements` from the `sassIncludePaths` array in `Gulpfile.js`
-- Remove references to GOV.UK from `flask_skeleton_ui/.gitignore`
-- Remove `govuk_elements_jinja_macros` and `land_registry_elements` from the template `PrefixLoader` in `flask_skeleton_ui/app.py`
-- Remove any references to GOV.UK from your app's SCSS and JS files
-- Change `flask_skeleton_ui/custom_extensions/jinja_markdown_filter/main.py` to use `misaka.HtmlRenderer` instead of the custom `GovRenderer` and update the unit tests to suit.
-- Remove the references to GOV.UK from `flask_skeleton_ui/templates/layout.html` and implement your own base layout template.
-- Remove `govuk-elements-sass`, `govuk_frontend_toolkit`, `govuk_template_jinja` and `land-registry-elements` from `package.json` and regenerate your `package-lock.json`
-- Remove `govuk-elements-jinja-macros` and `land-registry-elements` dependencies from `pipcompilewrapper.sh`
-
-## Using the GOV.UK toolkit on a non service.gov.uk domain
-
-The GOV.UK toolkit can be used freely to build anything you like, however there are restrictions on the use of the Crown and the Transport font which can only be used on the following URLs:
-
-- gov.uk/myservice
-- myservice.service.gov.uk
-- myblog.blog.gov.uk
-
-_(Taken from https://www.gov.uk/service-manual/design/making-your-service-look-like-govuk)_
-
-In order to use the toolkit elsewhere you therefore need to stop using these. This can be done as follows:
-
-- Make your own copy of govuk_template.html (Don't edit the one that's already there - this one will be overwritten when updating the GOV kit)
-- Find code that looks like the following blocks and delete them:
-
-  ```
-  <!--[if IE 8]><link rel="stylesheet" media="all" href="{{ asset_path }}stylesheets/fonts-ie8.css?0.23.0"/><![endif]-->
-  <!--[if gte IE 9]><!--><link rel="stylesheet" media="all" href="{{ asset_path }}stylesheets/fonts.css?0.23.0"/><!--<![endif]-->
-  ```
-
-  ```
-  <link rel="mask-icon" href="{{ asset_path }}images/gov.uk_logotype_crown.svg?0.23.0" color="#0b0c0c">
-  <link rel="apple-touch-icon" sizes="180x180" href="{{ asset_path }}images/apple-touch-icon-180x180.png?0.23.0">
-  <link rel="apple-touch-icon" sizes="167x167" href="{{ asset_path }}images/apple-touch-icon-167x167.png?0.23.0">
-  <link rel="apple-touch-icon" sizes="152x152" href="{{ asset_path }}images/apple-touch-icon-152x152.png?0.23.0">
-  <link rel="apple-touch-icon" href="{{ asset_path }}images/apple-touch-icon.png?0.23.0">
-  ```
-
-  ```
-  <meta property="og:image" content="{{ asset_path }}images/opengraph-image.png?0.23.0">
-  ```
-
-  
-- Create a new favicon for your app in `flask_skeleton_ui/assets/src/images` and re-point the shortcut icon to point to it as follows:
-
-  ```
-  <link rel="shortcut icon" href="{{ url_for('static', filename='images/app/favicon.ico') }}" type="image/x-icon" />
-  ```
-
-- Modify the `<div class="header-logo">` to be a Land Registry logo or whatever is appropriate.
-- Add the following code to the top of your `main.scss` file, above the `govuk-elements` import:
-
-  ```
-  $toolkit-font-stack: 'HelveticaNeue', 'Helvetica Neue', 'Arial', 'Helvetica', sans-serif;
-  $toolkit-font-stack-tabular: 'HelveticaNeue', 'Helvetica Neue', 'Arial', 'Helvetica', sans-serif;
-  ```
-- Rebuild your CSS by running `npm run build`
-
 ## Quick start
 
 ### Docker
@@ -216,9 +155,75 @@ Blueprints are registered in the `register_blueprints` method in `blueprints.py`
 The only (non-test related) requirements that should be changed by hand are those in `requirements.in`. They are the top -level requirements that are directly used by the application. When one of these is updated, the tool `pip-compile` should be used to generate a full requirements.txt that contains all sub-dependencies, pinned to whatever version is available at the time. Both files should be in source control. See [TechDocs](http://techdocs.dev.ctp.local/index.php/Requirements_management) for further explanation.
 
 
+### Support for Flask `flash()` messages
+
+Messages registered with the Flask `flash()` method will appear at the top of the page in a styled box.
+`flash('Something something', 'error')` will raise a message using the error style, whereas `flash('Message')` will produce a more neutral looking "information" style message.
+
 ## Other useful documentation
 
 ### ADFS authentication
 If you are looking to use ADFS for authenticating users, see this section on techdocs:
 
 [OAuth2 for Internal Users via ADFS - Implementation Guide](http://techdocs.dev.ctp.local/index.php/OAuth2_for_Internal_Users_via_ADFS_-_Implementation_Guide)
+
+### Removing the GOV.UK frontend code
+
+If you want to remove the GOV.UK frontend code in order to do something else such as Bootstrap or just custom stuff, you will need to make the following changes:
+
+- Remove the reference to `land-registry-elements` from the `sassIncludePaths` array in `Gulpfile.js`
+- Remove references to GOV.UK from `flask_skeleton_ui/.gitignore`
+- Remove `govuk_elements_jinja_macros` and `land_registry_elements` from the template `PrefixLoader` in `flask_skeleton_ui/app.py`
+- Remove any references to GOV.UK from your app's SCSS and JS files
+- Change `flask_skeleton_ui/custom_extensions/jinja_markdown_filter/main.py` to use `misaka.HtmlRenderer` instead of the custom `GovRenderer` and update the unit tests to suit.
+- Remove the references to GOV.UK from `flask_skeleton_ui/templates/layout.html` and implement your own base layout template.
+- Remove `govuk-elements-sass`, `govuk_frontend_toolkit`, `govuk_template_jinja` and `land-registry-elements` from `package.json` and regenerate your `package-lock.json`
+- Remove `govuk-elements-jinja-macros` and `land-registry-elements` dependencies from `pipcompilewrapper.sh`
+
+### Using the GOV.UK toolkit on a non service.gov.uk domain
+
+The GOV.UK toolkit can be used freely to build anything you like, however there are restrictions on the use of the Crown and the Transport font which can only be used on the following URLs:
+
+- gov.uk/myservice
+- myservice.service.gov.uk
+- myblog.blog.gov.uk
+
+_(Taken from https://www.gov.uk/service-manual/design/making-your-service-look-like-govuk)_
+
+In order to use the toolkit elsewhere you therefore need to stop using these. This can be done as follows:
+
+- Make your own copy of govuk_template.html (Don't edit the one that's already there - this one will be overwritten when updating the GOV kit)
+- Find code that looks like the following blocks and delete them:
+
+  ```
+  <!--[if IE 8]><link rel="stylesheet" media="all" href="{{ asset_path }}stylesheets/fonts-ie8.css?0.23.0"/><![endif]-->
+  <!--[if gte IE 9]><!--><link rel="stylesheet" media="all" href="{{ asset_path }}stylesheets/fonts.css?0.23.0"/><!--<![endif]-->
+  ```
+
+  ```
+  <link rel="mask-icon" href="{{ asset_path }}images/gov.uk_logotype_crown.svg?0.23.0" color="#0b0c0c">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ asset_path }}images/apple-touch-icon-180x180.png?0.23.0">
+  <link rel="apple-touch-icon" sizes="167x167" href="{{ asset_path }}images/apple-touch-icon-167x167.png?0.23.0">
+  <link rel="apple-touch-icon" sizes="152x152" href="{{ asset_path }}images/apple-touch-icon-152x152.png?0.23.0">
+  <link rel="apple-touch-icon" href="{{ asset_path }}images/apple-touch-icon.png?0.23.0">
+  ```
+
+  ```
+  <meta property="og:image" content="{{ asset_path }}images/opengraph-image.png?0.23.0">
+  ```
+
+  
+- Create a new favicon for your app in `flask_skeleton_ui/assets/src/images` and re-point the shortcut icon to point to it as follows:
+
+  ```
+  <link rel="shortcut icon" href="{{ url_for('static', filename='images/app/favicon.ico') }}" type="image/x-icon" />
+  ```
+
+- Modify the `<div class="header-logo">` to be a Land Registry logo or whatever is appropriate.
+- Add the following code to the top of your `main.scss` file, above the `govuk-elements` import:
+
+  ```
+  $toolkit-font-stack: 'HelveticaNeue', 'Helvetica Neue', 'Arial', 'Helvetica', sans-serif;
+  $toolkit-font-stack-tabular: 'HelveticaNeue', 'Helvetica Neue', 'Arial', 'Helvetica', sans-serif;
+  ```
+- Rebuild your CSS by running `npm run build`
