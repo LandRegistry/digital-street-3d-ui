@@ -10,9 +10,9 @@ The gulp build process is encapsulated in the `Gulpfile.js` in the root director
 
 ### Running the gulp tasks
 
-The build tasks run inside the docker container. To run them you can either user `docker exec` to run a command inside the container, or more simply, just `bashin` to the container like `bashin your-app-name-here`. Once you are in the container, type `npm run build` to do a one off build of the assets.
+The build tasks run inside the docker container. To run them you can either user `exec your-app-name-here npm run build` to run the build inside the container, or more simply, just `bashin` to the container like `bashin your-app-name-here`. Once you are in the container, type `npm run build` to do a one off build of the assets.
 
-Alternatively, you can type `npm run dev` if you are going to be working on the CSS/JS repeatedly. This will watch your files for changes and rebuild the assets as necessary. It will also start a "browsersync" server which will live-reload CSS changes. This is on port 3000 inside the docker container, but is mapped to another port outside the container. This should be done in your app's docker fragment.
+Alternatively, you can use `npm run dev` if you are going to be working on the CSS/JS repeatedly. This will watch your files for changes and rebuild the assets as necessary. It will also start a "browsersync" server which will live-reload CSS changes. This is on port 3000 inside the docker container, but is mapped to another port outside the container. This should be done in your app's docker fragment.
 
 ### `node_modules`
 The build tasks are written in Nodejs, and as such the repository contains a package.json which is where dependencies are configured. _Normally_, you would then run `npm install` and these dependencies would be downloaded and put in a `node_modules` folder in the repository root. However, the Dockerfile is configured to install these for you and they are installed to a slightly different location inside the Docker container (See the NODE_PATH environment variable). In order to work with this, the following guidelines should be followed:
@@ -58,6 +58,8 @@ Application specific frontend code is held in `application/assets/src` - this is
 The JavaScript is organised as a set of [ES6 modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) and bundled for the browser using [Webpack](https://github.com/webpack/docs/wiki/contents). There is a single entry point / bundle (`main.js`) by default, but additional bundles will be created for each `.js` file directly inside the `javascripts` folder.
 
 These top levels bundles can be used to `import` files from the `modules` subfolder, or from `node_modules` (Such as if you wish to include a module from https://npmjs.org/). Webpack is set up to import ES6 modules and CommonJS modules.
+
+No actual JS should be written here. Imports only.
 
 ### CSS (SCSS)
 

@@ -7,10 +7,6 @@ This repository contains a flask application structured in the way that all Land
 You can use this to create your own app.
 Take a copy of all the files, and change all occurences of `flask-skeleton-ui` and `flask_skeleton_ui` to your app name - including folders! There will be other places to tweak too such as the exposed port in docker-compose-fragment, so please look through every file before starting to extend it for your own use. There is a [more comprehensive guide](http://192.168.250.79/index.php/Diary_-_Creating_a_New_Application) available on TechDocs.
 
-## Building frontend assets (CSS, JS etc)
-
-See [flask_skeleton_ui/assets](flask_skeleton_ui/assets)
-
 ## Quick start
 
 ### Docker
@@ -155,17 +151,17 @@ Blueprints are registered in the `register_blueprints` method in `blueprints.py`
 The only (non-test related) requirements that should be changed by hand are those in `requirements.in`. They are the top -level requirements that are directly used by the application. When one of these is updated, the tool `pip-compile` should be used to generate a full requirements.txt that contains all sub-dependencies, pinned to whatever version is available at the time. Both files should be in source control. See [TechDocs](http://techdocs.dev.ctp.local/index.php/Requirements_management) for further explanation.
 
 
-### Support for Flask `flash()` messages
-
-Messages registered with the Flask `flash()` method will appear at the top of the page in a styled box.
-`flash('Something something', 'error')` will raise a message using the error style, whereas `flash('Message')` will produce a more neutral looking "information" style message.
-
 ## Other useful documentation
 
-### ADFS authentication
-If you are looking to use ADFS for authenticating users, see this section on techdocs:
+### Building frontend assets (CSS, JS etc)
 
-[OAuth2 for Internal Users via ADFS - Implementation Guide](http://techdocs.dev.ctp.local/index.php/OAuth2_for_Internal_Users_via_ADFS_-_Implementation_Guide)
+See [flask_skeleton_ui/assets](flask_skeleton_ui/assets) for more details.
+
+### GOV.UK template
+
+The GOV.UK template is pulled in automatically from the npm package that gets installed. This happens on every build, so while the file is committed into the repository, you should not modify it manually yourself.
+
+If you need to customise the file, make a copy of it and change your other templates to extend your copy instead of the original. When the GOV.UK kit gets updated, you then have a reference to use when bringing the updates in.
 
 ### Removing the GOV.UK frontend code
 
@@ -227,3 +223,84 @@ In order to use the toolkit elsewhere you therefore need to stop using these. Th
   $toolkit-font-stack-tabular: 'HelveticaNeue', 'Helvetica Neue', 'Arial', 'Helvetica', sans-serif;
   ```
 - Rebuild your CSS by running `npm run build`
+
+### Support for Flask `flash()` messages
+
+Messages registered with the Flask `flash()` method will appear at the top of the page in a styled box.
+`flash('Something something', 'error')` will raise a message using the error style, whereas `flash('Message')` will produce a more neutral looking "information" style message.
+
+### Flask-WTForms
+
+[Flask-WTForms](https://flask-wtf.readthedocs.io/en/stable/) is included and should be used for all forms.
+
+#### Jinja macros
+
+The skeleton includes a set of Jinja macros to assist in writing GOV.UK compliant forms (See https://github.com/LandRegistry/govuk-elements-jinja-macros). These can be imported as follows:
+
+```
+{% from 'govuk_elements_jinja_macros/form.html' import element, single_choice, multiple_choice, error_summary %}
+```
+
+#### CSRF protection
+
+Forms are protected with the CSRF protection built in to Flask-WTF. This is customised to handle the CSRFError exception that gets thrown and show users a message when it occurs. It is worth considering however whether you should warn users of this upfront, before they start filling out a form. Otherwise there is a risk their session will time out after an hour and their form submission will be thrown away, forcing them to do it again.
+
+### Land-registry-elements
+
+[land-registry-elements](https://github.com/LandRegistry/land-registry-elements) is bundled into the skeleton, providing CSS & JS as well as Jinja macros for some of the components. These can be used like this:
+
+```
+{% from 'land_registry_elements/address/template.html' import address_simple %}
+
+{{ address_simple(['48 Foo bar', 'Wibble', 'PL1 1LP']) }}
+```
+
+CSS can be imported from individual components like this:
+
+```css
+@import 'land_registry_elements/media/style';
+```
+
+And JS like this:
+
+```js
+import 'land-registry-elements/src/land_registry_elements/clientside-form-validation/controller'
+```
+
+
+### ApplicationError templates
+The ApplicationError class contains a code parameter when raising exceptions, such as:
+
+```
+raise ApplicationError('Friendly message here', 'E102', 400)
+```
+
+If this exception goes uncaught in your code, it will bubble up to the application  error handler. At this point, it will try to find a template named `E102.html` in the `flask-skeleton-ui/templates/errors/application` folder to allow you to write custom error pages on a per error code basis.
+
+If it cannot find this template, it will fall back to `application.html` and show a generic message.
+
+Do not feel you have to make custom templates for every error code. This is an _optional feature_, not a requirement.
+
+### Markdown
+
+`flask_skeleton_ui/custom_extensions/jinja_markdown_filter` exposes a jinja template filter which can be used to render markdown to GOV.UK compatible html. It's well suited to things like Terms and conditions pages which could be written in markdown and rendered to HTML on the fly.
+
+```
+  {{ my_variable_containing_some_markdown_content|markdown }}
+```
+
+or
+
+```
+{% filter markdown %}
+  # This is markdown
+
+  - Hello
+  - World
+{% endfilter %}
+```
+
+### ADFS authentication
+If you are looking to use ADFS for authenticating users, see this section on techdocs:
+
+[OAuth2 for Internal Users via ADFS - Implementation Guide](http://techdocs.dev.ctp.local/index.php/OAuth2_for_Internal_Users_via_ADFS_-_Implementation_Guide)
