@@ -79,7 +79,7 @@ In order to use the toolkit elsewhere you therefore need to stop using these. Th
 This app supports the [universal dev-env](http://gitlab.service.dev.ctp.local/common/dev-env) so adding the following to your dev-env config file is enough:
 
 ```YAML
-  flask-skeleton-api:
+  flask-skeleton-ui:
     repo: git@gitlab.service.dev.ctp.local:skeletons/flask-skeleton-ui.git
     branch: master
 ```

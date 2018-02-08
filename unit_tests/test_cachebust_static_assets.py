@@ -98,7 +98,7 @@ class TestCachebustStaticAssets(unittest.TestCase):
         with open(filename, 'w+') as file:
             file.write('Hello')
 
-        response = self.app.get('/static/test.css')
+        response = self.app.get('/ui/test.css')
 
         expires = response.headers.get('Expires')
         self.assertEqual(expires, 'Mon, 18 Jan 2027 10:12:00 GMT')
@@ -111,7 +111,7 @@ class TestCachebustStaticAssets(unittest.TestCase):
         with open(filename, 'w+') as file:
             file.write('Hello')
 
-        response = self.app.get('/static/test.txt')
+        response = self.app.get('/ui/test.txt')
 
         expires = response.headers.get('Expires')
         self.assertEqual(expires, 'Wed, 18 Jan 2017 12:00:00 GMT')

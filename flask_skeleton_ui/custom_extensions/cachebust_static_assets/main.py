@@ -28,7 +28,7 @@ def hashed_url_for(endpoint, **values):
     Use the md5 hash of the file on disk to perform cachebusting duties.
     This forces browsers to download new versions of files when they change.
     """
-    if endpoint == 'ui':
+    if endpoint == 'static':
         filename = values.get('filename', None)
 
         if filename:

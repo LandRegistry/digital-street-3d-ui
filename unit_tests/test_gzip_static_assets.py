@@ -46,7 +46,7 @@ class TestGzipStaticAssets(unittest.TestCase):
         with open(filename, 'w+') as test_file:
             test_file.write(file_contents)
 
-        response = self.client.get('/static/stylesheets/gzip-test.css', headers=Headers([('Accept-encoding', 'gzip')]))
+        response = self.client.get('/ui/stylesheets/gzip-test.css', headers=Headers([('Accept-encoding', 'gzip')]))
 
         # Check the response reports itself as gzip
         self.assertEqual(response.content_encoding, 'gzip')
@@ -63,7 +63,7 @@ class TestGzipStaticAssets(unittest.TestCase):
         response = self.client.get('/')
 
         self.assertIsNone(response.content_encoding)
-        self.assertIn('<h1 class="heading-large">flask-skeleton-ui</h1>', response.data.decode('utf-8'))
+        self.assertIn('<div class="header-logo">', response.data.decode('utf-8'))
 
     # @mock.patch.object(Compress, 'compress', wraps=Compress.compress)
     def test_repeated_requests_returns_cached_value(self):
@@ -80,7 +80,7 @@ class TestGzipStaticAssets(unittest.TestCase):
         compress_instance = Compress()
         with mock.patch.object(Compress, 'compress', wraps=compress_instance.compress) as mock_compress:
             # Do a first request to get the gzipped response
-            response = self.client.get('/static/stylesheets/gzip-test.css',
+            response = self.client.get('/ui/stylesheets/gzip-test.css',
                                        headers=Headers([('Accept-encoding', 'gzip')]))
 
             # Check that flask-compress was invoked
@@ -90,7 +90,7 @@ class TestGzipStaticAssets(unittest.TestCase):
             self.assertEqual(response.content_encoding, 'gzip')
 
             # Do a second request to get the gzipped response
-            response = self.client.get('/static/stylesheets/gzip-test.css',
+            response = self.client.get('/ui/stylesheets/gzip-test.css',
                                        headers=Headers([('Accept-encoding', 'gzip')]))
 
             # Check that flask-compress was *not* invoked again
