@@ -2,6 +2,8 @@ from flask_skeleton_ui.custom_extensions.cachebust_static_assets.main import Cac
 from flask_skeleton_ui.custom_extensions.enhanced_logging.main import EnhancedLogging
 from flask_skeleton_ui.custom_extensions.gzip_static_assets.main import GzipStaticAssets
 from flask_skeleton_ui.custom_extensions.security_headers.main import SecurityHeaders
+from flask_skeleton_ui.custom_extensions.jinja_markdown_filter.main import JinjaMarkdownFilter
+from flask_skeleton_ui.custom_extensions.csrf.main import CSRF
 
 
 # Create empty extension objects here
@@ -9,6 +11,8 @@ cachebust_static_assets = CachebustStaticAssets()
 enhanced_logging = EnhancedLogging()
 gzip_static_assets = GzipStaticAssets()
 security_headers = SecurityHeaders()
+jinja_markdown_filter = JinjaMarkdownFilter()
+csrf = CSRF()
 
 
 def register_extensions(app):
@@ -17,6 +21,8 @@ def register_extensions(app):
     cachebust_static_assets.init_app(app)
     gzip_static_assets.init_app(app)
     security_headers.init_app(app)
+    jinja_markdown_filter.init_app(app)
+    csrf.init_app(app)
 
     # All done!
     app.logger.info("Extensions registered")

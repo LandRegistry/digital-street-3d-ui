@@ -26,6 +26,9 @@ MAX_HEALTH_CASCADE = os.environ['MAX_HEALTH_CASCADE']
 # SELF = "http://localhost:8080"
 # DEPENDENCIES = {"SELF": SELF}
 
+# Secret key for CSRF
+SECRET_KEY = os.environ['SECRET_KEY']
+
 # Using SQLAlchemy/Postgres?
 # The required variables (and required usage) can be found here:
 # http://192.168.249.38/gadgets/gadget-api/blob/master/gadget_api/config.py
