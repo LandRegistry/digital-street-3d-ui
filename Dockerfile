@@ -2,9 +2,22 @@
 
 FROM hmlandregistry/dev_base_python_flask:4
 
-RUN yum install -y -q libffi-devel
+RUN yum install -y -q libffi-devel openssl
 
-RUN curl -SLO "https://nodejs.org/dist/v8.9.4/node-v8.9.4-linux-x64.tar.xz" && \
+# HTTPS cert
+RUN mkdir -p /supporting-files && \
+  cd /supporting-files && \
+  openssl req \
+    -new \
+    -newkey rsa:4096 \
+    -days 365 \
+    -nodes \
+    -x509 \
+    -subj "/C=GB/L=London/O=HM Land Registry/CN=localhost" \
+    -keyout ssl.key \
+    -out ssl.cert
+
+RUN cd /supporting-files && curl -SLO "https://nodejs.org/dist/v8.9.4/node-v8.9.4-linux-x64.tar.xz" && \
 tar -xJf "node-v8.9.4-linux-x64.tar.xz" -C /usr/local --strip-components=1 && \
 ln -s /usr/local/bin/node /usr/local/bin/nodejs && \
 rm "node-v8.9.4-linux-x64.tar.xz"
@@ -25,12 +38,12 @@ RUN pip3 install -q -r requirements.txt && \
 # Install node modules
 # These are installed outside of the mounted volume and nodejs is instructed to look for them by setting NODE_PATH / PATH
 # This is to avoid the fact that the volume will wipe out anything that gets added when the container is being built
-ENV NODE_PATH='/node_modules/flask-skeleton-ui/node_modules' \
-  PATH="/node_modules/flask-skeleton-ui/node_modules/.bin:${PATH}" \
+ENV NODE_PATH='/supporting-files/node_modules' \
+  PATH="/supporting-files/node_modules/.bin:${PATH}" \
   NODE_ENV='production' \
   NPM_CONFIG_PRODUCTION='false'
-ADD package*.json /node_modules/flask-skeleton-ui/
-RUN cd /node_modules/flask-skeleton-ui \
+ADD package*.json /supporting-files/
+RUN cd /supporting-files \
   && npm install
 
 

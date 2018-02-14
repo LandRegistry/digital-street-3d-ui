@@ -1,10 +1,10 @@
 from flask_script import Manager
 from flask_skeleton_ui.main import app
-import subprocess
 import os
 
 
 manager = Manager(app)
+
 
 @manager.command
 def runserver(port=9998):
@@ -14,7 +14,8 @@ def runserver(port=9998):
     os.environ["LOG_LEVEL"] = "DEBUG"
     os.environ["COMMIT"] = "LOCAL"
 
-    app.run(port=int(port))
+    app.run(port=int(port), ssl_context=('/supporting-files/ssl.cert', '/supporting-files/ssl.key'))
+
 
 if __name__ == "__main__":
     manager.run()
