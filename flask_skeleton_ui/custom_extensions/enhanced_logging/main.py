@@ -37,6 +37,9 @@ class EnhancedLogging(object):
             'formatters': {
                 'simple': {
                     '()': app_module_name + '.custom_extensions.enhanced_logging.formatters.JsonFormatter'
+                },
+                'content_security_policy': {
+                    '()': app_module_name + '.custom_extensions.enhanced_logging.formatters.ContentSecurityPolicyFormatter'
                 }
             },
             'filters': {
@@ -50,6 +53,12 @@ class EnhancedLogging(object):
                     'formatter': 'simple',
                     'filters': ['contextual'],
                     'stream': 'ext://sys.stdout'
+                },
+                'content_security_policy': {
+                    'class': 'logging.StreamHandler',
+                    'formatter': 'content_security_policy',
+                    'filters': ['contextual'],
+                    'stream': 'ext://sys.stdout'
                 }
             },
             'loggers': {
@@ -60,7 +69,12 @@ class EnhancedLogging(object):
                 app_module_name.replace("_", "-"): {
                     'handlers': ['console'],
                     'level': app.config['FLASK_LOG_LEVEL']
+                },
+                'content_security_policy': {
+                    'handlers': ['content_security_policy'],
+                    'level': app.config['FLASK_LOG_LEVEL']
                 }
+
             }
         }
 

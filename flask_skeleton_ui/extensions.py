@@ -4,6 +4,7 @@ from flask_skeleton_ui.custom_extensions.gzip_static_assets.main import GzipStat
 from flask_skeleton_ui.custom_extensions.security_headers.main import SecurityHeaders
 from flask_skeleton_ui.custom_extensions.jinja_markdown_filter.main import JinjaMarkdownFilter
 from flask_skeleton_ui.custom_extensions.csrf.main import CSRF
+from flask_skeleton_ui.custom_extensions.content_security_policy.main import ContentSecurityPolicy
 
 
 # Create empty extension objects here
@@ -13,6 +14,7 @@ gzip_static_assets = GzipStaticAssets()
 security_headers = SecurityHeaders()
 jinja_markdown_filter = JinjaMarkdownFilter()
 csrf = CSRF()
+content_security_policy = ContentSecurityPolicy()
 
 
 def register_extensions(app):
@@ -23,6 +25,7 @@ def register_extensions(app):
     security_headers.init_app(app)
     jinja_markdown_filter.init_app(app)
     csrf.init_app(app)
+    content_security_policy.init_app(app)
 
     # All done!
     app.logger.info("Extensions registered")
