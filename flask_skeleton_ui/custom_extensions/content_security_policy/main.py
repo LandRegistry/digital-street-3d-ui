@@ -5,6 +5,8 @@ class ContentSecurityPolicy(object):
     """Content security policy
 
     See https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
+        https://www.owasp.org/index.php/Content_Security_Policy_Cheat_Sheet
+        https://content-security-policy.com/
     """
 
     def __init__(self, app=None):
@@ -14,15 +16,25 @@ class ContentSecurityPolicy(object):
 
     def init_app(self, app):
 
-        self.csp = ("default-src 'self';"
-                    "script-src 'self' %(script_src_hashes)s;"
+        self.csp = ("default-src 'none';"                               # Disallow object, frame, media etc by default
+                    "script-src https: www.google-analytics.com ajax.googleapis.com %(script_src_hashes)s;"
+                    "connect-src https:;"
+                    "img-src https:;"
+                    "style-src https:;"
+                    "font-src data:;"                                   # GOV.UK template loads it's fonts with a data URI
                     "report-uri /content-security-policy-report/"
                     )
 
-        app.config.setdefault('CONTENT_SECURITY_POLICY_SCRIPT_SRC_HASHES', '')
+        app.config.setdefault('CONTENT_SECURITY_POLICY_SCRIPT_SRC_HASHES', "'sha256-fba5a75c897899b15308045df0ddc2390993ddb2499a8df637cabc65240021c5'")
         app.config.setdefault('CONTENT_SECURITY_POLICY_REPORT_ONLY', '')
 
         # TODOs:
+
+        # Document sha hash generation
+        # echo -n "js goes here" | sha256sum
+        # echo -n "document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');" | sha256sum
+
+
         # More research into what the _right_ policy is
         # Google analytics?
         # Do we need a Jinja macro for outputting script blocks?
@@ -47,7 +59,7 @@ class ContentSecurityPolicy(object):
             csp = self.csp % {
                 'script_src_hashes': app.config.get('CONTENT_SECURITY_POLICY_SCRIPT_SRC_HASHES')
             }
-            # response.headers['Content-Security-Policy'] = csp
-            response.headers['Content-Security-Policy-Report-Only'] = csp
+            response.headers['Content-Security-Policy'] = csp
+            # response.headers['Content-Security-Policy-Report-Only'] = csp
 
             return response
