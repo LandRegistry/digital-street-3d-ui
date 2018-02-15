@@ -14,8 +14,9 @@ class LandRegistryPackageLoader(PackageLoader):
     def get_source(self, environment, template):
         source, filename, uptodate = super().get_source(environment, template)
 
-        # Inject the content-security-policy nonce into plain script tags
+        # Inject the content-security-policy nonce into plain script and style tags
         source = source.replace('<script>', '<script nonce="{{ g.csp_nonce }}">')
+        source = source.replace('<style type="text/css">', '<style type="text/css" nonce="{{ g.csp_nonce }}">')
 
         return source, filename, uptodate
 

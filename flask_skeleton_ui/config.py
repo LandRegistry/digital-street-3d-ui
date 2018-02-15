@@ -29,6 +29,12 @@ MAX_HEALTH_CASCADE = os.environ['MAX_HEALTH_CASCADE']
 # Secret key for CSRF
 SECRET_KEY = os.environ['SECRET_KEY']
 
+# Content security policy mode
+# Can be either 'full' or 'report-only'
+# 'full' will action the CSP and block violations
+# 'report-only' will log but not block violations
+CONTENT_SECURITY_POLICY_MODE = os.environ['CONTENT_SECURITY_POLICY_MODE']
+
 # Using SQLAlchemy/Postgres?
 # The required variables (and required usage) can be found here:
 # http://192.168.249.38/gadgets/gadget-api/blob/master/gadget_api/config.py

@@ -21,6 +21,7 @@ class ContentSecurityPolicy(object):
     def init_app(self, app):
 
         self.csp = ("default-src 'self';"
+                    "style-src 'self' 'nonce-%(nonce)s';"
                     "script-src 'self' www.google-analytics.com ajax.googleapis.com 'nonce-%(nonce)s';"
                     "font-src 'self' data:;"                                   # GOV.UK template loads it's fonts with a data URI
                     "block-all-mixed-content;"
@@ -28,12 +29,11 @@ class ContentSecurityPolicy(object):
                     "report-uri %(report_uri)s;"
                     )
 
-        app.config.setdefault('CONTENT_SECURITY_POLICY_REPORT_ONLY', '')
+        app.config.setdefault('CONTENT_SECURITY_POLICY_MODE', 'full')
 
         # TODOs:
 
         # Google analytics?
-        # Decide right balance between csp and csp-report-only. You can even have both...
         # Docs
         # Refactor and tidy up
 
@@ -54,8 +54,10 @@ class ContentSecurityPolicy(object):
                 'report_uri': url_for('reporting.report', trace_id=g.trace_id),
                 'nonce': g.csp_nonce
             }
-            response.headers['Content-Security-Policy'] = csp
-            # response.headers['Content-Security-Policy-Report-Only'] = csp
+            if app.config['CONTENT_SECURITY_POLICY_MODE'] == 'report-only':
+                response.headers['Content-Security-Policy-Report-Only'] = csp
+            else:
+                response.headers['Content-Security-Policy'] = csp
 
             return response
 
