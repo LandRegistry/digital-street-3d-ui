@@ -1,4 +1,8 @@
 from flask_skeleton_ui.custom_extensions.content_security_policy import reporting
+from flask import url_for
+from flask import g
+from os import urandom
+from base64 import b64encode
 
 
 class ContentSecurityPolicy(object):
@@ -16,32 +20,22 @@ class ContentSecurityPolicy(object):
 
     def init_app(self, app):
 
-        self.csp = ("default-src 'none';"                               # Disallow object, frame, media etc by default
-                    "script-src https: www.google-analytics.com ajax.googleapis.com %(script_src_hashes)s;"
-                    "connect-src https:;"
-                    "img-src https:;"
-                    "style-src https:;"
-                    "font-src data:;"                                   # GOV.UK template loads it's fonts with a data URI
-                    "report-uri /content-security-policy-report/"
+        self.csp = ("default-src 'self';"
+                    "script-src 'self' www.google-analytics.com ajax.googleapis.com 'nonce-%(nonce)s';"
+                    "font-src 'self' data:;"                                   # GOV.UK template loads it's fonts with a data URI
+                    "block-all-mixed-content;"
+                    # "require-sri-for script style;"                   # Desirable, but disabled until browsers implement this
+                    "report-uri %(report_uri)s;"
                     )
 
-        app.config.setdefault('CONTENT_SECURITY_POLICY_SCRIPT_SRC_HASHES', "'sha256-fba5a75c897899b15308045df0ddc2390993ddb2499a8df637cabc65240021c5'")
         app.config.setdefault('CONTENT_SECURITY_POLICY_REPORT_ONLY', '')
 
         # TODOs:
 
-        # Document sha hash generation
-        # echo -n "js goes here" | sha256sum
-        # echo -n "document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');" | sha256sum
-
-
-        # More research into what the _right_ policy is
         # Google analytics?
-        # Do we need a Jinja macro for outputting script blocks?
-        # What to do about inline govuk script? Can we just specify a hash?
-        # Use url_for for reporting url or make reporting URL configurable?
         # Decide right balance between csp and csp-report-only. You can even have both...
-        # Pass traceid from parent request through to CSP report url? Is that even possible?
+        # Docs
+        # Refactor and tidy up
 
         app.register_blueprint(reporting.reporting, url_prefix='/content-security-policy-report/')
 
@@ -55,11 +49,16 @@ class ContentSecurityPolicy(object):
             csrf.exempt(reporting.reporting)
 
         @app.after_request
-        def csp_headers(response):
+        def after_request(response):
             csp = self.csp % {
-                'script_src_hashes': app.config.get('CONTENT_SECURITY_POLICY_SCRIPT_SRC_HASHES')
+                'report_uri': url_for('reporting.report', trace_id=g.trace_id),
+                'nonce': g.csp_nonce
             }
             response.headers['Content-Security-Policy'] = csp
             # response.headers['Content-Security-Policy-Report-Only'] = csp
 
             return response
+
+        @app.before_request
+        def before_request():
+            g.csp_nonce = b64encode(urandom(32)).decode('utf-8')

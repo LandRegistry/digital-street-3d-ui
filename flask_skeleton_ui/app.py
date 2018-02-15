@@ -9,9 +9,20 @@ app = LandRegistryFlask(__name__,
                         static_url_path='/ui'
                         )
 
+
+class LandRegistryPackageLoader(PackageLoader):
+    def get_source(self, environment, template):
+        source, filename, uptodate = super().get_source(environment, template)
+
+        # Inject the content-security-policy nonce into plain script tags
+        source = source.replace('<script>', '<script nonce="{{ g.csp_nonce }}">')
+
+        return source, filename, uptodate
+
+
 # Set Jinja up to be able to load templates from packages (See gadget-govuk-ui for a full example)
 app.jinja_loader = PrefixLoader({
-    'app': PackageLoader('flask_skeleton_ui'),
+    'app': LandRegistryPackageLoader('flask_skeleton_ui'),
     'govuk_elements_jinja_macros': PackageLoader('govuk_elements_jinja_macros'),
     'land_registry_elements': PackageLoader('land_registry_elements', '.'),
 })
