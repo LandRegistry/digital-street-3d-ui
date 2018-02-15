@@ -1,8 +1,6 @@
 from flask_skeleton_ui.custom_extensions.content_security_policy import reporting
 from flask import url_for
 from flask import g
-from os import urandom
-from base64 import b64encode
 
 
 class ContentSecurityPolicy(object):
@@ -19,17 +17,30 @@ class ContentSecurityPolicy(object):
             self.init_app(app)
 
     def init_app(self, app):
+        # Default config
+        app.config.setdefault('CONTENT_SECURITY_POLICY_MODE', 'full')
 
+        # Build up the content security policy header
         self.csp = ("default-src 'self';"
-                    "style-src 'self' 'nonce-%(nonce)s';"
-                    "script-src 'self' www.google-analytics.com ajax.googleapis.com 'nonce-%(nonce)s';"
+                    "script-src 'self' www.google-analytics.com ajax.googleapis.com {};"
                     "font-src 'self' data:;"                                   # GOV.UK template loads it's fonts with a data URI
                     "block-all-mixed-content;"
                     # "require-sri-for script style;"                   # Desirable, but disabled until browsers implement this
                     "report-uri %(report_uri)s;"
                     )
 
-        app.config.setdefault('CONTENT_SECURITY_POLICY_MODE', 'full')
+        # Insert sha hashes for govuk script tags
+        # If the script blocks in the govuk template are changed, these will
+        # need to be updated. Easiest way is to delete these hashes, and then
+        # pull the new ones from Chrome's dev console (It calculates them for you)
+        govuk_script_hashes = [
+            "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='",
+            "'sha256-G29/qSW/JHHANtFhlrZVDZW1HOkCDRc78ggbqwwIJ2g='"
+        ]
+        self.csp = self.csp.format(
+            " ".join(govuk_script_hashes)
+        )
+
 
         # TODOs:
 
@@ -51,8 +62,7 @@ class ContentSecurityPolicy(object):
         @app.after_request
         def after_request(response):
             csp = self.csp % {
-                'report_uri': url_for('reporting.report', trace_id=g.trace_id),
-                'nonce': g.csp_nonce
+                'report_uri': url_for('reporting.report', trace_id=g.trace_id)
             }
             if app.config['CONTENT_SECURITY_POLICY_MODE'] == 'report-only':
                 response.headers['Content-Security-Policy-Report-Only'] = csp
@@ -60,7 +70,3 @@ class ContentSecurityPolicy(object):
                 response.headers['Content-Security-Policy'] = csp
 
             return response
-
-        @app.before_request
-        def before_request():
-            g.csp_nonce = b64encode(urandom(32)).decode('utf-8')
