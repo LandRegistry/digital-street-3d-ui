@@ -22,14 +22,14 @@ class ContentSecurityPolicy(object):
 
         # Build up the content security policy header
         self.csp = ("default-src 'self';"
-                    "script-src 'self' www.google-analytics.com {};"
-                    "font-src 'self' data:;"                                   # GOV.UK template loads it's fonts with a data URI
+                    "script-src 'self' www.google-analytics.com %(govuk_script_hashes)s;"
+                    "font-src 'self' data:;"  # GOV.UK template loads it's fonts with a data URI
                     "block-all-mixed-content;"
-                    # "require-sri-for script style;"                   # Desirable, but disabled until browsers implement this
+                    # "require-sri-for script style;"  # Desirable, but disabled until browsers implement this
                     "report-uri %(report_uri)s;"
                     )
 
-        # Insert sha hashes for govuk script tags
+        # sha hashes for govuk script tags
         # If the script blocks in the govuk template are changed, these will
         # need to be updated. Easiest way is to delete these hashes, and then
         # pull the new ones from Chrome's dev console (It calculates them for you)
@@ -37,19 +37,12 @@ class ContentSecurityPolicy(object):
             "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='",
             "'sha256-G29/qSW/JHHANtFhlrZVDZW1HOkCDRc78ggbqwwIJ2g='"
         ]
-        self.csp = self.csp.format(
-            " ".join(govuk_script_hashes)
-        )
 
-
-        # TODOs:
-        # Docs
-        # Refactor and tidy up
-
+        # Register a blueprint containing a simple route to log CSP violations
         app.register_blueprint(reporting.reporting, url_prefix='/content-security-policy-report/')
 
-        # If we've got flask_wtf's CSRF protection enabled, we need to exempt the reporting blueprint
         try:
+            # If we've got flask_wtf's CSRF protection enabled, we need to exempt the reporting blueprint
             csrf = app.extensions['csrf']
         except KeyError:
             # If the CSRF extension isn't enabled just carry on
@@ -60,8 +53,10 @@ class ContentSecurityPolicy(object):
         @app.after_request
         def after_request(response):
             csp = self.csp % {
-                'report_uri': url_for('reporting.report', trace_id=g.trace_id)
+                'report_uri': url_for('reporting.report', trace_id=g.trace_id),
+                'govuk_script_hashes': " ".join(govuk_script_hashes)
             }
+
             if app.config['CONTENT_SECURITY_POLICY_MODE'] == 'report-only':
                 response.headers['Content-Security-Policy-Report-Only'] = csp
             else:
