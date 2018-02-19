@@ -53,6 +53,7 @@ ENV APP_NAME=flask-skeleton-ui \
   MAX_HEALTH_CASCADE=6 \
   LOG_LEVEL=DEBUG \
   SECRET_KEY='ABC' \
+  FLASK_DEBUG=1 \
   CONTENT_SECURITY_POLICY_MODE='full'
 
 CMD ["./run.sh"]
