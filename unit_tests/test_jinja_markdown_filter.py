@@ -35,7 +35,8 @@ class TestJinjaMarkdownFilter(unittest.TestCase):
 
     def test_render_returns_govuk_html_for_lists(self):
         markdown_to_html = {
-            '- Foo\n- Bar\n- Wibble': '<ul class="list list-bullet"><li>Foo</li>\n<li>Bar</li>\n<li>Wibble</li>\n</ul>',
+            '- Foo\n- Bar\n- Wibble': '<ul class="list list-bullet">'
+                                      '<li>Foo</li>\n<li>Bar</li>\n<li>Wibble</li>\n</ul>',
             '1. Foo\n2. Bar\n3. Wibble': '<ol class="list list-number">'
                                          '<li>Foo</li>\n<li>Bar</li>\n<li>Wibble</li>\n</ol>'
         }
