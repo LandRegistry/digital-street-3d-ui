@@ -33,6 +33,9 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # Can be either 'full' or 'report-only'
 # 'full' will action the CSP and block violations
 # 'report-only' will log but not block violations
+# It is recommended to run in report-only mode for a while and monitor the logs
+# to ensure that all violations are cleaned up to prevent your app from breaking
+# when you switch it on fully
 CONTENT_SECURITY_POLICY_MODE = os.environ['CONTENT_SECURITY_POLICY_MODE']
 
 # Using SQLAlchemy/Postgres?

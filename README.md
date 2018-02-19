@@ -175,6 +175,7 @@ If you want to remove the GOV.UK frontend code in order to do something else suc
 - Remove the references to GOV.UK from `flask_skeleton_ui/templates/layout.html` and implement your own base layout template.
 - Remove `govuk-elements-sass`, `govuk_frontend_toolkit`, `govuk_template_jinja` and `land-registry-elements` from `package.json` and regenerate your `package-lock.json`
 - Remove `govuk-elements-jinja-macros` and `land-registry-elements` dependencies from `pipcompilewrapper.sh`
+- Tweak the Content-Security-Policy to suit your new needs
 
 ### Using the GOV.UK toolkit on a non service.gov.uk domain
 
@@ -299,6 +300,94 @@ or
   - World
 {% endfilter %}
 ```
+
+### Content Security Policy
+
+The Content-Security-Policy (CSP) HTTP response header helps you reduce Cross Site Scripting (XSS) risks on modern browsers by declaring what dynamic resources are allowed to load via a HTTP Header. This has been configured with some sensible defaults that will work out the box for a GOV.UK frontend.
+
+#### Modes
+
+There are two modes available. `full` and `report-only`. These are configured via the `CONTENT_SECURITY_POLICY_MODE` environment variable. It is recommended that you initially use `report-only` which will test but not enforce the rules and monitor the logs for violations. If none are found after a bedding in period, it should be switched to `full` at which point the security protections will begin to be enforced.
+
+#### Gotcha #1: How to write inline scripts
+
+One of the main features of CSP is that it blocks inline script tags. This is a robust protection against XSS but it does sometimes get in the way of simple Google Analytics implementations and other uses of inline scripts. The best answer to this is _not to write inline scripts_. If you do everything in actual .js files you will not fall foul of the CSP.
+
+The difficulty this may present is that sometimes it is necessary to pass data from the backend through to the frontend. This is commonly done by writing values from the Python app directly into JavaScript variables. Unfortunately this is exactly the thing that CSP is trying to prevent, since these values will often be user generated either directly or indirectly. A specially crafted value might "break out" of the variable declaration and inject malicious JS into the page (In a very similar manner to SQL injection).
+
+There are a few options which can be used to work around this:
+
+##### `data-` attributes
+
+Simple bits of data could be included as follows:
+
+```html
+<div data-lat="50" data-lng="-4" id="my-map"></div>
+```
+
+This can then be accessed in jQuery:
+
+```js
+var $map = $('#my-map')
+var lat = $map.data('lat')
+var lat = $map.data('lng')
+```
+
+This is only really suitable for fairly simple pieces of data and it requires you to place it on a related HTML element. Data should not be arbitrarily placed on unrelated HTML elements purely for the sake of passing it around. In the above example, lat and lng are used to center the map once it is initialised, hence the data is related to the component on which it is stored.
+
+##### JSON in script tags
+
+For data beyond just simple strings, or data that isn't obviously associated with a component, you can stick JSON in script tags as follows:
+
+```
+<script type="application/json" id="my-data">
+  {
+    "center": {
+      "lat": "50",
+      "lng": "-4"
+    },
+    "polygon": [1, 2, 3, 4, 5, 6, 7, 8, 9 ...]
+  }
+</script>
+```
+
+This can then be loaded into your JavaScript files like this:
+
+```js
+var configElement = document.getElementById('my-data')
+rules = JSON.parse(configElement.innerHTML)
+```
+
+##### Hidden form fields
+
+Data can also be rendered into hidden form fields:
+
+```html
+<input type="hidden" name="lat" value="50" id="lat">
+<input type="hidden" name="lng" value="-4" id="lng">
+```
+
+And then accessed like:
+
+```js
+var lat = document.getElementById('lat').value
+var lng = document.getElementById('lng').value
+```
+
+#### Gotcha #2: Referencing scripts via CDN
+
+Another feature of CSPs is that they block external JavaScript and CSS loading from domains that are not in the approved list. If you need to add a new external stylesheet, you will need to add the domain to the `script-src` or `style-src` declarations in the CSP in flask_skeleton_ui/custom_extensions/content_security_policy/main.py.
+
+When doing this however **it is vital that you include a Sub Resource Integrity (SRI) hash on the script tag**. See https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity for details on how to do this. This is essential in order to mitigate against the possibility of malicious code being injected if the CDN were compromised, or someone managed to achieve a man in the middle attack. When SRI is used, the browser will not run the script if the contents do not match the hash.
+
+Future iterations of the CSP will strictly enforce SRI, but this is not currently in place due to poor browser support.
+
+#### Useful further reading
+
+https://content-security-policy.com/
+https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
+https://www.owasp.org/index.php/Content_Security_Policy_Cheat_Sheet
+
 
 ### ADFS authentication
 If you are looking to use ADFS for authenticating users, see this section on techdocs:
