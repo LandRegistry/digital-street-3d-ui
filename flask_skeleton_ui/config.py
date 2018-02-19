@@ -10,8 +10,6 @@ import os
 # For logging
 FLASK_LOG_LEVEL = os.environ['LOG_LEVEL']
 
-DEBUG = FLASK_LOG_LEVEL == 'DEBUG'
-
 # For health route
 COMMIT = os.environ['COMMIT']
 

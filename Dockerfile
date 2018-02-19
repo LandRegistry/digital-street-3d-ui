@@ -39,7 +39,8 @@ RUN cd /node_modules/flask-skeleton-ui \
 ENV APP_NAME=flask-skeleton-ui \
   MAX_HEALTH_CASCADE=6 \
   LOG_LEVEL=DEBUG \
-  SECRET_KEY='ABC'
+  SECRET_KEY='ABC' \
+  FLASK_DEBUG=1
 
 CMD ["./run.sh"]
 
