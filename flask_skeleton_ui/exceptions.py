@@ -2,7 +2,7 @@ from flask import current_app
 from flask import jsonify
 from flask import request
 from flask import render_template
-from flask_skeleton_ui import utils
+from flask_skeleton_ui.utils.content_negotiation_utils import request_wants_json
 from jinja2 import TemplateNotFound
 from werkzeug.exceptions import default_exceptions
 from werkzeug.exceptions import HTTPException
@@ -54,7 +54,7 @@ def unhandled_exception(e):
 
     try:
         # Negotiate based on the Accept header
-        if utils.request_wants_json():
+        if request_wants_json():
             return jsonify({}), http_code
         else:
             return render_template('app/errors/unhandled.html',
@@ -76,7 +76,7 @@ def http_exception(e):
         http_code = 500
 
     # Negotiate based on the Accept header
-    if utils.request_wants_json():
+    if request_wants_json():
         return jsonify({}), http_code
     else:
         return render_template('app/errors/unhandled.html',
@@ -107,7 +107,7 @@ def application_error(e):
     else:
         http_code = 500
 
-    if utils.request_wants_json():
+    if request_wants_json():
         return jsonify({
                        'message': e.message,
                        'code': e.code

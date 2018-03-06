@@ -6,7 +6,7 @@ def request_wants_json():
 
     Use it like:
 
-    if utils.request_wants_json():
+    if request_wants_json():
         return jsonify(...)
     else
         return render_template(...)
