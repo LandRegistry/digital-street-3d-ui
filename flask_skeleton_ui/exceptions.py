@@ -1,11 +1,8 @@
-from flask import current_app
-from flask import jsonify
-from flask import request
-from flask import render_template
-from flask_skeleton_ui.utils.content_negotiation_utils import request_wants_json
+from flask import current_app, jsonify, render_template, request
 from jinja2 import TemplateNotFound
-from werkzeug.exceptions import default_exceptions
-from werkzeug.exceptions import HTTPException
+from werkzeug.exceptions import HTTPException, default_exceptions
+
+from flask_skeleton_ui.utils.content_negotiation_utils import request_wants_json
 
 
 class ApplicationError(Exception):
@@ -117,7 +114,8 @@ def application_error(e):
             return render_template('app/errors/application/{}.html'.format(e.code),
                                    description=e.message,
                                    code=e.code,
-                                   http_code=http_code
+                                   http_code=http_code,
+                                   e=e,
                                    ), http_code
         except TemplateNotFound:
             return render_template('app/errors/application.html',

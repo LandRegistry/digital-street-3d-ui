@@ -4,6 +4,7 @@ Note that requirements updates are not listed here unless they result in more ch
 
 | Date | Summary | Comparison to previous |
 |---|---|---|
+| 2018-03-06 | Pass full exception through to application error templates                      | [Here](!19) | 
 | 2018-03-06 | Small tweak to csrf extension to make it possible to mark views as exempt       | [Here](!19) | 
 | 2018-03-06 | utils.request_wants_json() moved into utils sub folder                          | [Here](!19) | 
 | 2018-02-19 | Added Content Security Policy & serve via self signed https cert in dev env     | [Here](!17) |
