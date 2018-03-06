@@ -9,6 +9,7 @@ app = LandRegistryFlask(__name__,
                         static_url_path='/ui'
                         )
 
+
 # Set Jinja up to be able to load templates from packages (See gadget-govuk-ui for a full example)
 app.jinja_loader = PrefixLoader({
     'app': PackageLoader('flask_skeleton_ui'),

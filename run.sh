@@ -1,5 +1,5 @@
 #!/bin/bash
 
-cp /node_modules/flask-skeleton-ui/package-lock.json .
+cp /supporting-files/package-lock.json .
 npm run build &
-/usr/bin/gunicorn -k eventlet --pythonpath /src --access-logfile - manage:manager.app --reload
+/usr/bin/gunicorn -k eventlet --pythonpath /src --access-logfile - manage:manager.app --reload --keyfile /supporting-files/ssl.key --certfile /supporting-files/ssl.cert
