@@ -1,5 +1,6 @@
 import misaka
 
+
 class GovRenderer(misaka.HtmlRenderer):
 
     def header(self, content, level):

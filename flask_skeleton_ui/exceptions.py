@@ -60,7 +60,7 @@ def unhandled_exception(e):
             return render_template('app/errors/unhandled.html',
                                    http_code=http_code,
                                    ), http_code
-    except:
+    except Exception:
         # Ultimate fallback handler, such as if jinja templates are missing
         return 'Internal server error', 500
 
