@@ -246,6 +246,17 @@ The skeleton includes a set of Jinja macros to assist in writing GOV.UK complian
 
 Forms are protected with the CSRF protection built in to Flask-WTF. This is customised to handle the CSRFError exception that gets thrown and show users a message when it occurs. It is worth considering however whether you should warn users of this upfront, before they start filling out a form. Otherwise there is a risk their session will time out after an hour and their form submission will be thrown away, forcing them to do it again.
 
+If you need to exempt a view from CSRF, you need to import the csrf instance from the csrf extension as follows:
+
+```
+from flask_skeleton_ui.custom_extensions.csrf.main import csrf
+
+@csrf.exempt
+@my_blueprint.route("/")
+def index_page():
+    ...
+```
+
 ### Land-registry-elements
 
 [land-registry-elements](https://github.com/LandRegistry/land-registry-elements) is bundled into the skeleton, providing CSS & JS as well as Jinja macros for some of the components. These can be used like this:

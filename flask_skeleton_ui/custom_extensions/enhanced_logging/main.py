@@ -39,7 +39,8 @@ class EnhancedLogging(object):
                     '()': app_module_name + '.custom_extensions.enhanced_logging.formatters.JsonFormatter'
                 },
                 'content_security_policy': {
-                    '()': app_module_name + '.custom_extensions.enhanced_logging.formatters.ContentSecurityPolicyFormatter'
+                    '()': app_module_name + '.custom_extensions.enhanced_logging'
+                                            '.formatters.ContentSecurityPolicyFormatter'
                 }
             },
             'filters': {

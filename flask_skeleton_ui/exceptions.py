@@ -1,11 +1,8 @@
-from flask import current_app
-from flask import jsonify
-from flask import request
-from flask import render_template
-from flask_skeleton_ui import utils
+from flask import current_app, jsonify, render_template, request
 from jinja2 import TemplateNotFound
-from werkzeug.exceptions import default_exceptions
-from werkzeug.exceptions import HTTPException
+from werkzeug.exceptions import HTTPException, default_exceptions
+
+from flask_skeleton_ui.utils.content_negotiation_utils import request_wants_json
 
 
 class ApplicationError(Exception):
@@ -54,13 +51,13 @@ def unhandled_exception(e):
 
     try:
         # Negotiate based on the Accept header
-        if utils.request_wants_json():
+        if request_wants_json():
             return jsonify({}), http_code
         else:
             return render_template('app/errors/unhandled.html',
                                    http_code=http_code,
                                    ), http_code
-    except:
+    except Exception:
         # Ultimate fallback handler, such as if jinja templates are missing
         return 'Internal server error', 500
 
@@ -76,7 +73,7 @@ def http_exception(e):
         http_code = 500
 
     # Negotiate based on the Accept header
-    if utils.request_wants_json():
+    if request_wants_json():
         return jsonify({}), http_code
     else:
         return render_template('app/errors/unhandled.html',
@@ -107,7 +104,7 @@ def application_error(e):
     else:
         http_code = 500
 
-    if utils.request_wants_json():
+    if request_wants_json():
         return jsonify({
                        'message': e.message,
                        'code': e.code
@@ -117,7 +114,8 @@ def application_error(e):
             return render_template('app/errors/application/{}.html'.format(e.code),
                                    description=e.message,
                                    code=e.code,
-                                   http_code=http_code
+                                   http_code=http_code,
+                                   e=e,
                                    ), http_code
         except TemplateNotFound:
             return render_template('app/errors/application.html',
