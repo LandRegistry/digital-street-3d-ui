@@ -1,8 +1,7 @@
-from flask import redirect
-from flask import flash
-from flask import request
-from flask_wtf.csrf import CSRFError
-from flask_wtf.csrf import CSRFProtect
+from flask import flash, redirect, request
+from flask_wtf.csrf import CSRFError, CSRFProtect
+
+csrf = CSRFProtect()
 
 
 class CSRF(object):
@@ -22,7 +21,8 @@ class CSRF(object):
         # rather than 1 hour which is the default from flask-wtf
         app.config.setdefault('WTF_CSRF_TIME_LIMIT', None)
 
-        CSRFProtect(app)
+        global csrf
+        csrf.init_app(app)
 
         app.register_error_handler(CSRFError, handle_csrf_error)
 
