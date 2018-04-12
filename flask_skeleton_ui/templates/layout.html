@@ -27,8 +27,7 @@
 
 {% block body_end %}
   <script src="{{ url_for('static', filename='javascripts/jquery.min.js') }}"> </script>
-  <!--[if IE 8]><script src="{{junction}}{{ url_for('static', filename='javascripts/main.js') }}"> </script><![endif]-->
-  <!--[if gt IE 8]><!--><script src="{{ url_for('static', filename='javascripts/main.min.js') }}"> </script><!--<![endif]-->
+  <!--[if gt IE 8]><!--><script src="{{ url_for('static', filename='javascripts/main.js') }}"> </script><!--<![endif]-->
 {% endblock %}
 
 {% block content %}
