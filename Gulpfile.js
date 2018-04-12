@@ -1,6 +1,6 @@
 var gulp = require('gulp')
 var path = require('path')
-var landRegistryGulpTasks = require('land-registry-gulp-tasks')
+var glob = require('glob')
 
 var config = {
   'applicationPath': './flask_skeleton_ui',
@@ -14,10 +14,5 @@ var config = {
   'browsersyncPort': 3996
 }
 
-// Register all the gulp tasks provided by the land registry module
-// If you don't want to do this, you could opt not to register some of the tasks
-// Also, if you want more tasks than this, you are free to use the gulp variable
-// and register custom tasks below
-for (var task in landRegistryGulpTasks) {
-  landRegistryGulpTasks[task](gulp, config)
-}
+// Register all the gulp tasks from the /gulp directory
+glob.sync('gulp/**/*.js').map((task) => require(path.resolve(__dirname, task))(gulp, config))
