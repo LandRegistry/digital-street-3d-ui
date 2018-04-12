@@ -57,5 +57,5 @@ module.exports = function (gulp, config) {
       .pipe(sassLint.failOnError())
   })
 
-  gulp.task('test', ['standardjs', 'sass-lint'])
+  gulp.task('test', gulp.series(['standardjs', 'sass-lint']))
 }

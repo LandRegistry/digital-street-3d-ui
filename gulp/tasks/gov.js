@@ -32,10 +32,10 @@ module.exports = function (gulp, config) {
      .pipe(gulp.dest(path.join(config.sourcePath, 'scss/vendor/govuk-elements')))
   })
 
-  gulp.task('copyGov', [
+  gulp.task('copyGov', gulp.parallel([
     'copyGovTemplate',
     'copyGovTemplateAssets',
     'copyGovElements',
     'copyGovToolkitImages'
-  ])
+  ]))
 }

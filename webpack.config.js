@@ -3,13 +3,18 @@ var path = require('path')
 
 var config = require('./gulp/config.js')
 
-var entryPoints = glob.sync(path.join(config.sourcePath, 'javascripts/*.js'))
+var jsEntryPoints = glob.sync(path.join(config.sourcePath, 'javascripts/*.js'))
+
+jsEntryPoints = jsEntryPoints.reduce((accumulator, value) => {
+  accumulator[path.basename(value, '.js')] = path.resolve(value)
+  return accumulator
+}, {})
 
 module.exports = {
   mode: 'production',
   bail: true,
   devtool: 'source-map',
-  entry: entryPoints.map(item => path.resolve(item)),
+  entry: jsEntryPoints,
   output: {
     path: path.resolve(path.join(config.destinationPath, 'javascripts')),
     filename: '[name].js'
@@ -39,5 +44,8 @@ module.exports = {
         }
       }
     ]
+  },
+  watchOptions: {
+    poll: true // inotify doesn't work inside VMs
   }
 }
