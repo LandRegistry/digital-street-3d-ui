@@ -1,41 +1,41 @@
 var glob = require('glob')
 var path = require('path')
-var webpack = require('webpack')
 
 var config = require('./gulp/config.js')
 
 var entryPoints = glob.sync(path.join(config.sourcePath, 'javascripts/*.js'))
 
 module.exports = {
+  mode: 'production',
   bail: true,
   devtool: 'source-map',
-  resolve: {
-    fallback: process.env.NODE_PATH
-  },
-  resolveLoader: {
-    fallback: process.env.NODE_PATH
-  },
   entry: entryPoints.map(item => path.resolve(item)),
   output: {
     path: path.resolve(path.join(config.destinationPath, 'javascripts')),
     filename: '[name].js'
   },
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin()
-  ],
+  resolve: {
+    modules: [
+      process.env.NODE_PATH,
+      'node_modules'
+    ]
+  },
+  resolveLoader: {
+    modules: [
+      process.env.NODE_PATH,
+      'node_modules'
+    ]
+  },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
-        loader: 'babel-loader',
-        query: {
-          presets: [
-            [
-              'env'
-            ]
-          ],
-          plugins: [
-          ]
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['babel-preset-env']
+          }
         }
       }
     ]
