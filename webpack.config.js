@@ -47,5 +47,13 @@ module.exports = {
   },
   watchOptions: {
     poll: true // inotify doesn't work inside VMs
+  },
+  stats: {
+    assets: true,
+    colors: true,
+    entrypoints: false,
+    hash: false,
+    modules: false,
+    version: false
   }
 }

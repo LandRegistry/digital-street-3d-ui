@@ -1,4 +1,3 @@
-var glob = require('glob')
 var path = require('path')
 var exec = require('child_process').exec
 
@@ -16,7 +15,7 @@ module.exports = function (gulp, config) {
   })
 
   gulp.task('js', function (cb) {
-    exec('webpack --color', function (err, stdout, stderr) {
+    exec('webpack', function (err, stdout, stderr) {
       console.log(stdout)
       console.log(stderr)
       cb(err)
