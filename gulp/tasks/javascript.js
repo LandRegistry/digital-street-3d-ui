@@ -1,5 +1,5 @@
 var path = require('path')
-var exec = require('child_process').exec
+var spawn = require('child_process').spawn
 
 module.exports = function (gulp, config) {
   gulp.task('jquery', function () {
@@ -15,10 +15,25 @@ module.exports = function (gulp, config) {
   })
 
   gulp.task('js', function (cb) {
-    exec('webpack', function (err, stdout, stderr) {
-      console.log(stdout)
-      console.log(stderr)
-      cb(err)
+    var webpackArgs
+
+    if (process.argv.includes('--watch')) {
+      webpackArgs = ['--watch']
+    } else {
+      // If we're not running in dev mode, make webpack be quiet
+      webpackArgs = ['--display', 'errors-only']
+    }
+
+    var webpack = spawn('webpack', webpackArgs)
+
+    webpack.stdout.on('data', (data) => {
+      console.log(data.toString())
     })
+
+    webpack.stderr.on('data', (data) => {
+      console.log(data.toString())
+    })
+
+    return webpack
   })
 }
