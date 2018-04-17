@@ -1,20 +1,20 @@
-var path = require('path')
-var spawn = require('child_process').spawn
+const path = require('path')
+const spawn = require('child_process').spawn
 
-module.exports = function (gulp, config) {
-  gulp.task('jquery', function () {
-    return gulp
+module.exports = (gulp, config) => {
+  gulp.task('jquery', () =>
+    gulp
       .src(require.resolve('jquery/dist/jquery.min.js'))
       .pipe(gulp.dest(path.join(config.destinationPath, 'javascripts')))
-  })
+  )
 
-  gulp.task('js-vendor', function () {
-    return gulp
+  gulp.task('js-vendor', () =>
+    gulp
       .src(path.join(config.sourcePath, 'javascripts/vendor/*'))
       .pipe(gulp.dest(path.join(config.destinationPath, 'javascripts/vendor')))
-  })
+  )
 
-  gulp.task('js', function (cb) {
+  gulp.task('js', () => {
     var webpackArgs
 
     if (process.argv.includes('--watch')) {
@@ -24,13 +24,13 @@ module.exports = function (gulp, config) {
       webpackArgs = ['--display', 'errors-only']
     }
 
-    var webpack = spawn('webpack', webpackArgs)
+    const webpack = spawn('webpack', webpackArgs)
 
-    webpack.stdout.on('data', (data) => {
+    webpack.stdout.on('data', data => {
       console.log(data.toString())
     })
 
-    webpack.stderr.on('data', (data) => {
+    webpack.stderr.on('data', data => {
       console.log(data.toString())
     })
 

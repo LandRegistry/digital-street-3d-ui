@@ -1,14 +1,13 @@
-var path = require('path')
+const path = require('path')
 
-module.exports = function (gulp, config) {
-  gulp.task('appImages', function () {
-    return gulp
-    .src(path.join(config.sourcePath, 'images/**'))
-    .pipe(gulp.dest(path.join(config.destinationPath, 'images/app')))
-  })
+module.exports = (gulp, config) => {
+  gulp.task('appImages', () =>
+    gulp
+      .src(path.join(config.sourcePath, 'images/**'))
+      .pipe(gulp.dest(path.join(config.destinationPath, 'images/app')))
+  )
 
-  gulp.task('patternLibraryImages', function () {
-
+  gulp.task('patternLibraryImages', () => {
     var patternLibraryPath
 
     try {
@@ -18,8 +17,8 @@ module.exports = function (gulp, config) {
     }
 
     return gulp
-    .src(path.join(patternLibraryPath, 'src/land_registry_elements/**/*.{gif,png,jpg,jpeg,svg}'))
-    .pipe(gulp.dest(path.join(config.destinationPath, 'images/land_registry_elements')))
+      .src(path.join(patternLibraryPath, 'src/land_registry_elements/**/*.{gif,png,jpg,jpeg,svg}'))
+      .pipe(gulp.dest(path.join(config.destinationPath, 'images/land_registry_elements')))
   })
 
   gulp.task('images', gulp.parallel(['appImages', 'patternLibraryImages']))

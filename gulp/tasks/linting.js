@@ -1,9 +1,9 @@
-var path = require('path')
-var standard = require('gulp-standard')
-var sassLint = require('gulp-sass-lint')
+const path = require('path')
+const standard = require('gulp-standard')
+const sassLint = require('gulp-sass-lint')
 
-module.exports = function (gulp, config) {
-  gulp.task('standardjs', function () {
+module.exports = (gulp, config) => {
+  gulp.task('standardjs', () => {
     var jsFiles = [
       '**/*.js',
       '!' + path.join(config.sourcePath, 'javascripts/vendor/**'),
@@ -25,7 +25,7 @@ module.exports = function (gulp, config) {
       }))
   })
 
-  gulp.task('sass-lint', function () {
+  gulp.task('sass-lint', () => {
     var sassFiles = [
       '**/*.s+(a|c)ss',
       '!' + path.join(config.sourcePath, 'scss/vendor/**'),

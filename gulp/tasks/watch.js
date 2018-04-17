@@ -1,21 +1,21 @@
-module.exports = function (gulp, config) {
-  var watchConfig = {
+module.exports = (gulp, config) => {
+  const watchConfig = {
     cwd: config.sourcePath,
     usePolling: true
   }
 
-  gulp.task('sassWatch', function () {
-    var watcher = gulp.watch('scss/**/*.scss', watchConfig, gulp.series(['sass']))
+  gulp.task('sassWatch', () => {
+    const watcher = gulp.watch('scss/**/*.scss', watchConfig, gulp.series(['sass']))
 
-    watcher.on('change', function (path, stats) {
+    watcher.on('change', (path, stats) => {
       console.log(path + ' changed')
     })
 
-    watcher.on('add', function (path) {
+    watcher.on('add', path => {
       console.log(path + ' added')
     })
 
-    watcher.on('unlink', function (path) {
+    watcher.on('unlink', path => {
       console.log(path + ' removed')
     })
   })
