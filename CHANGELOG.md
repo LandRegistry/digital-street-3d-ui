@@ -4,6 +4,7 @@ Note that requirements updates are not listed here unless they result in more ch
 
 | Date | Summary | Comparison to previous |
 |---|---|---|
+| 2018-04-18 | Add new environment variable to control how static assets are served in development vs production                | [Here](!22) |
 | 2018-04-18 | Updated jQuery to 3.x.                                                                                           | [Here](!21) |
 |            | Removed land-registry-gulp-tasks in favour of in-situ gulp tasks (And update to webpack 4, gulp 4)               |             |
 |            | *NOTE*: From this point forward IE8 will no longer run JavaScript. Make sure your service is functional without. |             |
