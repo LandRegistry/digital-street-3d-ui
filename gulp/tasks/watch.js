@@ -20,5 +20,5 @@ module.exports = (gulp, config) => {
     })
   })
 
-  gulp.task('watch', gulp.parallel('sassWatch'))
+  gulp.task('watch', gulp.parallel(['build', 'sassWatch']))
 }
