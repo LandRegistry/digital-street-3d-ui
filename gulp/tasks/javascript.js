@@ -18,7 +18,7 @@ module.exports = (gulp, config) => {
     var webpackArgs
 
     if (process.argv.includes('--watch')) {
-      webpackArgs = ['--watch']
+      webpackArgs = ['--watch', '--info-verbosity', 'verbose']
     } else {
       // If we're not running in dev mode, make webpack be quiet
       webpackArgs = ['--display', 'errors-only']
