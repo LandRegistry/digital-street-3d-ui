@@ -51,7 +51,8 @@ ENV APP_NAME=flask-skeleton-ui \
   LOG_LEVEL=DEBUG \
   SECRET_KEY='ABC' \
   FLASK_DEBUG=1 \
-  CONTENT_SECURITY_POLICY_MODE='full'
+  CONTENT_SECURITY_POLICY_MODE='full' \
+  STATIC_ASSETS_MODE='development'
 
 CMD ["./run.sh"]
 

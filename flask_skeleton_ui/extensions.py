@@ -1,3 +1,4 @@
+from flask_skeleton_ui import config
 from flask_skeleton_ui.custom_extensions.cachebust_static_assets.main import CachebustStaticAssets
 from flask_skeleton_ui.custom_extensions.enhanced_logging.main import EnhancedLogging
 from flask_skeleton_ui.custom_extensions.gzip_static_assets.main import GzipStaticAssets
@@ -20,12 +21,14 @@ content_security_policy = ContentSecurityPolicy()
 def register_extensions(app):
     """Adds any previously created extension objects into the app, and does any further setup they need."""
     enhanced_logging.init_app(app)
-    cachebust_static_assets.init_app(app)
-    gzip_static_assets.init_app(app)
     security_headers.init_app(app)
     jinja_markdown_filter.init_app(app)
     csrf.init_app(app)
     content_security_policy.init_app(app)
+
+    if config.STATIC_ASSETS_MODE == 'production':
+        cachebust_static_assets.init_app(app)
+        gzip_static_assets.init_app(app)
 
     # All done!
     app.logger.info("Extensions registered")
