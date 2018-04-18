@@ -1,5 +1,6 @@
 from flask import Flask
 import os
+from flask_skeleton_ui import config
 
 
 class LandRegistryFlask(Flask):
@@ -29,6 +30,9 @@ class LandRegistryFlask(Flask):
 
         # Check the file extension against our list
         if os.path.splitext(name)[1] in static_file_extensions:
-            return 315569520  # 10 years
+            if config.STATIC_ASSETS_MODE == 'production':
+                return 315569520  # 10 years
+            else:
+                return 0
 
         return super(LandRegistryFlask, self).get_send_file_max_age(name)

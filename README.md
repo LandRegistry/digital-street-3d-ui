@@ -157,6 +157,11 @@ The only (non-test related) requirements that should be changed by hand are thos
 
 See [flask_skeleton_ui/assets](flask_skeleton_ui/assets) for more details.
 
+At a high level this includes:
+- Sass - because writing raw CSS is painful.
+- Webpack - for bundling JavaScript modules. To help us write modular, maintainable code and avoid "JavaScript spaghetti".
+- Babel - to let us use modern syntax which makes JavaScript nicer to write and in some cases reduce code complexity.
+
 ### GOV.UK template
 
 The GOV.UK template is pulled in automatically from the npm package that gets installed. This happens on every build, so while the file is committed into the repository, you should not modify it manually yourself.

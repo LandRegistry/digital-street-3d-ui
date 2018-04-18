@@ -10,6 +10,7 @@ from flask_skeleton_ui.custom_extensions.cachebust_static_assets.main import Cac
 
 
 class TestCachebustStaticAssets(unittest.TestCase):
+    """These tests will only pass if STATIC_ASSETS_MODE is set to production. See unit_tests/__init__.py"""
     def setUp(self):
         self.app = app.test_client()
 

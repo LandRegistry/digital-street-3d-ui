@@ -12,6 +12,7 @@ from flask_skeleton_ui.custom_extensions.gzip_static_assets.main import gzip_cac
 
 
 class TestGzipStaticAssets(unittest.TestCase):
+    """These tests will only pass if STATIC_ASSETS_MODE is set to production. See unit_tests/__init__.py"""
     def setUp(self):
         self.client = app.test_client()
 
