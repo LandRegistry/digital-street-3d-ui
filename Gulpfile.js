@@ -1,23 +1,12 @@
-var gulp = require('gulp')
-var path = require('path')
-var landRegistryGulpTasks = require('land-registry-gulp-tasks')
+const gulp = require('gulp')
 
-var config = {
-  'applicationPath': './flask_skeleton_ui',
-  'sourcePath': './flask_skeleton_ui/assets/src',
-  'destinationPath': './flask_skeleton_ui/assets/dist',
-  'sassPath': 'scss/*.scss',
-  'sassIncludePaths': [
-    path.join(path.dirname(require.resolve('land-registry-elements/README.md')), 'src')
-  ],
-  'localhost': 'localhost:8080',
-  'browsersyncPort': 3996
-}
+const config = require('./gulp/config.js')
 
-// Register all the gulp tasks provided by the land registry module
-// If you don't want to do this, you could opt not to register some of the tasks
-// Also, if you want more tasks than this, you are free to use the gulp variable
-// and register custom tasks below
-for (var task in landRegistryGulpTasks) {
-  landRegistryGulpTasks[task](gulp, config)
-}
+require('./gulp/tasks/clean.js')(gulp, config)
+require('./gulp/tasks/gov.js')(gulp, config)
+require('./gulp/tasks/images.js')(gulp, config)
+require('./gulp/tasks/javascript.js')(gulp, config)
+require('./gulp/tasks/linting.js')(gulp, config)
+require('./gulp/tasks/sass.js')(gulp, config)
+require('./gulp/tasks/watch.js')(gulp, config)
+require('./gulp/tasks/default.js')(gulp, config)

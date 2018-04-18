@@ -4,6 +4,9 @@ Note that requirements updates are not listed here unless they result in more ch
 
 | Date | Summary | Comparison to previous |
 |---|---|---|
+| 2018-04-18 | Updated jQuery to 3.x.                                                                                           | [Here](!21) |
+|            | Removed land-registry-gulp-tasks in favour of in-situ gulp tasks (And update to webpack 4, gulp 4)               |             |
+|            | *NOTE*: From this point forward IE8 will no longer run JavaScript. Make sure your service is functional without. |             |
 | 2018-04-06 | New version of land-registry-gulp-tasks which removes browsersync, disables linting on save, and fixes webpack timing bug | [Here](992f5c227f74d5d6af8367aa97310f957f82170f) |
 | 2018-03-06 | Fix `make unittest` command so that it only runs tests in the unit_test folder instead of integration tests as well | [Here](!19) |
 | 2018-03-06 | Pass full exception through to application error templates                      | [Here](!19) | 

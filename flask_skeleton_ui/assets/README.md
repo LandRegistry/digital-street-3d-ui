@@ -6,13 +6,21 @@ Frontend dependencies are managed using `npm` and are tracked in `package.json`.
 
 ## Building the frontend assets
 
-The gulp build process is encapsulated in the `Gulpfile.js` in the root directory. This is a simple wrapper around [https://github.com/LandRegistry/land-registry-gulp-tasks](https://github.com/LandRegistry/land-registry-gulp-tasks) where the gulp tasks are stored. This is done for simplicity of keeping them up to date (Since they are simply a dependency of the project)
+The gulp build process is encapsulated in the `Gulpfile.js` in the root directory. This loads tasks from the `gulp/tasks` directory. These are run by the commands detailed in the package.json `scripts` section.
 
 ### Running the gulp tasks
 
 The build tasks run inside the docker container. To run them you can either user `exec your-app-name-here npm run build` to run the build inside the container, or more simply, just `bashin` to the container like `bashin your-app-name-here`. Once you are in the container, type `npm run build` to do a one off build of the assets.
 
-Alternatively, you can use `npm run dev` if you are going to be working on the CSS/JS repeatedly. This will watch your files for changes and rebuild the assets as necessary. It will also start a "browsersync" server which will live-reload CSS changes. This is on port 3000 inside the docker container, but is mapped to another port outside the container. This should be done in your app's docker fragment.
+Alternatively, you can use `npm run dev` if you are going to be working on the CSS/JS repeatedly. This will watch your files for changes and rebuild the assets as necessary.
+
+At the time of writing, the build does not run in the pipeline and must be run inside the Docker container on the developer's laptop. This means that the build artefacts need to be committed into the repository. The following files would need to be committed in, but _should not be manually modified_
+
+- `application/assets/dist/**/*.*`
+- `application/templates/govuk_template.html` (This file is copied from the `govuk_template_jinja` module in `node_modules`. It is checked into the repository, but should not be modified manually.)
+
+Application specific frontend code is held in `application/assets/src` - this is the only place you should be manually editing files.
+
 
 ### `node_modules`
 The build tasks are written in Nodejs, and as such the repository contains a package.json which is where dependencies are configured. _Normally_, you would then run `npm install` and these dependencies would be downloaded and put in a `node_modules` folder in the repository root. However, the Dockerfile is configured to install these for you and they are installed to a slightly different location inside the Docker container (See the NODE_PATH environment variable). In order to work with this, the following guidelines should be followed:
@@ -22,36 +30,6 @@ The build tasks are written in Nodejs, and as such the repository contains a pac
 2) If you want to install a new module, run `npm install --package-lock-only packageNameHere` which will add the module to your package.json. You should then run `rebuild flask-skeleton-ui` and it will install the new package.
 
 3) If you want to work on a module directly and would normally use `npm link` - unfortunately you can't because Docker volumes do not support symlinks. Instead, check out a copy of the Git repository to a `node_modules` folder inside your application's repository and work on it there. Any modules installed in `/src/node_modules` will take precedence over the modules installed at `NODE_PATH`
-
-### Overriding Gulp tasks
-
-If you need to override the provided Gulp tasks, you can do so as follows. If you store a reference to the original task, you can call it in addition to your modifications if you wish.
-
-```
-var existingWatch = gulp.tasks.watch.fn
-
-gulp.task('watch', function () {
-  gulp.watch(path.join('src/**/*.scss'), ['sass', 'sass-lint'])
-  gulp.watch(path.join('src/**/*.js'), ['js', 'standardjs'])
-  existingWatch()
-})
-```
-
-### Decoupling from the `land-registry-gulp-tasks` repository entirely
-
-If you need to do anything "unusual" and decouple from the `land-registry-gulp-tasks`, you could copy these into your project and start modifying from there
-
-1. Do a one off build by typing `npm run build`
-2. Watch the SCSS and JS files and run a build every time they are updated by typing `npm run dev`
-
-At the time of writing, the build does not run in the pipeline and must be run inside the Docker container on the developer's laptop. This means that the build artefacts need to be committed into the repository. The following files would need to be committed in, but _should not be manually modified_
-
-- `application/assets/dist/**/*.*`
-- `application/templates/govuk_template.html` (This file is copied from the `govuk_template_jinja` module in `node_modules`. It is checked into the repository, but should not be modified manually.)
-
-## Editing CSS and JS
-
-Application specific frontend code is held in `application/assets/src` - this is the only place you should be manually editing files.
 
 ### JavaScript
 
