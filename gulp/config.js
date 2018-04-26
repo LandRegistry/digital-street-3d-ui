@@ -8,6 +8,5 @@ module.exports = {
   'sassIncludePaths': [
     path.join(path.dirname(require.resolve('land-registry-elements/README.md')), 'src')
   ],
-  'localhost': 'localhost:8080',
-  'browsersyncPort': 3996
+  'localhost': 'localhost:8080'
 }
