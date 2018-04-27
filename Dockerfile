@@ -42,8 +42,6 @@ RUN pip3 install -q -r requirements.txt && \
   pip3 install -q -r requirements_test.txt
 
 
-
-
 # Put your app-specific stuff here (extra yum installs etc).
 # Any unique environment variables your config.py needs should also be added as ENV entries here
 ENV APP_NAME=flask-skeleton-ui \
