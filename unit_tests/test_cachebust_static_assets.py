@@ -95,7 +95,6 @@ class TestCachebustStaticAssets(unittest.TestCase):
                 self.assertRegexpMatches(str(logs),
                                          'File not found: /.*/flask_skeleton_ui/assets/dist/doesnt-exist.txt')
 
-
     def test_hashed_url_for_only_runs_for_static_asset_routes(self):
         with app.test_request_context('/'):
             output = render_template_string("{{ url_for('index.index_page') }}")
