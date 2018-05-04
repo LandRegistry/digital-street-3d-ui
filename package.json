@@ -9,7 +9,7 @@
     "dev": "gulp clean && gulp copy && gulp watch",
     "pretest": "npm run check-node-version --silent",
     "prebuild": "npm run check-node-version --silent",
-    "preinstall": "./preinstall.sh"
+    "preinstall": "bash ./preinstall.sh"
   },
   "engines": {
     "npm": "5.x",
