@@ -1,1 +1,1 @@
-// See gadget-govuk-ui for examples of how to import modules
+import 'govuk-frontend/all' // Feel free to be more selective than this

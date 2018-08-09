@@ -1,7 +1,8 @@
-$path: '/ui/images/';
+$govuk-images-path: '/ui/.govuk-frontend/images/';
+$govuk-fonts-path: '/ui/.govuk-frontend/fonts/';
 
-@import 'vendor/govuk-elements/govuk-elements';
+@import 'govuk-frontend/all';  // Feel free to be more selective than this
 
-@import 'land_registry_elements/media/style';
-@import 'land_registry_elements/spacing/style';
-@import 'land_registry_elements/warning/style';
+// @import 'land_registry_elements/media/style';
+// @import 'land_registry_elements/spacing/style';
+// @import 'land_registry_elements/warning/style';

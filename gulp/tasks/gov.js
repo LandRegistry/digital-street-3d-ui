@@ -1,46 +1,49 @@
 const path = require('path')
+const es = require('event-stream')
+// const rename = require('gulp-rename')
 
 module.exports = (gulp, config) => {
-  const govukTemplateJinjaPath = path.dirname(require.resolve('govuk_template_jinja/README.md'))
-  const govukFrontendToolkitPath = path.dirname(require.resolve('govuk_frontend_toolkit/README.md'))
-  const govukElementsSassPath = path.dirname(require.resolve('govuk-elements-sass/README.md'))
+  const govukTemplatePath = path.dirname(require.resolve('govuk-frontend/README.md'))
 
-  gulp.task('copyGovTemplate', () =>
+  gulp.task('copyGovTemplates', () =>
     gulp
-      .src(path.join(govukTemplateJinjaPath, 'views/layouts/**'))
-      .pipe(gulp.dest(path.join(config.applicationPath, 'templates/vendor')))
+      .src(path.join(govukTemplatePath, '**/*.njk'))
+      // .pipe(rename({
+      //   extname: '.html'
+      // }))
+      .pipe(es.map(function(file, cb) {
+        var contents = file.contents.toString()
+
+        // Rename file
+        file.path = file.path.replace('.njk', '.html')
+
+        // Simple conversions from nunjucks/js to jinja/python
+        contents = contents.replace(/true/g, 'True')
+        contents = contents.replace(/false/g, 'False')
+        contents = contents.replace(/\.njk/g, '.html')
+
+        // Resolve paths to the templates as jinja does not support relative paths as nunjucks does
+        contents = contents.replace(/\.\.\//g, 'app/vendor/.govuk-frontend/' + path.relative(govukTemplatePath, path.dirname(path.resolve(file.path, '..'))) + '/')
+        contents = contents.replace(/\.\//g, 'app/vendor/.govuk-frontend/' + path.relative(govukTemplatePath, path.dirname(file.path)) + '/')
+
+        file.contents = Buffer.from(contents, 'utf8')
+        cb(null, file)
+      }))
+
+      .pipe(gulp.dest(path.join(config.applicationPath, 'templates/vendor/.govuk-frontend')))
   )
 
-  gulp.task('copyGovTemplateAssets', () =>
+  gulp.task('copyGovAssets', () =>
     gulp
-      .src(path.join(govukTemplateJinjaPath, 'assets/**'))
-      .pipe(gulp.dest(config.destinationPath))
-  )
-
-  gulp.task('copyGovToolkitImages', () =>
-    gulp
-      .src(path.join(govukFrontendToolkitPath, 'images/**'))
-      .pipe(gulp.dest(path.join(config.destinationPath, 'images')))
-  )
-
-  gulp.task('copyGovElements', () =>
-    gulp
-      .src([
-        path.join(govukElementsSassPath, 'public/sass/**'),
-        path.join(govukFrontendToolkitPath, 'stylesheets/**')
-      ])
-      .pipe(
-        gulp.dest(path.join(config.sourcePath, 'scss/vendor/govuk-elements'))
-      )
+      .src(path.join(govukTemplatePath, 'assets/**/*.*'))
+      .pipe(gulp.dest(path.join(config.destinationPath, '.govuk-frontend')))
   )
 
   gulp.task(
     'copyGov',
     gulp.parallel([
-      'copyGovTemplate',
-      'copyGovTemplateAssets',
-      'copyGovElements',
-      'copyGovToolkitImages'
+      'copyGovTemplates',
+      'copyGovAssets'
     ])
   )
 }

@@ -6,6 +6,8 @@ module.exports = {
   'destinationPath': './flask_skeleton_ui/assets/dist',
   'sassPath': 'scss/*.scss',
   'sassIncludePaths': [
+    process.env.NODE_PATH,
+    'node_modules',
     path.join(path.dirname(require.resolve('land-registry-elements/README.md')), 'src')
   ],
   'localhost': 'localhost:8080'
