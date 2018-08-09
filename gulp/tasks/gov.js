@@ -22,6 +22,16 @@ module.exports = (gulp, config) => {
         contents = contents.replace(/false/g, 'False')
         contents = contents.replace(/\.njk/g, '.html')
 
+        // Quoting dict keys, because nunjucks doesn't require them but jinja does
+        contents = contents.replace(/^([ ]*)([^"#\r\n:]+?)\s*:/gm, "$1'$2':")
+
+        // Gov template uses .items, which is a reserved word in python
+        contents = contents.replace(/\.items/g, "['items']")
+
+        // Python doesn't like inline ifs that don't have elses
+        // See phase banner for example
+        contents = contents.replace(/\b(.+) if \1(?! else)/g, "$1 if $1 else ''")
+
         // Resolve paths to the templates as jinja does not support relative paths as nunjucks does
         contents = contents.replace(/\.\.\//g, 'app/vendor/.govuk-frontend/' + path.relative(govukTemplatePath, path.dirname(path.resolve(file.path, '..'))) + '/')
         contents = contents.replace(/\.\//g, 'app/vendor/.govuk-frontend/' + path.relative(govukTemplatePath, path.dirname(file.path)) + '/')
