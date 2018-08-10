@@ -4,5 +4,10 @@
 
 {% block content %}
   <h1 class="govuk-heading-xl">flask-skeleton-ui</h1>
-  <p>This skeleton is intentionally bare as a starting point. Please see <a href="http://192.168.249.38/gadgets/gadget-govuk-ui">gadgets/gadget-govuk-ui</a> for a fuller example</p>
+  <p class="govuk-body">This skeleton is intentionally bare as a starting point. Please see <a href="http://192.168.249.38/gadgets/gadget-govuk-ui">gadgets/gadget-govuk-ui</a> for a fuller example</p>
+
+  <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+
+  <h2 class="govuk-heading-l">Kitchen sink</h2>
+  <p class="govuk-body">Since the govuk nunjucks templates undergo several transformations before they can be used in jinja, we need to check they don't throw any errors. Therefore, render absolutely everything on this page.</p>
 {% endblock %}
