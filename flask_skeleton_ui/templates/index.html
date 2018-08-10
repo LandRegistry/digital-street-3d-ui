@@ -1,6 +1,48 @@
 {% extends "app/layout.html" %}
 
+{% from 'app/vendor/.govuk-frontend/components/back-link/macro.html' import govukBackLink %}
+{% from 'app/vendor/.govuk-frontend/components/breadcrumbs/macro.html' import govukBreadcrumbs %}
+{% from 'app/vendor/.govuk-frontend/components/button/macro.html' import govukButton %}
+{% from 'app/vendor/.govuk-frontend/components/details/macro.html' import govukDetails %}
+{% from 'app/vendor/.govuk-frontend/components/footer/macro.html' import govukFooter %}
+{% from 'app/vendor/.govuk-frontend/components/header/macro.html' import govukHeader %}
+{% from 'app/vendor/.govuk-frontend/components/inset-text/macro.html' import govukInsetText %}
+{% from 'app/vendor/.govuk-frontend/components/panel/macro.html' import govukPanel %}
+{% from 'app/vendor/.govuk-frontend/components/phase-banner/macro.html' import govukPhaseBanner %}
+{% from 'app/vendor/.govuk-frontend/components/skip-link/macro.html' import govukSkipLink %}
+{% from 'app/vendor/.govuk-frontend/components/table/macro.html' import govukTable %}
+{% from 'app/vendor/.govuk-frontend/components/tabs/macro.html' import govukTabs %}
+{% from 'app/vendor/.govuk-frontend/components/warning-text/macro.html' import govukWarningText %}
+
+
 {% block title %}Index{% endblock %}
+
+{% block header %}
+  {{ govukHeader({
+    'homepageUrl': "#",
+    'serviceName': "Service name",
+    'serviceUrl': "#",
+    'navigation': [
+      {
+        'href': "#1",
+        'text': "Navigation item 1",
+        'active': true
+      },
+      {
+        'href': "#2",
+        'text': "Navigation item 2"
+      },
+      {
+        'href': "#3",
+        'text': "Navigation item 3"
+      },
+      {
+        'href': "#4",
+        'text': "Navigation item 4"
+      }
+    ]
+  }) }}
+{% endblock %}
 
 {% block content %}
   <h1 class="govuk-heading-xl">flask-skeleton-ui</h1>
@@ -10,4 +52,502 @@
 
   <h2 class="govuk-heading-l">Kitchen sink</h2>
   <p class="govuk-body">Since the govuk nunjucks templates undergo several transformations before they can be used in jinja, we need to check they don't throw any errors. Therefore, render absolutely everything on this page.</p>
+  <p class="govuk-body">Note that form macros are omitted from here due to difficulties porting them from nunjucks. These may appear in a future release&hellip;</p>
+  <div class="govuk-!-margin-top-9">
+    {{ govukBackLink({
+      'text': "Back",
+      'href': "#"
+    }) }}
+  </div>
+
+  <div class="govuk-!-margin-top-9">
+    {{ govukBreadcrumbs({
+      'items': [
+        {
+          'text': "Home",
+          'href': "#"
+        },
+        {
+          'text': "Passports, travel and living abroad",
+          'href': "#"
+        },
+        {
+          'text': "Travel abroad"
+        }
+      ]
+    }) }}
+  </div>
+
+  <div class="govuk-!-margin-top-9">
+    {{ govukButton({
+      'text': "Save and continue"
+    }) }}
+
+    {{ govukButton({
+      'text': "Disabled button",
+      'disabled': true
+    }) }}
+
+    {{ govukButton({
+      'text': "Start now",
+      'href': "#",
+      'classes': "govuk-button--start"
+    }) }}
+  </div>
+
+  <div class="govuk-!-margin-top-9">
+    {{ govukDetails({
+      'summaryText': "Help with nationality",
+      'text': "We need to know your nationality so we can work out which elections you’re entitled to vote in. If you can’t provide your nationality, you’ll have to send copies of identity documents through the post."
+    }) }}
+  </div>
+
+  <div class="govuk-!-margin-top-9">
+    {{ govukInsetText({
+      'text': "It can take up to 8 weeks to register a lasting power of attorney if there are no mistakes in the application."
+    }) }}
+  </div>
+
+  <div class="govuk-!-margin-top-9">
+    {{ govukPanel({
+      'headingLevel': 1,
+      'titleText': "Application complete",
+      'html': "Your reference number<br><strong>HDJ2123F</strong>"
+    }) }}
+  </div>
+
+  <div class="govuk-!-margin-top-9">
+    {{ govukPhaseBanner({
+      'tag': {
+        'text': "beta"
+      },
+      'html': 'This is a new service – your <a class="govuk-link" href="#">feedback</a> will help us to improve it.'
+    }) }}
+  </div>
+
+  <div class="govuk-!-margin-top-9">
+    {{ govukTable({
+      'caption': "Dates and amounts",
+      'firstCellIsHeader': true,
+      'head': [
+        {
+          'text': "Date"
+        },
+        {
+          'text': "Amount"
+        }
+      ],
+      'rows': [
+        [
+          {
+            'text': "First 6 weeks"
+          },
+          {
+            'text': "£109.80 per week"
+          }
+        ],
+        [
+          {
+            'text': "Next 33 weeks"
+          },
+          {
+            'text': "£109.80 per week"
+          }
+        ],
+        [
+          {
+            'text': "Total estimated pay"
+          },
+          {
+            'text': "£4,282.20"
+          }
+        ]
+      ]
+    }) }}
+  </div>
+
+  <div class="govuk-!-margin-top-9">
+    {% set pastDayHtml %}
+<h2 class="govuk-heading-l">Past day</h2>
+{{ govukTable({
+  'head': [
+    {
+      'text': "Case manager"
+    },
+    {
+      'text': "Cases opened"
+    },
+    {
+      'text': "Cases closed"
+    }
+  ],
+  'rows': [
+    [
+      {
+        'text': "David Francis"
+      },
+      {
+        'text': "3"
+      },
+      {
+        'text': "0"
+      }
+    ],
+    [
+      {
+        'text': "Paul Farmer"
+      },
+      {
+        'text': "1"
+      },
+      {
+        'text': "0"
+      }
+    ],
+    [
+      {
+        'text': "Rita Patel"
+      },
+      {
+        'text': "2"
+      },
+      {
+        'text': "0"
+      }
+    ]
+  ]
+}) }}
+{% endset -%}
+
+{% set pastWeekHtml %}
+<h2 class="govuk-heading-l">Past week</h2>
+{{ govukTable({
+  'head': [
+    {
+      'text': "Case manager"
+    },
+    {
+      'text': "Cases opened"
+    },
+    {
+      'text': "Cases closed"
+    }
+  ],
+  'rows': [
+    [
+      {
+        'text': "David Francis"
+      },
+      {
+        'text': "24"
+      },
+      {
+        'text': "18"
+      }
+    ],
+    [
+      {
+        'text': "Paul Farmer"
+      },
+      {
+        'text': "16"
+      },
+      {
+        'text': "20"
+      }
+    ],
+    [
+      {
+        'text': "Rita Patel"
+      },
+      {
+        'text': "24"
+      },
+      {
+        'text': "27"
+      }
+    ]
+  ]
+}) }}
+{% endset -%}
+
+{% set pastMonthHtml %}
+<h2 class="govuk-heading-l">Past month</h2>
+{{ govukTable({
+  'head': [
+    {
+      'text': "Case manager"
+    },
+    {
+      'text': "Cases opened"
+    },
+    {
+      'text': "Cases closed"
+    }
+  ],
+  'rows': [
+    [
+      {
+        'text': "David Francis"
+      },
+      {
+        'text': "98"
+      },
+      {
+        'text': "95"
+      }
+    ],
+    [
+      {
+        'text': "Paul Farmer"
+      },
+      {
+        'text': "122"
+      },
+      {
+        'text': "131"
+      }
+    ],
+    [
+      {
+        'text': "Rita Patel"
+      },
+      {
+        'text': "126"
+      },
+      {
+        'text': "142"
+      }
+    ]
+  ]
+}) }}
+{% endset -%}
+
+{% set pastYearHtml %}
+<h2 class="govuk-heading-l">Past year</h2>
+{{ govukTable({
+  'head': [
+    {
+      'text': "Case manager"
+    },
+    {
+      'text': "Cases opened"
+    },
+    {
+      'text': "Cases closed"
+    }
+  ],
+  'rows': [
+    [
+      {
+        'text': "David Francis"
+      },
+      {
+        'text': "1380"
+      },
+      {
+        'text': "1472"
+      }
+    ],
+    [
+      {
+        'text': "Paul Farmer"
+      },
+      {
+        'text': "1129"
+      },
+      {
+        'text': "1083"
+      }
+    ],
+    [
+      {
+        'text': "Rita Patel"
+      },
+      {
+        'text': "1539"
+      },
+      {
+        'text': "1265"
+      }
+    ]
+  ]
+}) }}
+{% endset -%}
+
+{{ govukTabs({
+  'items': [
+    {
+      'label': "Past day",
+      'id': "past-day",
+      'panel': {
+        'html': pastDayHtml
+      }
+    },
+    {
+      'label': "Past week",
+      'id': "past-week",
+      'panel': {
+        'html': pastWeekHtml
+      }
+    },
+    {
+      'label': "Past month",
+      'id': "past-month",
+      'panel': {
+        'html': pastMonthHtml
+      }
+    },
+    {
+      'label': "Past year",
+      'id': "past-year",
+      'panel': {
+        'html': pastYearHtml
+      }
+    }
+  ]
+}) }}
+  </div>
+
+  <div class="govuk-!-margin-top-9">
+    {{ govukWarningText({
+      'text': "You can be fined up to £5,000 if you don’t register.",
+      'iconFallbackText': "Warning"
+    }) }}
+  </div>
+
+{% endblock %}
+
+{% block footer %}
+{{ govukFooter({
+  'navigation': [
+    {
+      'title': "Services and information",
+      'columns': 2,
+      'items': [
+        {
+          'href': "#",
+          'text': "Benefits"
+        },
+        {
+          'href': "#",
+          'text': "Births, deaths, marriages and care"
+        },
+        {
+          'href': "#",
+          'text': "Business and self-employed"
+        },
+        {
+          'href': "#",
+          'text': "Childcare and parenting"
+        },
+        {
+          'href': "#",
+          'text': "Citizenship and living in the UK"
+        },
+        {
+          'href': "#",
+          'text': "Crime, justice and the law"
+        },
+        {
+          'href': "#",
+          'text': "Disabled people"
+        },
+        {
+          'href': "#",
+          'text': "Driving and transport"
+        },
+        {
+          'href': "#",
+          'text': "Education and learning"
+        },
+        {
+          'href': "#",
+          'text': "Employing people"
+        },
+        {
+          'href': "#",
+          'text': "Environment and countryside"
+        },
+        {
+          'href': "#",
+          'text': "Housing and local services"
+        },
+        {
+          'href': "#",
+          'text': "Money and tax"
+        },
+        {
+          'href': "#",
+          'text': "Passports, travel and living abroad"
+        },
+        {
+          'href': "#",
+          'text': "Visas and immigration"
+        },
+        {
+          'href': "#",
+          'text': "Working, jobs and pensions"
+        }
+      ]
+    },
+    {
+      'title': "Departments and policy",
+      'items': [
+        {
+          'href': "#",
+          'text': "How government works"
+        },
+        {
+          'href': "#",
+          'text': "Departments"
+        },
+        {
+          'href': "#",
+          'text': "Worldwide"
+        },
+        {
+          'href': "#",
+          'text': "Policies"
+        },
+        {
+          'href': "#",
+          'text': "Publications"
+        },
+        {
+          'href': "#",
+          'text': "Announcements"
+        }
+      ]
+    }
+  ],
+  'meta': {
+    'items': [
+      {
+        'href': "#",
+        'text': "Help"
+      },
+      {
+        'href': "#",
+        'text': "Cookies"
+      },
+      {
+        'href': "#",
+        'text': "Contact"
+      },
+      {
+        'href': "#",
+        'text': "Terms and conditions"
+      },
+      {
+        'href': "#",
+        'text': "Rhestr o Wasanaethau Cymraeg"
+      },
+      {
+        'href': "#",
+        'text': "Government Digital Service"
+      }
+    ]
+  }
+}) }}
 {% endblock %}

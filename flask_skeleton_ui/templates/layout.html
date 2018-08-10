@@ -14,12 +14,16 @@
 
 {% block pageTitle %}{% block title %}{% endblock %}{%if self.title() %} - {% endif %}{{ service_name }}{% endblock %}
 
-{% block cookie_message %}<p>HM Land Registry uses cookies to make the site simpler. <a href="https://www.gov.uk/help/cookies">Find out more about cookies</a></p>{% endblock %}
-
 {% block bodyEnd %}
   <!--[if gt IE 8]><!-->
   <script src="{{ url_for('static', filename='javascripts/main.js') }}"> </script>
   <!--<![endif]-->
+{% endblock %}
+
+{% block bodyStart %}
+  <div class="app-cookie-banner js-cookie-banner">
+    <p class="app-cookie-banner__message">HM Land Registry uses cookies to make the site simpler. <a href="https://www.gov.uk/help/cookies" class="govuk-link">Find out more about cookies</a></p>
+  </div>
 {% endblock %}
 
 {% block skipLink %}
