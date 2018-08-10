@@ -23,7 +23,7 @@ module.exports = (gulp, config) => {
         contents = contents.replace(/\.njk/g, '.html')
 
         // Quoting dict keys, because nunjucks doesn't require them but jinja does
-        contents = contents.replace(/^([ ]*)([^"#\r\n:]+?)\s*:/gm, "$1'$2':")
+        contents = contents.replace(/^([ ]*)([^ "#\r\n:]+?)\s*:/gm, "$1'$2':")
 
         // Gov template uses .items, which is a reserved word in python
         contents = contents.replace(/\.items/g, "['items']")
