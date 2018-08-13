@@ -30,7 +30,6 @@ module.exports = (gulp, config) => {
       .src(path.join(govukTemplatePath, '**/*.njk'))
       .pipe(blacklistedTemplates)
       .pipe(es.map(function(file, cb) {
-        console.log(file.path)
         var contents = file.contents.toString()
 
         // Rename file
