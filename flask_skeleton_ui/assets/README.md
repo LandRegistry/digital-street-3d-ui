@@ -17,7 +17,7 @@ Alternatively, you can use `npm run dev` if you are going to be working on the C
 At the time of writing, the build does not run in the pipeline and must be run inside the Docker container on the developer's laptop. This means that the build artefacts need to be committed into the repository. The following files would need to be committed in, but _should not be manually modified_
 
 - `application/assets/dist/**/*.*`
-- `application/templates/govuk_template.html` (This file is copied from the `govuk_template_jinja` module in `node_modules`. It is checked into the repository, but should not be modified manually.)
+- `application/templates/vendor/.govuk-frontend/template.html` (This file is copied from the `govuk-frontend` module in `node_modules`. It is checked into the repository, but should not be modified manually.)
 
 Application specific frontend code is held in `application/assets/src` - this is the only place you should be manually editing files.
 
@@ -27,7 +27,7 @@ The build tasks are written in Nodejs, and as such the repository contains a pac
 
 1) Don't run `npm install` to install all the packages. You should `rebuild` your docker container and they will be installed for you.
 
-2) If you want to install a new module, run `npm install --package-lock-only packageNameHere` which will add the module to your package.json. You should then run `rebuild flask-skeleton-ui` and it will install the new package.
+2) If you want to install a new module, run `npm install --package-lock-only packageNameHere` which will add the module to your package.json. You should then run `rebuild flask-skeleton-ui` and it will install the new package. Alternatively, it is often easier to simply add the line to package.json manually yourself and then do the rebuild.
 
 3) If you want to work on a module directly and would normally use `npm link` - unfortunately you can't because Docker volumes do not support symlinks. Instead, check out a copy of the Git repository to a `node_modules` folder inside your application's repository and work on it there. Any modules installed in `/src/node_modules` will take precedence over the modules installed at `NODE_PATH`
 
