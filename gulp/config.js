@@ -7,8 +7,7 @@ module.exports = {
   'sassPath': 'scss/*.scss',
   'sassIncludePaths': [
     process.env.NODE_PATH,
-    'node_modules',
-    path.join(path.dirname(require.resolve('land-registry-elements/README.md')), 'src')
+    'node_modules'
   ],
   'localhost': 'localhost:8080'
 }

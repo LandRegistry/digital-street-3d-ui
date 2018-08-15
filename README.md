@@ -262,12 +262,6 @@ There are important differences to bear in mind though, as follows:
 - When invoking macros with a dict as above, remember that keys should be quoted. Because the GOV.UK design system is written for Nunjucks/Node.JS they do not quote their keys and so copying and pasting their code examples directly will not work.
 - Import paths for the macros are different to those in the documentation. Note how in the above for example the macro is pulled from `app/vendor/.govuk-frontend/components` and the file extension is `.html` instead of `.njk`
 
-The skeleton also includes it's own set of Jinja macros to assist in writing GOV.UK compliant forms (See https://github.com/LandRegistry/govuk-elements-jinja-macros). These can be imported as follows:
-
-```
-{% from 'govuk_elements_jinja_macros/form.html' import element, single_choice, multiple_choice, error_summary %}
-```
-
 #### CSRF protection
 
 Forms are protected with the CSRF protection built in to Flask-WTF. This is customised to handle the CSRFError exception that gets thrown and show users a message when it occurs. It is worth considering however whether you should warn users of this upfront, before they start filling out a form. Otherwise there is a risk their session will time out after an hour and their form submission will be thrown away, forcing them to do it again.
@@ -282,29 +276,6 @@ from flask_skeleton_ui.custom_extensions.csrf.main import csrf
 def index_page():
     ...
 ```
-
-### Land-registry-elements
-
-[land-registry-elements](https://github.com/LandRegistry/land-registry-elements) is bundled into the skeleton, providing CSS & JS as well as Jinja macros for some of the components. These can be used like this:
-
-```
-{% from 'land_registry_elements/address/template.html' import address_simple %}
-
-{{ address_simple(['48 Foo bar', 'Wibble', 'PL1 1LP']) }}
-```
-
-CSS can be imported from individual components like this:
-
-```css
-@import 'land_registry_elements/media/style';
-```
-
-And JS like this:
-
-```js
-import 'land-registry-elements/src/land_registry_elements/clientside-form-validation/controller'
-```
-
 
 ### ApplicationError templates
 The ApplicationError class contains a code parameter when raising exceptions, such as:

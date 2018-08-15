@@ -20,8 +20,7 @@
     "url": "git@192.168.249.38:skeletons/flask-skeleton-ui.git"
   },
   "dependencies": {
-    "govuk-frontend": "1.2.0",
-    "land-registry-elements": "git+https://github.com/LandRegistry/land-registry-elements.git#v2.2.0"
+    "govuk-frontend": "1.2.0"
   },
   "devDependencies": {
     "semver": "^5.5.0",

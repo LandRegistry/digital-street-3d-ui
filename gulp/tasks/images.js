@@ -7,13 +7,5 @@ module.exports = (gulp, config) => {
       .pipe(gulp.dest(path.join(config.destinationPath, 'images/app')))
   )
 
-  gulp.task('patternLibraryImages', () => {
-    const patternLibraryPath = path.dirname(require.resolve('land-registry-elements/README.md'))
-
-    return gulp
-      .src(path.join(patternLibraryPath, 'src/land_registry_elements/**/*.{gif,png,jpg,jpeg,svg}'))
-      .pipe(gulp.dest(path.join(config.destinationPath, 'images/land_registry_elements')))
-  })
-
-  gulp.task('images', gulp.parallel(['appImages', 'patternLibraryImages']))
+  gulp.task('images', gulp.parallel(['appImages']))
 }

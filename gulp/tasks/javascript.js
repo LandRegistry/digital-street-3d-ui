@@ -2,11 +2,16 @@ const path = require('path')
 const spawn = require('child_process').spawn
 
 module.exports = (gulp, config) => {
-  gulp.task('jquery', () =>
-    gulp
-      .src(require.resolve('jquery/dist/jquery.min.js'))
-      .pipe(gulp.dest(path.join(config.destinationPath, 'javascripts')))
-  )
+  gulp.task('jquery', () => {
+    try {
+      return gulp
+        .src(require.resolve('jquery/dist/jquery.min.js'))
+        .pipe(gulp.dest(path.join(config.destinationPath, 'javascripts')))
+    } catch (e) {
+      // jQuery not installed, just continue
+      return Promise.resolve()
+    }
+  })
 
   gulp.task('js-vendor', () =>
     gulp
