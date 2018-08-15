@@ -236,7 +236,33 @@ Messages registered with the Flask `flash()` method will appear at the top of th
 
 #### Jinja macros
 
-The skeleton includes a set of Jinja macros to assist in writing GOV.UK compliant forms (See https://github.com/LandRegistry/govuk-elements-jinja-macros). These can be imported as follows:
+The GOV.UK design system includes a range of macros for generating their markup. Using these is beneficial because your markup will always keep in step with the version of the kit you are using. These macros are ported to Jinja from their Nunjucks equivalents automatically by the nodejs build process. Due to compatibility issues, this does not currently include the form macros.
+
+The GOV.UK macros can be imported into your template as follows:
+
+```
+{% from "app/vendor/.govuk-frontend/components/phase-banner/macro.html" import govukPhaseBanner %}
+```
+
+and then used:
+
+```
+  {{ govukPhaseBanner({
+    'tag': {
+      'text': "alpha"
+    },
+    'html': 'This is a new service – your <a class="govuk-link" href="#">feedback</a> will help us to improve it.'
+  }) }}
+```
+
+This is the broadly same as is documented in the GOV.UK design system so you can follow their guidelines on the whole. For example, the phase banner documentation can be found at https://design-system.service.gov.uk/components/phase-banner/
+
+There are important differences to bear in mind though, as follows:
+
+- When invoking macros with a dict as above, remember that keys should be quoted. Because the GOV.UK design system is written for Nunjucks/Node.JS they do not quote their keys and so copying and pasting their code examples directly will not work.
+- Import paths for the macros are different to those in the documentation. Note how in the above for example the macro is pulled from `app/vendor/.govuk-frontend/components` and the file extension is `.html` instead of `.njk`
+
+The skeleton also includes it's own set of Jinja macros to assist in writing GOV.UK compliant forms (See https://github.com/LandRegistry/govuk-elements-jinja-macros). These can be imported as follows:
 
 ```
 {% from 'govuk_elements_jinja_macros/form.html' import element, single_choice, multiple_choice, error_summary %}
