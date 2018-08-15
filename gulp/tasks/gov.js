@@ -57,19 +57,6 @@ module.exports = (gulp, config) => {
         // Jinja has a specific operator for doing this
         contents = contents.replace(/\+ loop.index/, '~ loop.index')
 
-        // Hardcoded replacements for deeply nested dict access, which requires
-        // more protection in Python than it does in JS
-        // replacements = {
-        //   'params.hint.classes': '(params.hint.classes if params.hint and params.hint.classes)',
-        //   'item.hint.text': '(item.hint.text if item.hint and item.hint.text)',
-        //   'item.hint.html': '(item.hint.html if item.hint and item.hint.html)',
-        //   'item.label.attributes': '(item.label.attributes if item.label and item.label.attributes)',
-        //   "(' ' + item.label.classes if item.label.classes else '')": "(' ' + item.label.classes if item.classes and item.label.classes else '')"
-        // }
-        // Object.keys(replacements).forEach(key =>
-        //   contents = contents.replace(new RegExp(escapeRegExp(key), 'g'), replacements[key])
-        // )
-
         // Resolve paths to the templates as jinja does not support relative paths as nunjucks does
         contents = contents.replace(/\.\.\//g, 'app/vendor/.govuk-frontend/' + path.relative(govukTemplatePath, path.dirname(path.resolve(file.path, '..'))) + '/')
         contents = contents.replace(/\.\//g, 'app/vendor/.govuk-frontend/' + path.relative(govukTemplatePath, path.dirname(file.path)) + '/')
