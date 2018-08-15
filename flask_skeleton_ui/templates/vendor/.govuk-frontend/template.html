@@ -1,8 +1,8 @@
-{% from "app/vendor/.govuk-frontend//components/skip-link/macro.html" import govukSkipLink %}
-{% from "app/vendor/.govuk-frontend//components/header/macro.html" import govukHeader %}
-{% from "app/vendor/.govuk-frontend//components/footer/macro.html" import govukFooter %}
+{% from "app/vendor/.govuk-frontend//components/skip-link/macro.html" import govukSkipLink -%}
+{% from "app/vendor/.govuk-frontend//components/header/macro.html" import govukHeader -%}
+{% from "app/vendor/.govuk-frontend//components/footer/macro.html" import govukFooter -%}
 {# specify absolute url for the static assets folder e.g. http://wwww.domain.com/assets #}
-{% set assetUrl = assetUrl | default(assetPath) %}
+{%- set assetUrl = assetUrl | default(assetPath) -%}
 <!DOCTYPE html>
 <html lang="{{ htmlLang | default('en') }}" class="govuk-template {{ htmlClasses }}">
   <head>
