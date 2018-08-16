@@ -12,9 +12,7 @@ app = LandRegistryFlask(__name__,
 
 # Set Jinja up to be able to load templates from packages (See gadget-govuk-ui for a full example)
 app.jinja_loader = PrefixLoader({
-    'app': PackageLoader('flask_skeleton_ui'),
-    'govuk_elements_jinja_macros': PackageLoader('govuk_elements_jinja_macros'),
-    'land_registry_elements': PackageLoader('land_registry_elements', '.'),
+    'app': PackageLoader('flask_skeleton_ui')
 })
 
 app.config.from_pyfile("config.py")

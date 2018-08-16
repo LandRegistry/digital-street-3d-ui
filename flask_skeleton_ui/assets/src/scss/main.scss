@@ -1,7 +1,7 @@
-$path: '/ui/images/';
+// GOV.UK design system
+$govuk-images-path: '/ui/.govuk-frontend/images/';
+$govuk-fonts-path: '/ui/.govuk-frontend/fonts/';
+@import 'govuk-frontend/all';  // Feel free to be more selective than this
 
-@import 'vendor/govuk-elements/govuk-elements';
-
-@import 'land_registry_elements/media/style';
-@import 'land_registry_elements/spacing/style';
-@import 'land_registry_elements/warning/style';
+// App specific code
+@import 'partials/cookie-banner';

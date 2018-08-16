@@ -1,1 +1,3 @@
-// See gadget-govuk-ui for examples of how to import modules
+import { initAll } from 'govuk-frontend/all' // Feel free to be more selective than this
+import './modules/cookie-banner'
+initAll()

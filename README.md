@@ -178,7 +178,7 @@ If you want to remove the GOV.UK frontend code in order to do something else suc
 - Remove any references to GOV.UK from your app's SCSS and JS files
 - Change `flask_skeleton_ui/custom_extensions/jinja_markdown_filter/main.py` to use `misaka.HtmlRenderer` instead of the custom `GovRenderer` and update the unit tests to suit.
 - Remove the references to GOV.UK from `flask_skeleton_ui/templates/layout.html` and implement your own base layout template.
-- Remove `govuk-elements-sass`, `govuk_frontend_toolkit`, `govuk_template_jinja` and `land-registry-elements` from `package.json` and regenerate your `package-lock.json`
+- Remove `govuk-frontend` and `land-registry-elements` from `package.json` and regenerate your `package-lock.json`
 - Remove `govuk-elements-jinja-macros` and `land-registry-elements` dependencies from `pipcompilewrapper.sh`
 - Tweak the Content-Security-Policy to suit your new needs
 
@@ -194,24 +194,20 @@ _(Taken from https://www.gov.uk/service-manual/design/making-your-service-look-l
 
 In order to use the toolkit elsewhere you therefore need to stop using these. This can be done as follows:
 
-- Make your own copy of govuk_template.html (Don't edit the one that's already there - this one will be overwritten when updating the GOV kit)
+- Make your own copy of the govuk template (Don't edit the one that's already there - this one will be overwritten when updating the GOV kit)
 - Find code that looks like the following blocks and delete them:
 
   ```
-  <!--[if IE 8]><link rel="stylesheet" media="all" href="{{ asset_path }}stylesheets/fonts-ie8.css?0.23.0"/><![endif]-->
-  <!--[if gte IE 9]><!--><link rel="stylesheet" media="all" href="{{ asset_path }}stylesheets/fonts.css?0.23.0"/><!--<![endif]-->
+  <link rel="shortcut icon" href="{{ assetPath | default('/assets') }}/images/favicon.ico" type="image/x-icon" />
+  <link rel="mask-icon" href="{{ assetPath | default('/assets') }}/images/govuk-mask-icon.svg" color="{{ themeColor | default('#0b0c0c') }}"> {# Hardcoded value of $govuk-black #}
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ assetPath | default('/assets') }}/images/govuk-apple-touch-icon-180x180.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="{{ assetPath | default('/assets') }}/images/govuk-apple-touch-icon-167x167.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="{{ assetPath | default('/assets') }}/images/govuk-apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" href="{{ assetPath | default('/assets') }}/images/govuk-apple-touch-icon.png">
   ```
 
   ```
-  <link rel="mask-icon" href="{{ asset_path }}images/gov.uk_logotype_crown.svg?0.23.0" color="#0b0c0c">
-  <link rel="apple-touch-icon" sizes="180x180" href="{{ asset_path }}images/apple-touch-icon-180x180.png?0.23.0">
-  <link rel="apple-touch-icon" sizes="167x167" href="{{ asset_path }}images/apple-touch-icon-167x167.png?0.23.0">
-  <link rel="apple-touch-icon" sizes="152x152" href="{{ asset_path }}images/apple-touch-icon-152x152.png?0.23.0">
-  <link rel="apple-touch-icon" href="{{ asset_path }}images/apple-touch-icon.png?0.23.0">
-  ```
-
-  ```
-  <meta property="og:image" content="{{ asset_path }}images/opengraph-image.png?0.23.0">
+  <meta property="og:image" content="{{ assetUrl | default('/assets') }}/images/govuk-opengraph-image.png">
   ```
 
   
@@ -221,12 +217,11 @@ In order to use the toolkit elsewhere you therefore need to stop using these. Th
   <link rel="shortcut icon" href="{{ url_for('static', filename='images/app/favicon.ico') }}" type="image/x-icon" />
   ```
 
-- Modify the `<div class="header-logo">` to be a Land Registry logo or whatever is appropriate.
+- Replace the call to `govukHeader` to be your own custom code as appropriate
 - Add the following code to the top of your `main.scss` file, above the `govuk-elements` import:
 
   ```
-  $toolkit-font-stack: 'HelveticaNeue', 'Helvetica Neue', 'Arial', 'Helvetica', sans-serif;
-  $toolkit-font-stack-tabular: 'HelveticaNeue', 'Helvetica Neue', 'Arial', 'Helvetica', sans-serif;
+  $govuk-font-family: "Comic Sans MS", cursive, sans-serif
   ```
 - Rebuild your CSS by running `npm run build`
 
@@ -241,11 +236,31 @@ Messages registered with the Flask `flash()` method will appear at the top of th
 
 #### Jinja macros
 
-The skeleton includes a set of Jinja macros to assist in writing GOV.UK compliant forms (See https://github.com/LandRegistry/govuk-elements-jinja-macros). These can be imported as follows:
+The GOV.UK design system includes a range of macros for generating their markup. Using these is beneficial because your markup will always keep in step with the version of the kit you are using. These macros are ported to Jinja from their Nunjucks equivalents automatically by the nodejs build process. Due to compatibility issues, this does not currently include the form macros.
+
+The GOV.UK macros can be imported into your template as follows:
 
 ```
-{% from 'govuk_elements_jinja_macros/form.html' import element, single_choice, multiple_choice, error_summary %}
+{% from "app/vendor/.govuk-frontend/components/phase-banner/macro.html" import govukPhaseBanner %}
 ```
+
+and then used:
+
+```
+  {{ govukPhaseBanner({
+    'tag': {
+      'text': "alpha"
+    },
+    'html': 'This is a new service – your <a class="govuk-link" href="#">feedback</a> will help us to improve it.'
+  }) }}
+```
+
+This is the broadly same as is documented in the GOV.UK design system so you can follow their guidelines on the whole. For example, the phase banner documentation can be found at https://design-system.service.gov.uk/components/phase-banner/
+
+There are important differences to bear in mind though, as follows:
+
+- When invoking macros with a dict as above, remember that keys should be quoted. Because the GOV.UK design system is written for Nunjucks/Node.JS they do not quote their keys and so copying and pasting their code examples directly will not work.
+- Import paths for the macros are different to those in the documentation. Note how in the above for example the macro is pulled from `app/vendor/.govuk-frontend/components` and the file extension is `.html` instead of `.njk`
 
 #### CSRF protection
 
@@ -261,29 +276,6 @@ from flask_skeleton_ui.custom_extensions.csrf.main import csrf
 def index_page():
     ...
 ```
-
-### Land-registry-elements
-
-[land-registry-elements](https://github.com/LandRegistry/land-registry-elements) is bundled into the skeleton, providing CSS & JS as well as Jinja macros for some of the components. These can be used like this:
-
-```
-{% from 'land_registry_elements/address/template.html' import address_simple %}
-
-{{ address_simple(['48 Foo bar', 'Wibble', 'PL1 1LP']) }}
-```
-
-CSS can be imported from individual components like this:
-
-```css
-@import 'land_registry_elements/media/style';
-```
-
-And JS like this:
-
-```js
-import 'land-registry-elements/src/land_registry_elements/clientside-form-validation/controller'
-```
-
 
 ### ApplicationError templates
 The ApplicationError class contains a code parameter when raising exceptions, such as:
