@@ -4,7 +4,6 @@ import os
 import gzip
 from werkzeug import Headers
 from flask_compress import Compress
-from contextlib import suppress
 
 from flask_skeleton_ui.main import app
 from flask_skeleton_ui.custom_extensions.gzip_static_assets.main import GzipStaticAssets
@@ -59,9 +58,8 @@ class TestGzipStaticAssets(unittest.TestCase):
         # Unzip it, check the contents is the same as the original
         self.assertEqual(gzip.decompress(response.data).decode('utf-8'), file_contents)
 
-        # Suppress exception that occurs on Windows which is over-eager when locking the files
-        with suppress(OSError):
-            os.remove(filename)
+        response.close()
+        os.remove(filename)
 
     def test_html_is_not_gzipped(self):
         response = self.client.get('/')
@@ -93,6 +91,8 @@ class TestGzipStaticAssets(unittest.TestCase):
             # Check the response reports itself as gzip
             self.assertEqual(response.content_encoding, 'gzip')
 
+            response.close()
+
             # Do a second request to get the gzipped response
             response = self.client.get('/ui/gzip-test.css',
                                        headers=Headers([('Accept-encoding', 'gzip')]))
@@ -103,6 +103,6 @@ class TestGzipStaticAssets(unittest.TestCase):
             # Check the response reports itself as gzip
             self.assertEqual(response.content_encoding, 'gzip')
 
-        # Suppress exception that occurs on Windows which is over-eager when locking the files
-        with suppress(OSError):
-            os.remove(filename)
+            response.close()
+
+        os.remove(filename)

@@ -2,7 +2,6 @@ import unittest
 from unittest import mock
 import os
 from freezegun import freeze_time
-from contextlib import suppress
 
 from flask_skeleton_ui.main import app
 from flask import render_template_string
@@ -44,9 +43,7 @@ class TestCachebustStaticAssets(unittest.TestCase):
         hash_two = md5_for_file(filename)
         self.assertNotEqual(hash_one, hash_two)
 
-        # Suppress exception that occurs on Windows which is over-eager when locking the files
-        with suppress(OSError):
-            os.remove(filename)
+        os.remove(filename)
 
     def test_url_for_adds_cache_query_string(self):
         filename = 'flask_skeleton_ui/assets/dist/test.txt'
@@ -60,9 +57,7 @@ class TestCachebustStaticAssets(unittest.TestCase):
 
         self.assertIn('?cache={}'.format(md5_value), output)
 
-        # Suppress exception that occurs on Windows which is over-eager when locking the files
-        with suppress(OSError):
-            os.remove(filename)
+        os.remove(filename)
 
     @mock.patch('flask_skeleton_ui.custom_extensions.cachebust_static_assets.main.md5_for_file', wraps=md5_for_file)
     def test_repeated_url_for_calls_hits_cache_not_disk(self, mock_md5_for_file):
@@ -80,9 +75,7 @@ class TestCachebustStaticAssets(unittest.TestCase):
         self.assertEqual(hash_one, hash_two)
         self.assertEqual(hash_two, hash_three)
 
-        # Suppress exception that occurs on Windows which is over-eager when locking the files
-        with suppress(OSError):
-            os.remove(filename)
+        os.remove(filename)
 
     def test_non_existent_file_doesnt_throw_exception_but_logs_instead(self):
         with app.test_request_context('/'):
@@ -111,10 +104,10 @@ class TestCachebustStaticAssets(unittest.TestCase):
 
         expires = response.headers.get('Expires')
         self.assertEqual(expires, 'Mon, 18 Jan 2027 10:12:00 GMT')
+        
+        response.close()
 
-        # Suppress exception that occurs on Windows which is over-eager when locking the files
-        with suppress(OSError):
-            os.remove(filename)
+        os.remove(filename)
 
     @freeze_time("2017-01-18")
     def test_far_future_expiry_headers_for_txt_file(self):
@@ -127,6 +120,6 @@ class TestCachebustStaticAssets(unittest.TestCase):
         expires = response.headers.get('Expires')
         self.assertEqual(expires, 'Wed, 18 Jan 2017 12:00:00 GMT')
 
-        # Suppress exception that occurs on Windows which is over-eager when locking the files
-        with suppress(OSError):
-            os.remove(filename)
+        response.close()
+        
+        os.remove(filename)
