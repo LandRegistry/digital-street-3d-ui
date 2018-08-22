@@ -67,7 +67,7 @@ class TestGzipStaticAssets(unittest.TestCase):
         response = self.client.get('/')
 
         self.assertIsNone(response.content_encoding)
-        self.assertIn('<div class="header-logo">', response.data.decode('utf-8'))
+        self.assertIn('<span class="govuk-header__logotype-text">', response.data.decode('utf-8'))
 
     # @mock.patch.object(Compress, 'compress', wraps=Compress.compress)
     def test_repeated_requests_returns_cached_value(self):
