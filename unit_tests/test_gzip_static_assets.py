@@ -42,12 +42,12 @@ class TestGzipStaticAssets(unittest.TestCase):
 
     def test_gzipped_response(self):
         # Create test file
-        filename = 'flask_skeleton_ui/assets/dist/stylesheets/gzip-test.css'
+        filename = 'flask_skeleton_ui/assets/dist/gzip-test.css'
         file_contents = "* { content: 'Test. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip.'; }"   # noqa: E501
         with open(filename, 'w+') as test_file:
             test_file.write(file_contents)
 
-        response = self.client.get('/ui/stylesheets/gzip-test.css', headers=Headers([('Accept-encoding', 'gzip')]))
+        response = self.client.get('/ui/gzip-test.css', headers=Headers([('Accept-encoding', 'gzip')]))
 
         # Check the response reports itself as gzip
         self.assertEqual(response.content_encoding, 'gzip')
@@ -58,6 +58,7 @@ class TestGzipStaticAssets(unittest.TestCase):
         # Unzip it, check the contents is the same as the original
         self.assertEqual(gzip.decompress(response.data).decode('utf-8'), file_contents)
 
+        response.close()
         os.remove(filename)
 
     def test_html_is_not_gzipped(self):
@@ -73,7 +74,7 @@ class TestGzipStaticAssets(unittest.TestCase):
         cache.clear()
 
         # Create test file
-        filename = 'flask_skeleton_ui/assets/dist/stylesheets/gzip-test.css'
+        filename = 'flask_skeleton_ui/assets/dist/gzip-test.css'
         file_contents = "* { content: 'Test. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip.'; }"   # noqa: E501
         with open(filename, 'w+') as test_file:
             test_file.write(file_contents)
@@ -81,7 +82,7 @@ class TestGzipStaticAssets(unittest.TestCase):
         compress_instance = Compress()
         with mock.patch.object(Compress, 'compress', wraps=compress_instance.compress) as mock_compress:
             # Do a first request to get the gzipped response
-            response = self.client.get('/ui/stylesheets/gzip-test.css',
+            response = self.client.get('/ui/gzip-test.css',
                                        headers=Headers([('Accept-encoding', 'gzip')]))
 
             # Check that flask-compress was invoked
@@ -90,8 +91,10 @@ class TestGzipStaticAssets(unittest.TestCase):
             # Check the response reports itself as gzip
             self.assertEqual(response.content_encoding, 'gzip')
 
+            response.close()
+
             # Do a second request to get the gzipped response
-            response = self.client.get('/ui/stylesheets/gzip-test.css',
+            response = self.client.get('/ui/gzip-test.css',
                                        headers=Headers([('Accept-encoding', 'gzip')]))
 
             # Check that flask-compress was *not* invoked again
@@ -99,5 +102,7 @@ class TestGzipStaticAssets(unittest.TestCase):
 
             # Check the response reports itself as gzip
             self.assertEqual(response.content_encoding, 'gzip')
+
+            response.close()
 
         os.remove(filename)

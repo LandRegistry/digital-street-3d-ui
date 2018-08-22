@@ -85,7 +85,8 @@ class TestCachebustStaticAssets(unittest.TestCase):
 
                 render_template_string("{{ url_for('static', filename='doesnt-exist.txt') }}")
                 # Test would fail if an exception was raised above
-                self.assertIn('File not found: /src/flask_skeleton_ui/assets/dist/doesnt-exist.txt', str(logs))
+                self.assertRegexpMatches(str(logs),
+                                         'File not found: /.*/flask_skeleton_ui/assets/dist/doesnt-exist.txt')
 
     def test_hashed_url_for_only_runs_for_static_asset_routes(self):
         with app.test_request_context('/'):
@@ -103,6 +104,8 @@ class TestCachebustStaticAssets(unittest.TestCase):
 
         expires = response.headers.get('Expires')
         self.assertEqual(expires, 'Mon, 18 Jan 2027 10:12:00 GMT')
+        
+        response.close()
 
         os.remove(filename)
 
@@ -117,4 +120,6 @@ class TestCachebustStaticAssets(unittest.TestCase):
         expires = response.headers.get('Expires')
         self.assertEqual(expires, 'Wed, 18 Jan 2017 12:00:00 GMT')
 
+        response.close()
+        
         os.remove(filename)
