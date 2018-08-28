@@ -13,6 +13,16 @@
 {% from 'app/vendor/.govuk-frontend/components/table/macro.html' import govukTable %}
 {% from 'app/vendor/.govuk-frontend/components/tabs/macro.html' import govukTabs %}
 {% from 'app/vendor/.govuk-frontend/components/warning-text/macro.html' import govukWarningText %}
+{% from 'app/vendor/.govuk-frontend/components/checkboxes/macro.html' import govukCheckboxes %}
+{% from 'app/vendor/.govuk-frontend/components/date-input/macro.html' import govukDateInput %}
+{% from 'app/vendor/.govuk-frontend/components/error-message/macro.html' import govukErrorMessage %}
+{% from 'app/vendor/.govuk-frontend/components/error-summary/macro.html' import govukErrorSummary %}
+{% from 'app/vendor/.govuk-frontend/components/fieldset/macro.html' import govukFieldset %}
+{% from 'app/vendor/.govuk-frontend/components/file-upload/macro.html' import govukFileUpload %}
+{% from 'app/vendor/.govuk-frontend/components/input/macro.html' import govukInput %}
+{% from 'app/vendor/.govuk-frontend/components/radios/macro.html' import govukRadios %}
+{% from 'app/vendor/.govuk-frontend/components/select/macro.html' import govukSelect %}
+{% from 'app/vendor/.govuk-frontend/components/textarea/macro.html' import govukTextarea %}
 
 
 {% block title %}Index{% endblock %}
@@ -168,245 +178,245 @@
 
   <div class="govuk-!-margin-top-9">
     {% set pastDayHtml %}
-<h2 class="govuk-heading-l">Past day</h2>
-{{ govukTable({
-  'head': [
-    {
-      'text': "Case manager"
-    },
-    {
-      'text': "Cases opened"
-    },
-    {
-      'text': "Cases closed"
-    }
-  ],
-  'rows': [
-    [
-      {
-        'text': "David Francis"
-      },
-      {
-        'text': "3"
-      },
-      {
-        'text': "0"
-      }
-    ],
-    [
-      {
-        'text': "Paul Farmer"
-      },
-      {
-        'text': "1"
-      },
-      {
-        'text': "0"
-      }
-    ],
-    [
-      {
-        'text': "Rita Patel"
-      },
-      {
-        'text': "2"
-      },
-      {
-        'text': "0"
-      }
-    ]
-  ]
-}) }}
-{% endset -%}
+      <h2 class="govuk-heading-l">Past day</h2>
+      {{ govukTable({
+        'head': [
+          {
+            'text': "Case manager"
+          },
+          {
+            'text': "Cases opened"
+          },
+          {
+            'text': "Cases closed"
+          }
+        ],
+        'rows': [
+          [
+            {
+              'text': "David Francis"
+            },
+            {
+              'text': "3"
+            },
+            {
+              'text': "0"
+            }
+          ],
+          [
+            {
+              'text': "Paul Farmer"
+            },
+            {
+              'text': "1"
+            },
+            {
+              'text': "0"
+            }
+          ],
+          [
+            {
+              'text': "Rita Patel"
+            },
+            {
+              'text': "2"
+            },
+            {
+              'text': "0"
+            }
+          ]
+        ]
+      }) }}
+      {% endset -%}
 
-{% set pastWeekHtml %}
-<h2 class="govuk-heading-l">Past week</h2>
-{{ govukTable({
-  'head': [
-    {
-      'text': "Case manager"
-    },
-    {
-      'text': "Cases opened"
-    },
-    {
-      'text': "Cases closed"
-    }
-  ],
-  'rows': [
-    [
-      {
-        'text': "David Francis"
-      },
-      {
-        'text': "24"
-      },
-      {
-        'text': "18"
-      }
-    ],
-    [
-      {
-        'text': "Paul Farmer"
-      },
-      {
-        'text': "16"
-      },
-      {
-        'text': "20"
-      }
-    ],
-    [
-      {
-        'text': "Rita Patel"
-      },
-      {
-        'text': "24"
-      },
-      {
-        'text': "27"
-      }
-    ]
-  ]
-}) }}
-{% endset -%}
+      {% set pastWeekHtml %}
+      <h2 class="govuk-heading-l">Past week</h2>
+      {{ govukTable({
+        'head': [
+          {
+            'text': "Case manager"
+          },
+          {
+            'text': "Cases opened"
+          },
+          {
+            'text': "Cases closed"
+          }
+        ],
+        'rows': [
+          [
+            {
+              'text': "David Francis"
+            },
+            {
+              'text': "24"
+            },
+            {
+              'text': "18"
+            }
+          ],
+          [
+            {
+              'text': "Paul Farmer"
+            },
+            {
+              'text': "16"
+            },
+            {
+              'text': "20"
+            }
+          ],
+          [
+            {
+              'text': "Rita Patel"
+            },
+            {
+              'text': "24"
+            },
+            {
+              'text': "27"
+            }
+          ]
+        ]
+      }) }}
+      {% endset -%}
 
-{% set pastMonthHtml %}
-<h2 class="govuk-heading-l">Past month</h2>
-{{ govukTable({
-  'head': [
-    {
-      'text': "Case manager"
-    },
-    {
-      'text': "Cases opened"
-    },
-    {
-      'text': "Cases closed"
-    }
-  ],
-  'rows': [
-    [
-      {
-        'text': "David Francis"
-      },
-      {
-        'text': "98"
-      },
-      {
-        'text': "95"
-      }
-    ],
-    [
-      {
-        'text': "Paul Farmer"
-      },
-      {
-        'text': "122"
-      },
-      {
-        'text': "131"
-      }
-    ],
-    [
-      {
-        'text': "Rita Patel"
-      },
-      {
-        'text': "126"
-      },
-      {
-        'text': "142"
-      }
-    ]
-  ]
-}) }}
-{% endset -%}
+      {% set pastMonthHtml %}
+      <h2 class="govuk-heading-l">Past month</h2>
+      {{ govukTable({
+        'head': [
+          {
+            'text': "Case manager"
+          },
+          {
+            'text': "Cases opened"
+          },
+          {
+            'text': "Cases closed"
+          }
+        ],
+        'rows': [
+          [
+            {
+              'text': "David Francis"
+            },
+            {
+              'text': "98"
+            },
+            {
+              'text': "95"
+            }
+          ],
+          [
+            {
+              'text': "Paul Farmer"
+            },
+            {
+              'text': "122"
+            },
+            {
+              'text': "131"
+            }
+          ],
+          [
+            {
+              'text': "Rita Patel"
+            },
+            {
+              'text': "126"
+            },
+            {
+              'text': "142"
+            }
+          ]
+        ]
+      }) }}
+      {% endset -%}
 
-{% set pastYearHtml %}
-<h2 class="govuk-heading-l">Past year</h2>
-{{ govukTable({
-  'head': [
-    {
-      'text': "Case manager"
-    },
-    {
-      'text': "Cases opened"
-    },
-    {
-      'text': "Cases closed"
-    }
-  ],
-  'rows': [
-    [
-      {
-        'text': "David Francis"
-      },
-      {
-        'text': "1380"
-      },
-      {
-        'text': "1472"
-      }
-    ],
-    [
-      {
-        'text': "Paul Farmer"
-      },
-      {
-        'text': "1129"
-      },
-      {
-        'text': "1083"
-      }
-    ],
-    [
-      {
-        'text': "Rita Patel"
-      },
-      {
-        'text': "1539"
-      },
-      {
-        'text': "1265"
-      }
-    ]
-  ]
-}) }}
-{% endset -%}
+      {% set pastYearHtml %}
+      <h2 class="govuk-heading-l">Past year</h2>
+      {{ govukTable({
+        'head': [
+          {
+            'text': "Case manager"
+          },
+          {
+            'text': "Cases opened"
+          },
+          {
+            'text': "Cases closed"
+          }
+        ],
+        'rows': [
+          [
+            {
+              'text': "David Francis"
+            },
+            {
+              'text': "1380"
+            },
+            {
+              'text': "1472"
+            }
+          ],
+          [
+            {
+              'text': "Paul Farmer"
+            },
+            {
+              'text': "1129"
+            },
+            {
+              'text': "1083"
+            }
+          ],
+          [
+            {
+              'text': "Rita Patel"
+            },
+            {
+              'text': "1539"
+            },
+            {
+              'text': "1265"
+            }
+          ]
+        ]
+      }) }}
+      {% endset -%}
 
-{{ govukTabs({
-  'items': [
-    {
-      'label': "Past day",
-      'id': "past-day",
-      'panel': {
-        'html': pastDayHtml
-      }
-    },
-    {
-      'label': "Past week",
-      'id': "past-week",
-      'panel': {
-        'html': pastWeekHtml
-      }
-    },
-    {
-      'label': "Past month",
-      'id': "past-month",
-      'panel': {
-        'html': pastMonthHtml
-      }
-    },
-    {
-      'label': "Past year",
-      'id': "past-year",
-      'panel': {
-        'html': pastYearHtml
-      }
-    }
-  ]
-}) }}
+      {{ govukTabs({
+        'items': [
+          {
+            'label': "Past day",
+            'id': "past-day",
+            'panel': {
+              'html': pastDayHtml
+            }
+          },
+          {
+            'label': "Past week",
+            'id': "past-week",
+            'panel': {
+              'html': pastWeekHtml
+            }
+          },
+          {
+            'label': "Past month",
+            'id': "past-month",
+            'panel': {
+              'html': pastMonthHtml
+            }
+          },
+          {
+            'label': "Past year",
+            'id': "past-year",
+            'panel': {
+              'html': pastYearHtml
+            }
+          }
+        ]
+      }) }}
   </div>
 
   <div class="govuk-!-margin-top-9">
@@ -415,6 +425,216 @@
       'iconFallbackText': "Warning"
     }) }}
   </div>
+
+  <div class="govuk-!-margin-top-9">
+    {{ govukCheckboxes({
+      'idPrefix': "waste",
+      'name': "waste",
+      'fieldset': {
+        'legend': {
+          'text': "Which types of waste do you transport?",
+          'isPageHeading': True,
+          'classes': "govuk-fieldset__legend--xl"
+        }
+      },
+      'hint': {
+        'text': "Select all that apply."
+      },
+      'items': [
+        {
+          'value': "carcasses",
+          'text': "Waste from animal carcasses"
+        },
+        {
+          'value': "mines",
+          'text': "Waste from mines or quarries"
+        },
+        {
+          'value': "farm",
+          'text': "Farm or agricultural waste"
+        }
+      ]
+    }) }}
+  </div>
+
+  <div class="govuk-!-margin-top-9">
+    {{ govukDateInput({
+      'id': "dob",
+      'name': "dob",
+      'fieldset': {
+        'legend': {
+          'text': "What is your date of birth?",
+          'isPageHeading': True,
+          'classes': "govuk-fieldset__legend--xl"
+        }
+      },
+      'hint': {
+        'text': "For example, 31 3 1980"
+      },
+      'items': [
+        {
+          'name': "day"
+        },
+        {
+          'name': "month"
+        },
+        {
+          'name': "year"
+        }
+      ]
+    }) }}
+  </div>
+
+  <div class="govuk-!-margin-top-9">
+    {{ govukDateInput({
+      'fieldset': {
+        'legend': {
+          'text': "What is your date of birth?",
+          'isPageHeading': true,
+          'classes': "govuk-fieldset__legend--xl"
+        }
+      },
+      'hint': {
+        'text': "For example, 31 3 1980"
+      },
+      'errorMessage': {
+        'text': "Date of birth must be in the past"
+      },
+      'id': "dob",
+      'name': "dob",
+      'items': [
+        {
+          'name': "day",
+          'value': "6"
+        },
+        {
+          'name': "month",
+          'value': "3"
+        },
+        {
+          'name': "year",
+          'value': "2076"
+        }
+      ]
+    }) }}
+  </div>
+
+  <div class="govuk-!-margin-top-9">
+    {{ govukErrorSummary({
+      'titleText': "There is a problem",
+      'errorList': [
+        {
+          'text': "Date of birth must be in the past",
+          'href': "#dob-error"
+        },
+        {
+          'text': "Enter a postcode, like AA1 1AA",
+          'href': "#postcode-error"
+        }
+      ]
+    }) }}
+  </div>
+
+  <div class="govuk-!-margin-top-9">
+    {{ govukFieldset({
+      'legend': {
+        'text': "Legend text goes here",
+        'classes': "govuk-fieldset__legend--xl",
+        'isPageHeading': true
+      }
+    }) }}
+  </div>
+
+  <div class="govuk-!-margin-top-9">
+    {{ govukFileUpload({
+      'id': "file-upload-1",
+      'name': "file-upload-1",
+      'label': {
+        'text': "Upload a file"
+      }
+    }) }}
+  </div>
+
+  <div class="govuk-!-margin-top-9">
+    {{ govukInput({
+      'label': {
+        'text': "Full name"
+      },
+      'id': "name",
+      'name': "name"
+    }) }}
+  </div>
+
+  <div class="govuk-!-margin-top-9">
+    {{ govukRadios({
+      'classes': "govuk-radios--inline",
+      'idPrefix': "changed-name",
+      'name': "changed-name",
+      'fieldset': {
+        'legend': {
+          'text': "Have you changed your name?",
+          'isPageHeading': true,
+          'classes': "govuk-fieldset__legend--xl"
+        }
+      },
+      'hint': {
+        'text': "This includes changing your last name or spelling your name differently."
+      },
+      'items': [
+        {
+          'value': "yes",
+          'text': "Yes"
+        },
+        {
+          'value': "no",
+          'text': "No"
+        }
+      ]
+    }) }}
+  </div>
+
+  <div class="govuk-!-margin-top-9">
+    {{ govukSelect({
+      'id': "sort",
+      'name': "sort",
+      'label': {
+        'text': "Sort by"
+      },
+      'items': [
+        {
+          'value': "published",
+          'text': "Recently published"
+        },
+        {
+          'value': "updated",
+          'text': "Recently updated",
+          'selected': true
+        },
+        {
+          'value': "views",
+          'text': "Most views"
+        },
+        {
+          'value': "comments",
+          'text': "Most comments"
+        }
+      ]
+    }) }}
+  </div>
+
+  <div class="govuk-!-margin-top-9">
+    {{ govukTextarea({
+      'name': "more-detail",
+      'id': "more-detail",
+      'label': {
+        'text': "Can you provide more detail?"
+      },
+      'hint': {
+        'text': "Don’t include personal or financial information, eg your National Insurance number or credit card details."
+      }
+    }) }}
+  </div>
+</div>
 
 {% endblock %}
 
