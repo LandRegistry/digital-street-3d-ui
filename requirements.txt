@@ -4,10 +4,11 @@
 #
 #    pip-compile --output-file requirements.txt requirements.in
 #
-certifi==2018.8.13        # via requests
+certifi==2018.8.24        # via requests
 cffi==1.11.5              # via misaka
 chardet==3.0.4            # via requests
 click==6.7                # via flask
+deepmerge==0.0.4
 flask-compress==1.4.0
 flask-logconfig==0.4.2
 flask-script==2.0.6

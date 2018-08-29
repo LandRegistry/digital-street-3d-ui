@@ -1,0 +1,24 @@
+{% from 'app/vendor/.govuk-frontend/components/input/macro.html' import govukInput %}
+
+{% macro element(form, name, params={}) %}
+  {% set el=form[name] %}
+
+  {# By default, map the various pieces from the wtforms element onto the govuk params structure #}
+  {% set wtforms_params = {
+    'id': el.id,
+    'name': name,
+    'label': {
+      'text': el.label.text,
+      'for': el.id
+    },
+    'value': el.data
+  } %}
+
+  {# Merge the wtforms defaults with any passed in params #}
+  {# This allows people to specify additional options as if they were using the gov macros #}
+  {# or to override anything set on the wtform object #}
+  {% set merged_params = wtforms_params|deep_merge(params) %}
+
+  {# Call the actual gov macro with the merged params #}
+  {{ govukInput(merged_params) }}
+{% endmacro %}

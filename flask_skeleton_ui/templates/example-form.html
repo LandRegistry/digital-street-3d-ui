@@ -1,0 +1,44 @@
+{#{% from 'govuk_elements_jinja_macros/form.html' import element, single_choice, multiple_choice, error_summary %}#}
+
+{% from 'app/macros/flask_wtf.html' import element %}
+
+{% extends "app/layout.html" %}
+
+{% block content %}
+  {#{{ error_summary(form) }}#}
+
+  <h1 class="govuk-heading-l">Example GOV.UK styled Flask-WTF form</h1>
+  <form method="POST" action="{{url_for('example_form.index', **request.args)}}">
+      {{ form.csrf_token }}
+
+      {{ element(form, 'full_name')}}
+
+      {{ element(form, 'ni', {
+        'hint': {
+          'html': 'It\'s on your National Insurance card, benefit letter, payslip or P60. <br>For example, ‘QQ 12 34 56 C’.'
+        }
+      }) }}
+
+    {#
+
+    <p>The above field stores it's value in "session storage". This allows us to easily retrieve it on other forms. <a href="{{ url_for('example_form.session_storage') }}">Click here</a> to navigate to another page and see the value you typed transfer across. Read <a href="http://land-registry-elements.herokuapp.com/form-session-storage/set">http://land-registry-elements.herokuapp.com/form-session-storage/set</a> for more info.</p>
+
+    {{ element(form, 'email', attributes={'data-email-hint':True, 'type':'email'}) }}
+
+    {{ element(form, 'select_field')}}
+
+    {{ single_choice(form, 'checkbox')}}
+
+    {{ multiple_choice(form, 'checkboxes_field')}}
+
+    {{ multiple_choice(form, 'radio_field')}}
+
+    {{ element(form, 'password')}}
+
+    {{ element(form, 'password_retype')}}
+
+    <input class="button" type="submit" value="Go" data-double-click-prevention>
+#}
+  </form>
+
+{% endblock %}

@@ -1,6 +1,7 @@
 from flask_skeleton_ui.landregistry_flask import LandRegistryFlask
 from jinja2 import PackageLoader
 from jinja2 import PrefixLoader
+from deepmerge import Merger
 
 
 app = LandRegistryFlask(__name__,
@@ -29,3 +30,23 @@ def inject_global_values():
     return dict(
         service_name='Flask Skeleton UI'
     )
+
+@app.template_filter('deep_merge')
+def deep_merge(a, b):
+    my_merger = Merger(
+        # pass in a list of tuple, with the
+        # strategies you are looking to apply
+        # to each type.
+        [
+            (list, ["append"]),
+            (dict, ["merge"])
+        ],
+        # next, choose the fallback strategies,
+        # applied to all other types:
+        ["override"],
+        # finally, choose the strategies in
+        # the case where the types conflict:
+        ["override"]
+    )
+
+    return my_merger.merge(a, b)
