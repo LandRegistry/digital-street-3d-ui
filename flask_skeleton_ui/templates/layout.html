@@ -5,7 +5,7 @@
 
 {% extends "app/vendor/.govuk-frontend/template.html" %}
 
-{% set assetPath = url_for('static', filename='').rstrip('/') %}
+{% set assetPath = url_for('static', filename='.govuk-frontend').rstrip('/') %}
 
 {% block head %}
   <!--[if gt IE 8]><!--><link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/main.css') }}" /><!--<![endif]-->
