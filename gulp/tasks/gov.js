@@ -6,10 +6,6 @@ const filter = require('gulp-filter')
 module.exports = (gulp, config) => {
   const govukTemplatePath = path.dirname(require.resolve('govuk-frontend/README.md'))
 
-  function escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-  }
-
   const templateFilter = filter([
     '**',
     '!**/components/**/template.njk'  // We want everything *except* the templates (i.e. just the macros)

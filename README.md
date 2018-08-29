@@ -168,6 +168,35 @@ The GOV.UK template is pulled in automatically from the npm package that gets in
 
 If you need to customise the file, make a copy of it and change your other templates to extend your copy instead of the original. When the GOV.UK kit gets updated, you then have a reference to use when bringing the updates in.
 
+### GOV.UK frontend macros
+
+The [govuk-frontend](https://github.com/alphagov/govuk-frontend) repository contains Nunjucks/NodeJS macros that allow you to create govuk style html without having to type it manually. These are converted to Jinja2/Python by the skeleton so that they can be used inside Flask.
+
+For example, to render the GOV.UK style header, you import the macro as follows:
+
+```
+{% from 'app/vendor/.govuk-frontend/components/header/macro.html' import govukHeader %}
+```
+
+And then call it with the appropriate data:
+
+```
+  {{ govukHeader({
+    'homepageUrl': "#",
+    'serviceName': "Service name",
+    'serviceUrl': "#",
+    'navigation': [
+      {
+        'href': "#1",
+        'text': "Navigation item 1",
+        'active': True
+      }
+    ]
+  }) }}
+```
+
+You will find examples like this all throughout the GOV.UK design system. These will work almost identically in Python/Jinja. An important difference however is that the Nunjucks examples will not have quoted keys in dicts (objects in JS parlance), but Python must. Therefore, when copying and pasting examples from the GOV.UK documentation make sure to add these in.
+
 ### Removing the GOV.UK frontend code
 
 If you want to remove the GOV.UK frontend code in order to do something else such as Bootstrap or just custom stuff, you will need to make the following changes:
@@ -210,7 +239,7 @@ In order to use the toolkit elsewhere you therefore need to stop using these. Th
   <meta property="og:image" content="{{ assetUrl | default('/assets') }}/images/govuk-opengraph-image.png">
   ```
 
-  
+
 - Create a new favicon for your app in `flask_skeleton_ui/assets/src/images` and re-point the shortcut icon to point to it as follows:
 
   ```
