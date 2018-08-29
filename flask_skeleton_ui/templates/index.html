@@ -60,9 +60,26 @@
 
   <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
 
-  <h2 class="govuk-heading-l">Kitchen sink</h2>
-  <p class="govuk-body">Since the govuk nunjucks templates undergo several transformations before they can be used in jinja, we need to check they don't throw any errors. Therefore, render absolutely everything on this page.</p>
-  <p class="govuk-body">Note that form macros are omitted from here due to difficulties porting them from nunjucks. These may appear in a future release&hellip;</p>
+  <h2 class="govuk-heading-s">govuk-frontend macros kitchen sink</h2>
+  <p class="govuk-body">govuk-frontend supplies macros for generating compliant html. These are converted from nunjucks to jinja and made available to the skeleton. See the README.md for more information.</p>
+  <p class="govuk-body">Since the nunjucks source undergoes several transformations before it can be used in jinja, we need to check they don't throw any errors. Therefore, we render absolutely everything on this page as a sanity check.</p>
+
+  <div class="govuk-!-margin-top-9">
+    {{ govukErrorSummary({
+      'titleText': "There is a problem",
+      'errorList': [
+        {
+          'text': "Date of birth must be in the past",
+          'href': "#dob-error"
+        },
+        {
+          'text': "Enter a postcode, like AA1 1AA",
+          'href': "#postcode-error"
+        }
+      ]
+    }) }}
+  </div>
+
   <div class="govuk-!-margin-top-9">
     {{ govukBackLink({
       'text': "Back",
@@ -514,22 +531,6 @@
         {
           'name': "year",
           'value': "2076"
-        }
-      ]
-    }) }}
-  </div>
-
-  <div class="govuk-!-margin-top-9">
-    {{ govukErrorSummary({
-      'titleText': "There is a problem",
-      'errorList': [
-        {
-          'text': "Date of birth must be in the past",
-          'href': "#dob-error"
-        },
-        {
-          'text': "Enter a postcode, like AA1 1AA",
-          'href': "#postcode-error"
         }
       ]
     }) }}
