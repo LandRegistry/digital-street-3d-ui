@@ -63,9 +63,7 @@ class ExampleForm(FlaskForm):
 
     checkboxes_field = SelectMultipleField('Select multiple',
                                            [InputRequired(message='Please select an option')],
-                                           choices=[('one', 'One'), ('two', 'Two'), ('three', 'Three')],
-                                           option_widget=widgets.CheckboxInput(),
-                                           widget=widgets.ListWidget(prefix_label=False)
+                                           choices=[('one', 'One'), ('two', 'Two'), ('three', 'Three')]
                                            )
 
     password = PasswordField('Create a password', validators=[

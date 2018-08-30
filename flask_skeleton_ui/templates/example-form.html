@@ -30,14 +30,19 @@
         {{ wtforms.govukSelect(form, 'select_field')}}
 
         {{ wtforms.govukCheckboxes(form, 'checkbox')}}
+
+        {{ wtforms.govukCheckboxes(form, 'checkboxes_field', {
+          'fieldset': {
+            'legend': {
+              'text': 'SelectMultipleField rendered as checkboxes'
+            }
+          }
+        })}}
+
+        {{ form['checkboxes_field'] }}
       {% endcall %}
 
       {#
-
-
-
-
-    {{ multiple_choice(form, 'checkboxes_field')}}
 
     {{ multiple_choice(form, 'radio_field')}}
 

@@ -108,6 +108,23 @@ def wtforms_helper():
                 ]
             }
 
+        # Special handling for:
+        # SelectMultipleField
+        #
+        # govuk-frontend requires a list of items with the standard form structure, plus
+        #   - a 'checked' attribute
+        if el.type in ['SelectMultipleField']:
+
+            def wtforms_checkbox_option(option):
+                (index, option) = option
+                return {
+                            'id': '%s-%d' % (el.id, index),
+                            'name': name,
+                            'value': option[0],
+                            'text': option[1],
+                            'checked': option[0] in el.data
+                        }
+            wtforms_params['items'] = list(map(wtforms_checkbox_option, enumerate(el.choices)))
 
         # Special handling for:
         # SelectField
@@ -122,7 +139,7 @@ def wtforms_helper():
                          'text': option[1],
                          'selected': option[0] == el.data }
 
-            wtforms_params['items'] =  map(wtforms_select_option, el.choices)
+            wtforms_params['items'] = list(map(wtforms_select_option, el.choices))
 
         return my_merger.merge(wtforms_params, params)
 
