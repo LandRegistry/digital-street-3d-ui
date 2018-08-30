@@ -104,7 +104,7 @@ class TestCachebustStaticAssets(unittest.TestCase):
 
         expires = response.headers.get('Expires')
         self.assertEqual(expires, 'Mon, 18 Jan 2027 10:12:00 GMT')
-        
+
         response.close()
 
         os.remove(filename)
@@ -121,5 +121,5 @@ class TestCachebustStaticAssets(unittest.TestCase):
         self.assertEqual(expires, 'Wed, 18 Jan 2017 12:00:00 GMT')
 
         response.close()
-        
+
         os.remove(filename)

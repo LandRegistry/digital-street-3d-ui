@@ -31,22 +31,58 @@ def inject_global_values():
         service_name='Flask Skeleton UI'
     )
 
-@app.template_filter('deep_merge')
-def deep_merge(a, b):
-    my_merger = Merger(
-        # pass in a list of tuple, with the
-        # strategies you are looking to apply
-        # to each type.
-        [
-            (list, ["append"]),
-            (dict, ["merge"])
-        ],
-        # next, choose the fallback strategies,
-        # applied to all other types:
-        ["override"],
-        # finally, choose the strategies in
-        # the case where the types conflict:
-        ["override"]
-    )
 
-    return my_merger.merge(a, b)
+@app.context_processor
+def wtforms_helper():
+    """Inject WTForms helper method"""
+
+    def wtforms(form, name, params={}):
+        """WTForms / govuk macro helper
+
+        Takes a WTForms form object and maps it to the necessary pieces
+        of the govuk-frontend macros so that the two mesh seamlessly
+        """
+        my_merger = Merger(
+            # pass in a list of tuple, with the
+            # strategies you are looking to apply
+            # to each type.
+            [
+                (list, ["append"]),
+                (dict, ["merge"])
+            ],
+            # next, choose the fallback strategies,
+            # applied to all other types:
+            ["override"],
+            # finally, choose the strategies in
+            # the case where the types conflict:
+            ["override"]
+        )
+
+        el = form[name]
+
+        # Map basic properties onto the govuk params structure
+        wtforms_params = {
+            'id': el.id,
+            'name': name,
+            'label': {
+                'text': el.label.text,
+                'for': el.id
+            },
+            'value': el.data
+        }
+
+        # Special handling for <select> field options
+        if el.type == 'SelectField':
+            # Note that wtforms does not appear to allow disabled options inside a select field
+            # so this is left unhandled
+            wtforms_params['items'] = [{
+                                        'value': value,
+                                        'text': text,
+                                        'selected': value == el.data
+                                      } for value, text in el.choices]
+
+        return my_merger.merge(wtforms_params, params)
+
+    return dict(
+        wtforms=wtforms
+    )

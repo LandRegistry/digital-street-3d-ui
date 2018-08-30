@@ -1,24 +1,24 @@
-{% from 'app/vendor/.govuk-frontend/components/input/macro.html' import govukInput %}
+{% from 'app/vendor/.govuk-frontend/components/input/macro.html' import govukInput as govukInputOriginal %}
+{% from 'app/vendor/.govuk-frontend/components/checkboxes/macro.html' import govukCheckboxes as govukCheckboxesOriginal %}
+{% from 'app/vendor/.govuk-frontend/components/date-input/macro.html' import govukDateInput as govukDateInputOriginal %}
+{% from 'app/vendor/.govuk-frontend/components/error-summary/macro.html' import govukErrorSummary as govukErrorSummaryOriginal %}
+{% from 'app/vendor/.govuk-frontend/components/fieldset/macro.html' import govukFieldset as govukFieldsetOriginal %}
+{% from 'app/vendor/.govuk-frontend/components/file-upload/macro.html' import govukFileUpload as govukFileUploadOriginal %}
+{% from 'app/vendor/.govuk-frontend/components/select/macro.html' import govukSelect as govukSelectOriginal %}
+{% from 'app/vendor/.govuk-frontend/components/textarea/macro.html' import govukTextarea as govukTextareaOriginal %}
 
-{% macro element(form, name, params={}) %}
-  {% set el=form[name] %}
-
-  {# By default, map the various pieces from the wtforms element onto the govuk params structure #}
-  {% set wtforms_params = {
-    'id': el.id,
-    'name': name,
-    'label': {
-      'text': el.label.text,
-      'for': el.id
-    },
-    'value': el.data
-  } %}
-
-  {# Merge the wtforms defaults with any passed in params #}
-  {# This allows people to specify additional options as if they were using the gov macros #}
-  {# or to override anything set on the wtform object #}
-  {% set merged_params = wtforms_params|deep_merge(params) %}
-
-  {# Call the actual gov macro with the merged params #}
-  {{ govukInput(merged_params) }}
+{% macro govukInput(form, name, params={}) %}
+  {{ govukInputOriginal(wtforms(form, name, params)) }}
 {% endmacro %}
+
+{% macro govukSelect(form, name, params={}) %}
+  {{ govukSelectOriginal(wtforms(form, name, params)) }}
+{% endmacro %}
+
+<!-- checboxes
+date input
+error message
+error summary
+fieldset
+file upload
+textarea -->
