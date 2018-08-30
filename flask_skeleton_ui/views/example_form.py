@@ -35,7 +35,7 @@ def session_storage():
 
 class ExampleForm(FlaskForm):
     full_name = StringField('Full name',
-                            validators=[InputRequired(message='Full name is required')]
+                            validators=[InputRequired(message='Full name is required')],
                             )
 
     ni = StringField('National Insurance number',

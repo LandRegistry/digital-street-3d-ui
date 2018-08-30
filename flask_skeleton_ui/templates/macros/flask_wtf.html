@@ -15,7 +15,11 @@
   {{ govukSelectOriginal(wtforms(form, name, params)) }}
 {% endmacro %}
 
-<!-- checboxes
+{% macro govukCheckboxes(form, name, params={}) %}
+  {{ govukCheckboxesOriginal(wtforms(form, name, params)) }}
+{% endmacro %}
+
+<!--
 date input
 error message
 error summary

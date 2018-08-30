@@ -41,6 +41,26 @@ def wtforms_helper():
 
         Takes a WTForms form object and maps it to the necessary pieces
         of the govuk-frontend macros so that the two mesh seamlessly
+
+        Available wtforms types
+        -----------------------
+
+        No special handling required:
+        StringField
+        FloatField
+        IntegerField
+        DecimalField
+
+        Require special handling:
+        BooleanField
+        DateField
+        DateTimeField
+        FileField
+        MultipleFileField
+        RadioField
+        SelectField
+        SelectMultipleField
+        SubmitField
         """
         my_merger = Merger(
             # pass in a list of tuple, with the
@@ -65,21 +85,44 @@ def wtforms_helper():
             'id': el.id,
             'name': name,
             'label': {
-                'text': el.label.text,
-                'for': el.id
+                'text': el.label.text
             },
             'value': el.data
         }
 
-        # Special handling for <select> field options
-        if el.type == 'SelectField':
+        # Special handling for:
+        # BooleanField
+        #
+        # govuk-frontend requires a list of items with the standard form structure, plus
+        #   - a 'checked' attribute
+        if el.type in ['BooleanField']:
+            wtforms_params = {
+                'items': [
+                    {
+                        'id': el.id,
+                        'name': name,
+                        'text': el.label.text,
+                        'value': el.data,
+                        'checked': el.data
+                    }
+                ]
+            }
+
+
+        # Special handling for:
+        # SelectField
+        #
+        # govuk-frontend requires a list of dicts with value, text, selected and disabled keys
+        if el.type in ['SelectField']:
             # Note that wtforms does not appear to allow disabled options inside a select field
-            # so this is left unhandled
-            wtforms_params['items'] = [{
-                                        'value': value,
-                                        'text': text,
-                                        'selected': value == el.data
-                                      } for value, text in el.choices]
+            # so this is left unhandled.
+            # Frankly this is a weird edge case anyway which is probably unlikely to be well understood by users so perhaps this is for the best
+            def wtforms_select_option(option):
+                return { 'value': option[0],
+                         'text': option[1],
+                         'selected': option[0] == el.data }
+
+            wtforms_params['items'] =  map(wtforms_select_option, el.choices)
 
         return my_merger.merge(wtforms_params, params)
 
