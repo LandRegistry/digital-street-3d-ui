@@ -36,10 +36,12 @@
             'legend': {
               'text': 'SelectMultipleField rendered as checkboxes'
             }
+          },
+          'hint': {
+            'text': 'Please note that SelectMultipleField elements should never be rendered as <select multiple> elements since users find these extremely difficult to interact with.'
           }
         })}}
 
-        {{ form['checkboxes_field'] }}
       {% endcall %}
 
       {#

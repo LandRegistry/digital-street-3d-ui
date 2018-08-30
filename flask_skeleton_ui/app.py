@@ -1,6 +1,7 @@
 from flask_skeleton_ui.landregistry_flask import LandRegistryFlask
 from jinja2 import PackageLoader
 from jinja2 import PrefixLoader
+from jinja2 import TemplateError
 from deepmerge import Merger
 
 
@@ -35,6 +36,9 @@ def inject_global_values():
 @app.context_processor
 def wtforms_helper():
     """Inject WTForms helper method"""
+
+    def raise_template_error(message):
+        raise TemplateError(message)
 
     def wtforms(form, name, params={}):
         """WTForms / govuk macro helper
@@ -144,5 +148,6 @@ def wtforms_helper():
         return my_merger.merge(wtforms_params, params)
 
     return dict(
-        wtforms=wtforms
+        wtforms=wtforms,
+        raise_template_error=raise_template_error
     )

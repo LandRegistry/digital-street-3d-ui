@@ -11,6 +11,9 @@
 {% endmacro %}
 
 {% macro govukSelect(form, name, params={}) %}
+  {% if form[name].type == 'SelectMultipleField' %}
+    {{ raise_template_error('SelectMultipleField elements should be rendered with the govukCheckboxes macro, not as a <select multiple> element') }}
+  {% endif %}
   {{ govukSelectOriginal(wtforms(form, name, params)) }}
 {% endmacro %}
 
