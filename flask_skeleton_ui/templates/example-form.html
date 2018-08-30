@@ -1,31 +1,36 @@
-{#{% from 'govuk_elements_jinja_macros/form.html' import element, single_choice, multiple_choice, error_summary %}#}
-
+{% from 'app/vendor/.govuk-frontend/components/fieldset/macro.html' import govukFieldset %}
 {% import 'app/macros/flask_wtf.html' as wtforms with context %}
 
 {% extends "app/layout.html" %}
 
 {% block content %}
   {#{{ error_summary(form) }}#}
-
-  <h1 class="govuk-heading-l">Example GOV.UK styled Flask-WTF form</h1>
-  <form method="POST" action="{{url_for('example_form.index', **request.args)}}" novalidate>
-      {{ form.csrf_token }}
-
-      {{ wtforms.govukInput(form, 'full_name')}}
-
-      {{ wtforms.govukInput(form, 'ni', {
-        'hint': {
-          'html': 'It\'s on your National Insurance card, benefit letter, payslip or P60. <br>For example, ‘QQ 12 34 56 C’.'
+  <form method="POST" action="{{url_for('example_form.index')}}" novalidate>
+      {% call govukFieldset({
+        'legend': {
+          'text': "Example GOV.UK styled Flask-WTF form",
+          'classes': "govuk-fieldset__legend--m",
+          'isPageHeading': true
         }
-      }) }}
+      }) %}
+        {{ form.csrf_token }}
 
-      {{ wtforms.govukInput(form, 'email', {
-        'type': 'email'
-      }) }}
+        {{ wtforms.govukInput(form, 'full_name')}}
 
-      {{ wtforms.govukSelect(form, 'select_field')}}
+        {{ wtforms.govukInput(form, 'ni', {
+          'hint': {
+            'html': 'It\'s on your National Insurance card, benefit letter, payslip or P60. <br>For example, ‘QQ 12 34 56 C’.'
+          }
+        }) }}
 
-      {{ wtforms.govukCheckboxes(form, 'checkbox')}}
+        {{ wtforms.govukInput(form, 'email', {
+          'type': 'email'
+        }) }}
+
+        {{ wtforms.govukSelect(form, 'select_field')}}
+
+        {{ wtforms.govukCheckboxes(form, 'checkbox')}}
+      {% endcall %}
 
       {#
 
