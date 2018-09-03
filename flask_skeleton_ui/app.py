@@ -59,14 +59,14 @@ def wtforms_helper():
         BooleanField
         SelectField
         SelectMultipleField
-
         RadioField
+        PasswordField
 
-        DateField
-        DateTimeField
         FileField
         MultipleFileField
         SubmitField
+        DateField
+        DateTimeField
         """
         my_merger = Merger(
             # pass in a list of tuple, with the
@@ -93,7 +93,7 @@ def wtforms_helper():
             'label': {
                 'text': el.label.text
             },
-            'value': el.data
+            'value': el.data if el.data else ''
         }
 
         # Special handling for:
@@ -119,7 +119,7 @@ def wtforms_helper():
         #
         # govuk-frontend requires a list of items with the standard form structure, plus
         #   - a 'checked' attribute
-        if el.type in ['SelectMultipleField']:
+        if el.type in ['SelectMultipleField', 'RadioField']:
 
             def wtforms_checkbox_option(option):
                 (index, option) = option
@@ -146,6 +146,13 @@ def wtforms_helper():
                          'selected': option[0] == el.data }
 
             wtforms_params['items'] = list(map(wtforms_select_option, el.choices))
+
+        # Special handling for:
+        # PasswordField
+        #
+        # don't pass the value back up through the template layer
+        if el.type in ['PasswordField']:
+            del wtforms_params['value']
 
         return my_merger.merge(wtforms_params, params)
 

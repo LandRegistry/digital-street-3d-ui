@@ -17,6 +17,14 @@
 
         {{ wtforms.govukInput(form, 'string_field')}}
 
+        {{ wtforms.govukInput(form, 'password_field', {
+          'type': 'password'
+        })}}
+
+        {{ wtforms.govukInput(form, 'password_retype_field', {
+          'type': 'password'
+        })}}
+
         {{ wtforms.govukInput(form, 'email_field', {
           'type': 'email',
           'hint': 'This is a hint'
@@ -25,6 +33,9 @@
         {{ wtforms.govukInput(form, 'float_field')}}
         {{ wtforms.govukInput(form, 'integer_field')}}
         {{ wtforms.govukInput(form, 'decimal_field')}}
+
+        {{ wtforms.govukTextarea(form, 'textarea_field')}}
+
         {{ wtforms.govukCheckboxes(form, 'boolean_field')}}
         {{ wtforms.govukSelect(form, 'select_field')}}
 
@@ -39,12 +50,12 @@
           }
         })}}
 
+        {{ wtforms.govukRadios(form, 'radio_field')}}
+
 
       {% endcall %}
 
       {#
-
-    {{ multiple_choice(form, 'radio_field')}}
 
     {{ element(form, 'password')}}
 

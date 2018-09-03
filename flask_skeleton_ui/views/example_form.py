@@ -9,10 +9,16 @@ from wtforms.fields import RadioField
 from wtforms.fields import SelectField
 from wtforms.fields import SelectMultipleField
 from wtforms.fields import StringField
+from wtforms.fields import TextAreaField
 from wtforms.fields import PasswordField
 from wtforms.fields import FloatField
 from wtforms.fields import IntegerField
 from wtforms.fields import DecimalField
+from wtforms.fields import DateField
+from wtforms.fields import DateTimeField
+from wtforms.fields import FileField
+from wtforms.fields import MultipleFileField
+from wtforms.fields import SubmitField
 from wtforms.validators import InputRequired
 from wtforms.validators import EqualTo
 from wtforms.validators import ValidationError
@@ -57,6 +63,10 @@ class ExampleForm(FlaskForm):
                      validators=[InputRequired(message='DecimalField is required')]
                      )
 
+    textarea_field = TextAreaField('TextAreaField',
+                     validators=[InputRequired(message='TextAreaField is required')]
+                     )
+
     boolean_field = BooleanField('BooleanField',
                             validators=[InputRequired(message='Please tick the box')]
                             )
@@ -77,13 +87,19 @@ class ExampleForm(FlaskForm):
                              choices=[('one', 'One'), ('two', 'Two'), ('three', 'Three')]
                              )
 
+    date_field = DateField('DateField')
+    date_time_field = DateTimeField('DateTimeField')
+    file_field = FileField('FileField')
+    multiple_file_field = MultipleFileField('MultipleFileField')
+    submit_field = SubmitField('SubmitField')
 
-    password = PasswordField('PasswordField', validators=[
+
+    password_field = PasswordField('PasswordField', validators=[
         InputRequired('Password is required'),
         EqualTo('password_retype', message='Please ensure both password fields match'),
     ])
 
-    password_retype = PasswordField('Re-type your password')
+    password_retype_field = PasswordField('Re-type your password')
 
     def validate_string_field(self, field):
         if field.data != 'John Smith':

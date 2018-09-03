@@ -5,6 +5,7 @@
 {% from 'app/vendor/.govuk-frontend/components/file-upload/macro.html' import govukFileUpload as govukFileUploadOriginal %}
 {% from 'app/vendor/.govuk-frontend/components/select/macro.html' import govukSelect as govukSelectOriginal %}
 {% from 'app/vendor/.govuk-frontend/components/textarea/macro.html' import govukTextarea as govukTextareaOriginal %}
+{% from 'app/vendor/.govuk-frontend/components/radios/macro.html' import govukRadios as govukRadiosOriginal %}
 
 {% macro govukInput(form, name, params={}) %}
   {{ govukInputOriginal(wtforms(form, name, params)) }}
@@ -19,6 +20,14 @@
 
 {% macro govukCheckboxes(form, name, params={}) %}
   {{ govukCheckboxesOriginal(wtforms(form, name, params)) }}
+{% endmacro %}
+
+{% macro govukRadios(form, name, params={}) %}
+  {{ govukRadiosOriginal(wtforms(form, name, params)) }}
+{% endmacro %}
+
+{% macro govukTextarea(form, name, params={}) %}
+  {{ govukTextareaOriginal(wtforms(form, name, params)) }}
 {% endmacro %}
 
 <!--
