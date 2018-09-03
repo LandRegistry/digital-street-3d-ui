@@ -1,5 +1,5 @@
 {% from 'app/vendor/.govuk-frontend/components/fieldset/macro.html' import govukFieldset %}
-{% import 'app/macros/flask_wtf.html' as wtforms with context %}
+{% import 'app/macros/wtforms_helpers.html' as wtforms_helpers %}
 
 {% extends "app/layout.html" %}
 
@@ -9,7 +9,7 @@
 {%- endblock %}
 
 {% block content %}
-  {{ wtforms.govukErrorSummary(form) }}
+  {{ wtforms_helpers.govukErrorSummary(form) }}
 
   <form method="POST" action="{{url_for('example_form.index')}}" novalidate>
       {% call govukFieldset({
@@ -22,32 +22,32 @@
 
         {{ form.csrf_token }}
 
-        {{ wtforms.govukInput(form, 'string_field')}}
+        {{ wtforms_helpers.govukInput(form, 'string_field')}}
 
-        {{ wtforms.govukInput(form, 'password_field', {
+        {{ wtforms_helpers.govukInput(form, 'password_field', {
           'type': 'password'
         })}}
 
-        {{ wtforms.govukInput(form, 'password_retype_field', {
+        {{ wtforms_helpers.govukInput(form, 'password_retype_field', {
           'type': 'password'
         })}}
 
-        {{ wtforms.govukInput(form, 'email_field', {
+        {{ wtforms_helpers.govukInput(form, 'email_field', {
           'type': 'email',
           'hint': 'This is a hint'
         }) }}
 
-        {{ wtforms.govukInput(form, 'float_field')}}
-        {{ wtforms.govukInput(form, 'integer_field')}}
-        {{ wtforms.govukInput(form, 'decimal_field')}}
+        {{ wtforms_helpers.govukInput(form, 'float_field')}}
+        {{ wtforms_helpers.govukInput(form, 'integer_field')}}
+        {{ wtforms_helpers.govukInput(form, 'decimal_field')}}
 
-        {{ wtforms.govukTextarea(form, 'textarea_field')}}
+        {{ wtforms_helpers.govukTextarea(form, 'textarea_field')}}
 
-        {{ wtforms.govukCheckboxes(form, 'boolean_field')}}
+        {{ wtforms_helpers.govukCheckboxes(form, 'boolean_field')}}
 
-        {{ wtforms.govukSelect(form, 'select_field')}}
+        {{ wtforms_helpers.govukSelect(form, 'select_field')}}
 
-        {{ wtforms.govukCheckboxes(form, 'select_multiple_field', {
+        {{ wtforms_helpers.govukCheckboxes(form, 'select_multiple_field', {
           'fieldset': {
             'legend': {
               'text': 'SelectMultipleField rendered as checkboxes'
@@ -58,12 +58,12 @@
           }
         })}}
 
-        {{ wtforms.govukRadios(form, 'radio_field')}}
+        {{ wtforms_helpers.govukRadios(form, 'radio_field')}}
 
-        {{ wtforms.govukFileUpload(form, 'file_field') }}
-        {{ wtforms.govukFileUpload(form, 'multiple_file_field') }}
+        {{ wtforms_helpers.govukFileUpload(form, 'file_field') }}
+        {{ wtforms_helpers.govukFileUpload(form, 'multiple_file_field') }}
 
-        {{ wtforms.govukButton(form, 'submit_button') }}
+        {{ wtforms_helpers.govukButton(form, 'submit_button') }}
       {% endcall %}
   </form>
 
