@@ -1,6 +1,7 @@
 from deepmerge import Merger
 from jinja2 import TemplateError
 
+
 class WTFormsHelpers(object):
     """WTForms helpers
 
@@ -18,6 +19,7 @@ class WTFormsHelpers(object):
         app.add_template_global(wtforms_field)
         app.add_template_global(wtforms_errors)
 
+
 merger = Merger(
     # pass in a list of tuple, with the
     # strategies you are looking to apply
@@ -34,8 +36,10 @@ merger = Merger(
     ["override"]
 )
 
+
 def raise_template_error(message):
     raise TemplateError(message)
+
 
 def wtforms_field(form, name, params={}):
     """WTForms / govuk macro helper
@@ -121,11 +125,12 @@ def wtforms_field(form, name, params={}):
     if el.type in ['SelectField']:
         # Note that wtforms does not appear to allow disabled options inside a select field
         # so this is left unhandled.
-        # Frankly this is a weird edge case anyway which is probably unlikely to be well understood by users so perhaps this is for the best
+        # Frankly this is a weird edge case anyway which is probably unlikely to be well understood
+        # by users so perhaps this is for the best
         def wtforms_select_option(option):
-            return { 'value': option[0],
-                        'text': option[1],
-                        'selected': option[0] == el.data }
+            return {'value': option[0],
+                    'text': option[1],
+                    'selected': option[0] == el.data}
 
         wtforms_params['items'] = list(map(wtforms_select_option, el.choices))
 
@@ -157,6 +162,7 @@ def wtforms_field(form, name, params={}):
         }
 
     return merger.merge(wtforms_params, params)
+
 
 def wtforms_errors(form, params):
     wtforms_params = {

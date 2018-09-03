@@ -29,5 +29,3 @@ def inject_global_values():
     return dict(
         service_name='Flask Skeleton UI'
     )
-
-
