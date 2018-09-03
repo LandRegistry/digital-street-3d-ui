@@ -10,6 +10,9 @@ from wtforms.fields import SelectField
 from wtforms.fields import SelectMultipleField
 from wtforms.fields import StringField
 from wtforms.fields import PasswordField
+from wtforms.fields import FloatField
+from wtforms.fields import IntegerField
+from wtforms.fields import DecimalField
 from wtforms.validators import InputRequired
 from wtforms.validators import EqualTo
 from wtforms.validators import ValidationError
@@ -34,46 +37,55 @@ def session_storage():
 
 
 class ExampleForm(FlaskForm):
-    full_name = StringField('Full name',
-                            validators=[InputRequired(message='Full name is required')],
+    string_field = StringField('StringField',
+                            validators=[InputRequired(message='StringField is required')],
                             )
 
-    ni = StringField('National Insurance number',
-                     validators=[InputRequired(message='National Insurance number is required')]
-                     )
-
-    email = StringField('Email address',
+    email_field = StringField('Email address',
                         validators=[InputRequired(message='Email address is required')]
                         )
 
-    checkbox = BooleanField('Boolean field',
+    float_field = FloatField('FloatField',
+                  validators=[InputRequired(message='FloatField is required')]
+                  )
+
+    integer_field = IntegerField('IntegerField',
+                     validators=[InputRequired(message='IntegerField is required')]
+                     )
+
+    decimal_field = DecimalField('DecimalField',
+                     validators=[InputRequired(message='DecimalField is required')]
+                     )
+
+    boolean_field = BooleanField('BooleanField',
                             validators=[InputRequired(message='Please tick the box')]
                             )
 
-    select_field = SelectField('Select field',
+    select_field = SelectField('SelectField',
                                [InputRequired(message='Please select an option')],
                                choices=[('', 'Please select'), ('one', 'One'), ('two', 'Two'), ('three', 'Three')],
                                default=''
                                )
 
-    radio_field = RadioField('Radio field',
-                             [InputRequired(message='Please select an option')],
-                             choices=[('one', 'One'), ('two', 'Two'), ('three', 'Three')]
-                             )
-
-    checkboxes_field = SelectMultipleField('Select multiple',
+    select_multiple_field = SelectMultipleField('SelectMultipleField',
                                            [InputRequired(message='Please select an option')],
                                            choices=[('one', 'One'), ('two', 'Two'), ('three', 'Three')]
                                            )
 
-    password = PasswordField('Create a password', validators=[
+    radio_field = RadioField('RadioField',
+                             [InputRequired(message='Please select an option')],
+                             choices=[('one', 'One'), ('two', 'Two'), ('three', 'Three')]
+                             )
+
+
+    password = PasswordField('PasswordField', validators=[
         InputRequired('Password is required'),
         EqualTo('password_retype', message='Please ensure both password fields match'),
     ])
 
     password_retype = PasswordField('Re-type your password')
 
-    def validate_full_name(self, field):
+    def validate_string_field(self, field):
         if field.data != 'John Smith':
             raise ValidationError('Example serverside error - type "John Smith" into this field to suppress it')
 

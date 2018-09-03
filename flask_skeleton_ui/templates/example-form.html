@@ -15,23 +15,20 @@
       }) %}
         {{ form.csrf_token }}
 
-        {{ wtforms.govukInput(form, 'full_name')}}
+        {{ wtforms.govukInput(form, 'string_field')}}
 
-        {{ wtforms.govukInput(form, 'ni', {
-          'hint': {
-            'html': 'It\'s on your National Insurance card, benefit letter, payslip or P60. <br>For example, ‘QQ 12 34 56 C’.'
-          }
+        {{ wtforms.govukInput(form, 'email_field', {
+          'type': 'email',
+          'hint': 'This is a hint'
         }) }}
 
-        {{ wtforms.govukInput(form, 'email', {
-          'type': 'email'
-        }) }}
-
+        {{ wtforms.govukInput(form, 'float_field')}}
+        {{ wtforms.govukInput(form, 'integer_field')}}
+        {{ wtforms.govukInput(form, 'decimal_field')}}
+        {{ wtforms.govukCheckboxes(form, 'boolean_field')}}
         {{ wtforms.govukSelect(form, 'select_field')}}
 
-        {{ wtforms.govukCheckboxes(form, 'checkbox')}}
-
-        {{ wtforms.govukCheckboxes(form, 'checkboxes_field', {
+        {{ wtforms.govukCheckboxes(form, 'select_multiple_field', {
           'fieldset': {
             'legend': {
               'text': 'SelectMultipleField rendered as checkboxes'
@@ -41,6 +38,7 @@
             'text': 'Please note that SelectMultipleField elements should never be rendered as <select multiple> elements since users find these extremely difficult to interact with.'
           }
         })}}
+
 
       {% endcall %}
 

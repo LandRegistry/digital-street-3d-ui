@@ -57,13 +57,15 @@ def wtforms_helper():
 
         Require special handling:
         BooleanField
+        SelectField
+        SelectMultipleField
+
+        RadioField
+
         DateField
         DateTimeField
         FileField
         MultipleFileField
-        RadioField
-        SelectField
-        SelectMultipleField
         SubmitField
         """
         my_merger = Merger(
@@ -126,7 +128,7 @@ def wtforms_helper():
                             'name': name,
                             'value': option[0],
                             'text': option[1],
-                            'checked': option[0] in el.data
+                            'checked': option[0] in el.data if el.data else False
                         }
             wtforms_params['items'] = list(map(wtforms_checkbox_option, enumerate(el.choices)))
 
