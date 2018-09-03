@@ -93,7 +93,8 @@ def wtforms_helper():
             'label': {
                 'text': el.label.text
             },
-            'value': el.data if el.data else ''
+            'value': el.data if el.data else '',
+            'attributes': {}
         }
 
         # Special handling for:
@@ -153,6 +154,20 @@ def wtforms_helper():
         # don't pass the value back up through the template layer
         if el.type in ['PasswordField']:
             del wtforms_params['value']
+
+        # Special handling for:
+        # MultipleFileField
+        #
+        # Need to set the multiple attribute on the field
+        if el.type in ['MultipleFileField']:
+            wtforms_params['attributes']['multiple'] = 'multiple'
+
+        # Special handling for:
+        # SubmitField
+        #
+        # Just need to grab button text which wtforms stores in the "label"
+        if el.type in ['SubmitField']:
+            wtforms_params['text'] = el.label
 
         return my_merger.merge(wtforms_params, params)
 

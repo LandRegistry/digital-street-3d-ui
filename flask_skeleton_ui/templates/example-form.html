@@ -52,17 +52,11 @@
 
         {{ wtforms.govukRadios(form, 'radio_field')}}
 
+        {{ wtforms.govukFileUpload(form, 'file_field') }}
+        {{ wtforms.govukFileUpload(form, 'multiple_file_field') }}
 
+        {{ wtforms.govukButton(form, 'submit_button') }}
       {% endcall %}
-
-      {#
-
-    {{ element(form, 'password')}}
-
-    {{ element(form, 'password_retype')}}
-
-    #}
-    <input class="button" type="submit" value="Go">
   </form>
 
 {% endblock %}

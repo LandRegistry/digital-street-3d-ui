@@ -6,6 +6,7 @@
 {% from 'app/vendor/.govuk-frontend/components/select/macro.html' import govukSelect as govukSelectOriginal %}
 {% from 'app/vendor/.govuk-frontend/components/textarea/macro.html' import govukTextarea as govukTextareaOriginal %}
 {% from 'app/vendor/.govuk-frontend/components/radios/macro.html' import govukRadios as govukRadiosOriginal %}
+{% from 'app/vendor/.govuk-frontend/components/button/macro.html' import govukButton as govukButtonOriginal %}
 
 {% macro govukInput(form, name, params={}) %}
   {{ govukInputOriginal(wtforms(form, name, params)) }}
@@ -30,10 +31,15 @@
   {{ govukTextareaOriginal(wtforms(form, name, params)) }}
 {% endmacro %}
 
+{% macro govukFileUpload(form, name, params={}) %}
+  {{ govukFileUploadOriginal(wtforms(form, name, params)) }}
+{% endmacro %}
+
+{% macro govukButton(form, name, params={}) %}
+  {{ govukButtonOriginal(wtforms(form, name, params)) }}
+{% endmacro %}
+
 <!--
-date input
 error message
 error summary
-fieldset
-file upload
-textarea -->
+-->

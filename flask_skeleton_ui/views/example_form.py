@@ -91,8 +91,7 @@ class ExampleForm(FlaskForm):
     date_time_field = DateTimeField('DateTimeField')
     file_field = FileField('FileField')
     multiple_file_field = MultipleFileField('MultipleFileField')
-    submit_field = SubmitField('SubmitField')
-
+    submit_button = SubmitField('SubmitField')
 
     password_field = PasswordField('PasswordField', validators=[
         InputRequired('Password is required'),
