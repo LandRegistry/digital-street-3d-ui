@@ -39,7 +39,8 @@
   {{ govukButtonOriginal(wtforms(form, name, params)) }}
 {% endmacro %}
 
-<!--
-error message
-error summary
--->
+{% macro govukErrorSummary(form, params={}) %}
+  {% if form.errors %}
+    {{ govukErrorSummaryOriginal(wtforms_errors(form, params)) }}
+  {% endif %}
+{% endmacro %}

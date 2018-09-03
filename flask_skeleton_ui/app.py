@@ -40,6 +40,22 @@ def wtforms_helper():
     def raise_template_error(message):
         raise TemplateError(message)
 
+    merger = Merger(
+        # pass in a list of tuple, with the
+        # strategies you are looking to apply
+        # to each type.
+        [
+            (list, ["append"]),
+            (dict, ["merge"])
+        ],
+        # next, choose the fallback strategies,
+        # applied to all other types:
+        ["override"],
+        # finally, choose the strategies in
+        # the case where the types conflict:
+        ["override"]
+    )
+
     def wtforms(form, name, params={}):
         """WTForms / govuk macro helper
 
@@ -68,22 +84,6 @@ def wtforms_helper():
         DateField
         DateTimeField
         """
-        my_merger = Merger(
-            # pass in a list of tuple, with the
-            # strategies you are looking to apply
-            # to each type.
-            [
-                (list, ["append"]),
-                (dict, ["merge"])
-            ],
-            # next, choose the fallback strategies,
-            # applied to all other types:
-            ["override"],
-            # finally, choose the strategies in
-            # the case where the types conflict:
-            ["override"]
-        )
-
         el = form[name]
 
         # Map basic properties onto the govuk params structure
@@ -104,13 +104,13 @@ def wtforms_helper():
         #   - a 'checked' attribute
         if el.type in ['BooleanField']:
             wtforms_params = {
+                'name': name,
                 'items': [
                     {
                         'id': el.id,
-                        'name': name,
                         'text': el.label.text,
-                        'value': el.data,
-                        'checked': el.data
+                        'checked': el.data,
+                        'value': el._value()
                     }
                 ]
             }
@@ -169,9 +169,30 @@ def wtforms_helper():
         if el.type in ['SubmitField']:
             wtforms_params['text'] = el.label
 
-        return my_merger.merge(wtforms_params, params)
+        # Assign errors to individual inputs
+        if name in form.errors:
+            wtforms_params['errorMessage'] = {
+                'text': form.errors[name][0]
+            }
+
+        return merger.merge(wtforms_params, params)
+
+    def wtforms_errors(form, params):
+        wtforms_params = {
+            'titleText': 'There is a problem',
+            'errorList': []
+        }
+
+        for key, errors in form.errors.items():
+            wtforms_params['errorList'].append({
+                'text': errors[0],
+                'href': '#%s-error' % key
+            })
+
+        return merger.merge(wtforms_params, params)
 
     return dict(
         wtforms=wtforms,
+        wtforms_errors=wtforms_errors,
         raise_template_error=raise_template_error
     )

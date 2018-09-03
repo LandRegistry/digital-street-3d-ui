@@ -3,8 +3,14 @@
 
 {% extends "app/layout.html" %}
 
+{% block title -%}
+  {%- if form.errors %}Error: {% endif -%}
+  Example GOV.UK styled Flask-WTF form
+{%- endblock %}
+
 {% block content %}
-  {#{{ error_summary(form) }}#}
+  {{ wtforms.govukErrorSummary(form) }}
+
   <form method="POST" action="{{url_for('example_form.index')}}" novalidate>
       {% call govukFieldset({
         'legend': {
@@ -13,6 +19,7 @@
           'isPageHeading': true
         }
       }) %}
+
         {{ form.csrf_token }}
 
         {{ wtforms.govukInput(form, 'string_field')}}
@@ -37,6 +44,7 @@
         {{ wtforms.govukTextarea(form, 'textarea_field')}}
 
         {{ wtforms.govukCheckboxes(form, 'boolean_field')}}
+
         {{ wtforms.govukSelect(form, 'select_field')}}
 
         {{ wtforms.govukCheckboxes(form, 'select_multiple_field', {

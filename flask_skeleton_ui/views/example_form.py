@@ -2,6 +2,7 @@ from flask import Blueprint
 from flask import redirect
 from flask import render_template
 from flask import url_for
+from flask import flash
 from flask_wtf import FlaskForm
 from wtforms import widgets
 from wtforms.fields import BooleanField
@@ -32,7 +33,8 @@ example_form = Blueprint('example_form', __name__)
 def index():
     form = ExampleForm()
     if form.validate_on_submit():
-        return redirect(url_for('example_form.success'))
+        flash('Thanks')
+        return redirect(url_for('example_form.index'))
     else:
         return render_template('app/example-form.html', form=form)
 
@@ -87,24 +89,22 @@ class ExampleForm(FlaskForm):
                              choices=[('one', 'One'), ('two', 'Two'), ('three', 'Three')]
                              )
 
-    date_field = DateField('DateField')
-    date_time_field = DateTimeField('DateTimeField')
-    file_field = FileField('FileField')
-    multiple_file_field = MultipleFileField('MultipleFileField')
+    file_field = FileField('FileField',
+                           [InputRequired(message='Please upload a file')])
+
+    multiple_file_field = MultipleFileField('MultipleFileField',
+                                            [InputRequired(message='Please upload a file')])
+
     submit_button = SubmitField('SubmitField')
 
     password_field = PasswordField('PasswordField', validators=[
         InputRequired('Password is required'),
-        EqualTo('password_retype', message='Please ensure both password fields match'),
+        EqualTo('password_retype_field', message='Please ensure both password fields match'),
     ])
 
-    password_retype_field = PasswordField('Re-type your password')
+    password_retype_field = PasswordField('Re-type your password',
+                                          validators=[InputRequired('Please retype your password')])
 
     def validate_string_field(self, field):
         if field.data != 'John Smith':
             raise ValidationError('Example serverside error - type "John Smith" into this field to suppress it')
-
-
-@example_form.route("/success")
-def success():
-    return render_template('app/success.html', message='Form successfully submitted')
