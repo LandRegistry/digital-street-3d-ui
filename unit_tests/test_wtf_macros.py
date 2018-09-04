@@ -1,25 +1,10 @@
 import json
 import unittest
+import re
 from unittest import mock
 from flask import render_template_string
 from flask_skeleton_ui.main import app
-from flask_wtf import FlaskForm
-from wtforms.fields import BooleanField
-from wtforms.fields import RadioField
-from wtforms.fields import SelectField
-from wtforms.fields import SelectMultipleField
-from wtforms.fields import StringField
-from wtforms.fields import TextAreaField
-from wtforms.fields import PasswordField
-from wtforms.fields import FloatField
-from wtforms.fields import IntegerField
-from wtforms.fields import DecimalField
-from wtforms.fields import FileField
-from wtforms.fields import MultipleFileField
-from wtforms.fields import SubmitField
-from wtforms.validators import InputRequired
-from wtforms.validators import EqualTo
-from wtforms.validators import ValidationError
+from unit_tests.fixtures.wtf_macros_example_form import ExampleForm
 
 
 class TestFlaskWtfMacros(unittest.TestCase):
@@ -50,91 +35,26 @@ class TestFlaskWtfMacros(unittest.TestCase):
         return render_template_string(self.base_template + template,
                                         form=self.form).strip()
 
-    def test_string_field(self):
-        self.request()
-        output = self.render("{{ wtforms_helpers.govukInput(form, 'string_field')}}")
+def make_test_function(template, scenario_data):
+    def test(self):
+        if 'request' in scenario_data:
+            self.request(**scenario_data['request'])
+        else:
+            self.request()
 
-        self.assertIn('<input class="govuk-input" id="string_field" name="string_field" type="text">', output)
-        self.assertRegex(output, '<label class="govuk-label" for="string_field">\s*StringField\s*</label>')
+        output = self.render(template)
 
-    def test_string_field_valid_post(self):
-        self.request(method='post', data={'string_field': 'John Smith'})
-        output = self.render("{{ wtforms_helpers.govukInput(form, 'string_field')}}")
+        for expectation in scenario_data['expected_output']:
+            self.assertRegex(output, expectation)
 
-        self.assertIn('<input class="govuk-input" id="string_field" name="string_field" type="text" value="John Smith">', output)
-        self.assertRegex(output, '<label class="govuk-label" for="string_field">\s*StringField\s*</label>')
+    return test
 
-    def test_string_field_invalid_post(self):
-        self.request(method='post', data={'string_field': 'foo'})
-        output = self.render("{{ wtforms_helpers.govukInput(form, 'string_field')}}")
+test_data = json.loads(open('unit_tests/fixtures/wtf_macros_data.json').read())
 
-        self.assertIn('<input class="govuk-input govuk-input--error" id="string_field" name="string_field" type="text" value="foo" aria-describedby="string_field-error">', output)
-        self.assertRegex(output, '<label class="govuk-label" for="string_field">\s*StringField\s*</label>')
-        self.assertRegex(output, '<span id="string_field-error" class="govuk-error-message">\s*Example serverside error - type &#34;John Smith&#34; into this field to suppress it\s*</span>')
-        self.assertIn('<div class="govuk-form-group govuk-form-group--error">', output)
-
-
-class ExampleForm(FlaskForm):
-    string_field = StringField('StringField',
-                               validators=[InputRequired(message='StringField is required')],
-                               )
-
-    email_field = StringField('Email address',
-                              validators=[InputRequired(message='Email address is required')]
-                              )
-
-    float_field = FloatField('FloatField',
-                             validators=[InputRequired(message='FloatField is required')]
-                             )
-
-    integer_field = IntegerField('IntegerField',
-                                 validators=[InputRequired(message='IntegerField is required')]
-                                 )
-
-    decimal_field = DecimalField('DecimalField',
-                                 validators=[InputRequired(message='DecimalField is required')]
-                                 )
-
-    textarea_field = TextAreaField('TextAreaField',
-                                   validators=[InputRequired(message='TextAreaField is required')]
-                                   )
-
-    boolean_field = BooleanField('BooleanField',
-                                 validators=[InputRequired(message='Please tick the box')]
-                                 )
-
-    select_field = SelectField('SelectField',
-                               [InputRequired(message='Please select an option')],
-                               choices=[('', 'Please select'), ('one', 'One'), ('two', 'Two'), ('three', 'Three')],
-                               default=''
-                               )
-
-    select_multiple_field = SelectMultipleField('SelectMultipleField',
-                                                [InputRequired(message='Please select an option')],
-                                                choices=[('one', 'One'), ('two', 'Two'), ('three', 'Three')]
-                                                )
-
-    radio_field = RadioField('RadioField',
-                             [InputRequired(message='Please select an option')],
-                             choices=[('one', 'One'), ('two', 'Two'), ('three', 'Three')]
-                             )
-
-    file_field = FileField('FileField',
-                           [InputRequired(message='Please upload a file')])
-
-    multiple_file_field = MultipleFileField('MultipleFileField',
-                                            [InputRequired(message='Please upload a file')])
-
-    submit_button = SubmitField('SubmitField')
-
-    password_field = PasswordField('PasswordField', validators=[
-        InputRequired('Password is required'),
-        EqualTo('password_retype_field', message='Please ensure both password fields match'),
-    ])
-
-    password_retype_field = PasswordField('Re-type your password',
-                                          validators=[InputRequired('Please retype your password')])
-
-    def validate_string_field(self, field):
-        if field.data != 'John Smith':
-            raise ValidationError('Example serverside error - type "John Smith" into this field to suppress it')
+for element_name, params in test_data.items():
+    print('---------------')
+    print(params)
+    print('---------------')
+    for scenario_name, scenario_data in params['scenarios'].items():
+        test_func = make_test_function(params['template'], scenario_data)
+        setattr(TestFlaskWtfMacros, 'test_{0}_{1}'.format(element_name, scenario_name), test_func)
