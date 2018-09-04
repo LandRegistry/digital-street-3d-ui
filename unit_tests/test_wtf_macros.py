@@ -36,22 +36,27 @@ class TestFlaskWtfMacros(unittest.TestCase):
 
     def setup_method(self, method):
         self.app = app.test_client()
+        self.base_template = "{% import 'app/macros/wtforms_helpers.html' as wtforms_helpers %}"
+        with app.test_request_context('/'):
+            self.form = ExampleForm()
 
         app.jinja_env.lstrip_blocks = True
         app.jinja_env.trim_blocks = True
 
-    def test_string_field(self):
-        class ExampleForm(FlaskForm):
-            string_field = StringField('StringField',
-                                    validators=[InputRequired(message='StringField is required')],
-                                    )
-
-        template = '''{% import 'app/macros/wtforms_helpers.html' as wtforms_helpers %}
-                      {{ wtforms_helpers.govukInput(form, 'string_field')}}'''
-
+    def render(self, template):
+        """Helper method to render a snippet of a form"""
         with app.test_request_context('/'):
-            form = ExampleForm()
-            output = render_template_string(template, form=form).strip()
+            return render_template_string(self.base_template + template,
+                                            form=self.form).strip()
+
+    def test_string_field(self):
+        output = self.render("{{ wtforms_helpers.govukInput(form, 'string_field')}}")
 
         self.assertIn('<input class="govuk-input" id="string_field" name="string_field" type="text">', output)
         self.assertRegex(output, '<label class="govuk-label" for="string_field">\s*StringField\s*</label>')
+
+
+class ExampleForm(FlaskForm):
+    string_field = StringField('StringField',
+                            validators=[InputRequired(message='StringField is required')],
+                            )
