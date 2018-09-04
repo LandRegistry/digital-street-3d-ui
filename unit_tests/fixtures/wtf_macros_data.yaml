@@ -85,21 +85,26 @@ integer_field:
     scenarios:
         empty_get:
             expected_output:
-                - foo
+                - <input class="govuk-input" id="integer_field" name="integer_field" type="text">
+                - <label class="govuk-label" for="integer_field">\s*IntegerField\s*</label>
         valid_post:
             request:
                 method: post
                 data:
-                    integer_field: foo
+                    integer_field: 1
             expected_output:
-                - foo
+                - <input class="govuk-input" id="integer_field" name="integer_field" type="text" value="1">
+                - <label class="govuk-label" for="integer_field">\s*IntegerField\s*</label>
         invalid_post:
             request:
                 method: post
                 data:
-                    integer_field: foo
+                    integer_field: 1.4
             expected_output:
-                - foo
+                - <input class="govuk-input govuk-input--error" id="integer_field" name="integer_field" type="text" value="1.4" aria-describedby="integer_field-error">
+                - <label class="govuk-label" for="integer_field">\s*IntegerField\s*</label>
+                - <span id="integer_field-error" class="govuk-error-message">\s* Not a valid integer value\s*</span>
+                - <div class="govuk-form-group govuk-form-group--error">
 
 decimal_field:
     template: "{{ wtforms_helpers.govukInput(form, 'decimal_field') }}"
