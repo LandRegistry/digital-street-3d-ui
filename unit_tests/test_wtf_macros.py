@@ -8,7 +8,7 @@ from flask_skeleton_ui.main import app
 from unit_tests.fixtures.wtf_macros_example_form import ExampleForm
 
 
-class TestFlaskWtfMacros(unittest.TestCase):
+class FlaskWtfMacroTestBase(unittest.TestCase):
     """Test the flask-wtf -> govuk macros
 
     Test the output of passing flask-wtf form elements
@@ -36,7 +36,9 @@ class TestFlaskWtfMacros(unittest.TestCase):
         return render_template_string(self.base_template + template,
                                         form=self.form).strip()
 
+
 def make_test_function(template, scenario_data):
+
     def test(self):
         if 'request' in scenario_data:
             self.request(**scenario_data['request'])
@@ -53,6 +55,12 @@ def make_test_function(template, scenario_data):
 test_data = yaml.load(open('unit_tests/fixtures/wtf_macros_data.yaml').read())
 
 for element_name, params in test_data.items():
+    methods = {}
     for scenario_name, scenario_data in params['scenarios'].items():
         test_func = make_test_function(params['template'], scenario_data)
-        setattr(TestFlaskWtfMacros, 'test_{0}_{1}'.format(element_name, scenario_name), test_func)
+        methods['test_{0}'.format(scenario_name)] = test_func
+
+    klassname = 'Test{}'.format(params['class'])
+
+    globals()[klassname] = type(klassname, (FlaskWtfMacroTestBase,), methods)
+

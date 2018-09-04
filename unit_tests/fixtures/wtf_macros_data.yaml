@@ -1,5 +1,6 @@
 ---
 string_field:
+    class: StringField
     template: "{{ wtforms_helpers.govukInput(form, 'string_field')}}"
     scenarios:
         empty_get:
@@ -33,6 +34,7 @@ string_field:
                 - <div class="govuk-form-group govuk-form-group--error">
 
 email_field:
+    class: EmailField
     template: "{{ wtforms_helpers.govukInput(form, 'email_field', {'type': 'email', 'hint': {'text': 'This is a hint'}}) }}"
     scenarios:
         empty_get:
@@ -62,6 +64,7 @@ email_field:
                 - <div class="govuk-form-group govuk-form-group--error">
 
 float_field:
+    class: FloatField
     template: "{{ wtforms_helpers.govukInput(form, 'float_field') }}"
     scenarios:
         empty_get:
@@ -88,6 +91,7 @@ float_field:
                 - <div class="govuk-form-group govuk-form-group--error">
 
 integer_field:
+    class: IntegerField
     template: "{{ wtforms_helpers.govukInput(form, 'integer_field') }}"
     scenarios:
         empty_get:
@@ -114,6 +118,7 @@ integer_field:
                 - <div class="govuk-form-group govuk-form-group--error">
 
 decimal_field:
+    class: DecimalField
     template: "{{ wtforms_helpers.govukInput(form, 'decimal_field') }}"
     scenarios:
         empty_get:
@@ -140,6 +145,7 @@ decimal_field:
                 - <div class="govuk-form-group govuk-form-group--error">
 
 textarea_field:
+    class: TextAreaField
     template: "{{ wtforms_helpers.govukTextarea(form, 'textarea_field') }}"
     scenarios:
         empty_get:
@@ -168,6 +174,7 @@ textarea_field:
                 - <div class="govuk-form-group govuk-form-group--error">
 
 boolean_field:
+    class: BooleanField
     template: "{{ wtforms_helpers.govukInput(form, 'boolean_field') }}"
     scenarios:
         empty_get:
@@ -189,6 +196,7 @@ boolean_field:
                 - foo
 
 select_field:
+    class: SelectField
     template: "{{ wtforms_helpers.govukInput(form, 'select_field') }}"
     scenarios:
         empty_get:
@@ -210,6 +218,7 @@ select_field:
                 - foo
 
 select_multiple_field:
+    class: SelectMultipleField
     template: "{{ wtforms_helpers.govukInput(form, 'select_multiple_field') }}"
     scenarios:
         empty_get:
@@ -231,6 +240,7 @@ select_multiple_field:
                 - foo
 
 radio_field:
+    class: RadioField
     template: "{{ wtforms_helpers.govukInput(form, 'radio_field') }}"
     scenarios:
         empty_get:
@@ -252,6 +262,7 @@ radio_field:
                 - foo
 
 file_field:
+    class: FileField
     template: "{{ wtforms_helpers.govukInput(form, 'file_field') }}"
     scenarios:
         empty_get:
@@ -273,6 +284,7 @@ file_field:
                 - foo
 
 multiple_file_field:
+    class: MultipleFieldField
     template: "{{ wtforms_helpers.govukInput(form, 'multiple_file_field') }}"
     scenarios:
         empty_get:
@@ -294,6 +306,7 @@ multiple_file_field:
                 - foo
 
 submit_button:
+    class: SubmitButton
     template: "{{ wtforms_helpers.govukInput(form, 'submit_button') }}"
     scenarios:
         empty_get:
@@ -315,6 +328,7 @@ submit_button:
                 - foo
 
 password_field:
+    class: PasswordField
     template: "{{ wtforms_helpers.govukInput(form, 'password_field') }}"
     scenarios:
         empty_get:
@@ -332,26 +346,5 @@ password_field:
                 method: post
                 data:
                     password_field: foo
-            expected_output:
-                - foo
-
-password_retype_field:
-    template: "{{ wtforms_helpers.govukInput(form, 'password_retype_field') }}"
-    scenarios:
-        empty_get:
-            expected_output:
-                - foo
-        valid_post:
-            request:
-                method: post
-                data:
-                    password_retype_field: foo
-            expected_output:
-                - foo
-        invalid_post:
-            request:
-                method: post
-                data:
-                    password_retype_field: foo
             expected_output:
                 - foo
