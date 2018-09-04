@@ -1,0 +1,26 @@
+---
+string_field:
+  template: "{{ wtforms_helpers.govukInput(form, 'string_field')}}"
+  scenarios:
+    empty:
+      expected_output:
+      - <input class="govuk-input" id="string_field" name="string_field" type="text">
+      - <label class="govuk-label" for="string_field">\s*StringField\s*</label>
+    valid_post:
+      request:
+        method: post
+        data:
+          string_field: John Smith
+      expected_output:
+      - <input class="govuk-input" id="string_field" name="string_field" type="text" value="John Smith">
+      - <label class="govuk-label" for="string_field">\s*StringField\s*</label>
+    invalid_post:
+      request:
+        method: post
+        data:
+          string_field: foo
+      expected_output:
+      - <input class="govuk-input govuk-input--error" id="string_field" name="string_field" type="text" value="foo" aria-describedby="string_field-error">
+      - <label class="govuk-label" for="string_field">\s*StringField\s*</label>
+      - <span id="string_field-error" class="govuk-error-message">\s*Example serverside error - type &#34;John Smith&#34; into this field to suppress it\s*</span>
+      - <div class="govuk-form-group govuk-form-group--error">

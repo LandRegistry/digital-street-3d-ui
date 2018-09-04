@@ -1,6 +1,7 @@
 import json
 import unittest
 import re
+import yaml
 from unittest import mock
 from flask import render_template_string
 from flask_skeleton_ui.main import app
@@ -49,12 +50,9 @@ def make_test_function(template, scenario_data):
 
     return test
 
-test_data = json.loads(open('unit_tests/fixtures/wtf_macros_data.json').read())
+test_data = yaml.load(open('unit_tests/fixtures/wtf_macros_data.yaml').read())
 
 for element_name, params in test_data.items():
-    print('---------------')
-    print(params)
-    print('---------------')
     for scenario_name, scenario_data in params['scenarios'].items():
         test_func = make_test_function(params['template'], scenario_data)
         setattr(TestFlaskWtfMacros, 'test_{0}_{1}'.format(element_name, scenario_name), test_func)
