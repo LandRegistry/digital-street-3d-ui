@@ -24,3 +24,299 @@ string_field:
       - <label class="govuk-label" for="string_field">\s*StringField\s*</label>
       - <span id="string_field-error" class="govuk-error-message">\s*Example serverside error - type &#34;John Smith&#34; into this field to suppress it\s*</span>
       - <div class="govuk-form-group govuk-form-group--error">
+
+email_field:
+    template: "{{ wtforms_helpers.govukInput(form, 'email_field', {'type': 'email', 'hint': {'text': 'This is a hint'}}) }}"
+    scenarios:
+        empty:
+            expected_output:
+                - <span id="email_field-hint" class="govuk-hint">\s*This is a hint\s*</span>
+                - <label class="govuk-label" for="email_field">\s*Email address\s*</label>
+                - <input class="govuk-input" id="email_field" name="email_field" type="email" aria-describedby="email_field-hint">
+        valid_post:
+            request:
+                method: post
+                data:
+                    email_field: foo
+            expected_output:
+                - foo
+        invalid_post:
+            request:
+                method: post
+                data:
+                    email_field: foo
+            expected_output:
+                - foo
+
+float_field:
+    template: "{{ wtforms_helpers.govukInput(form, 'float_field') }}"
+    scenarios:
+        empty:
+            expected_output:
+                - foo
+        valid_post:
+            request:
+                method: post
+                data:
+                    float_field: foo
+            expected_output:
+                - foo
+        invalid_post:
+            request:
+                method: post
+                data:
+                    float_field: foo
+            expected_output:
+                - foo
+
+integer_field:
+    template: "{{ wtforms_helpers.govukInput(form, 'integer_field') }}"
+    scenarios:
+        empty:
+            expected_output:
+                - foo
+        valid_post:
+            request:
+                method: post
+                data:
+                    integer_field: foo
+            expected_output:
+                - foo
+        invalid_post:
+            request:
+                method: post
+                data:
+                    integer_field: foo
+            expected_output:
+                - foo
+
+decimal_field:
+    template: "{{ wtforms_helpers.govukInput(form, 'decimal_field') }}"
+    scenarios:
+        empty:
+            expected_output:
+                - foo
+        valid_post:
+            request:
+                method: post
+                data:
+                    decimal_field: foo
+            expected_output:
+                - foo
+        invalid_post:
+            request:
+                method: post
+                data:
+                    decimal_field: foo
+            expected_output:
+                - foo
+
+textarea_field:
+    template: "{{ wtforms_helpers.govukInput(form, 'textarea_field') }}"
+    scenarios:
+        empty:
+            expected_output:
+                - foo
+        valid_post:
+            request:
+                method: post
+                data:
+                    textarea_field: foo
+            expected_output:
+                - foo
+        invalid_post:
+            request:
+                method: post
+                data:
+                    textarea_field: foo
+            expected_output:
+                - foo
+
+boolean_field:
+    template: "{{ wtforms_helpers.govukInput(form, 'boolean_field') }}"
+    scenarios:
+        empty:
+            expected_output:
+                - foo
+        valid_post:
+            request:
+                method: post
+                data:
+                    boolean_field: foo
+            expected_output:
+                - foo
+        invalid_post:
+            request:
+                method: post
+                data:
+                    boolean_field: foo
+            expected_output:
+                - foo
+
+select_field:
+    template: "{{ wtforms_helpers.govukInput(form, 'select_field') }}"
+    scenarios:
+        empty:
+            expected_output:
+                - foo
+        valid_post:
+            request:
+                method: post
+                data:
+                    select_field: foo
+            expected_output:
+                - foo
+        invalid_post:
+            request:
+                method: post
+                data:
+                    select_field: foo
+            expected_output:
+                - foo
+
+select_multiple_field:
+    template: "{{ wtforms_helpers.govukInput(form, 'select_multiple_field') }}"
+    scenarios:
+        empty:
+            expected_output:
+                - foo
+        valid_post:
+            request:
+                method: post
+                data:
+                    select_multiple_field: foo
+            expected_output:
+                - foo
+        invalid_post:
+            request:
+                method: post
+                data:
+                    select_multiple_field: foo
+            expected_output:
+                - foo
+
+radio_field:
+    template: "{{ wtforms_helpers.govukInput(form, 'radio_field') }}"
+    scenarios:
+        empty:
+            expected_output:
+                - foo
+        valid_post:
+            request:
+                method: post
+                data:
+                    radio_field: foo
+            expected_output:
+                - foo
+        invalid_post:
+            request:
+                method: post
+                data:
+                    radio_field: foo
+            expected_output:
+                - foo
+
+file_field:
+    template: "{{ wtforms_helpers.govukInput(form, 'file_field') }}"
+    scenarios:
+        empty:
+            expected_output:
+                - foo
+        valid_post:
+            request:
+                method: post
+                data:
+                    file_field: foo
+            expected_output:
+                - foo
+        invalid_post:
+            request:
+                method: post
+                data:
+                    file_field: foo
+            expected_output:
+                - foo
+
+multiple_file_field:
+    template: "{{ wtforms_helpers.govukInput(form, 'multiple_file_field') }}"
+    scenarios:
+        empty:
+            expected_output:
+                - foo
+        valid_post:
+            request:
+                method: post
+                data:
+                    multiple_file_field: foo
+            expected_output:
+                - foo
+        invalid_post:
+            request:
+                method: post
+                data:
+                    multiple_file_field: foo
+            expected_output:
+                - foo
+
+submit_button:
+    template: "{{ wtforms_helpers.govukInput(form, 'submit_button') }}"
+    scenarios:
+        empty:
+            expected_output:
+                - foo
+        valid_post:
+            request:
+                method: post
+                data:
+                    submit_button: foo
+            expected_output:
+                - foo
+        invalid_post:
+            request:
+                method: post
+                data:
+                    submit_button: foo
+            expected_output:
+                - foo
+
+password_field:
+    template: "{{ wtforms_helpers.govukInput(form, 'password_field') }}"
+    scenarios:
+        empty:
+            expected_output:
+                - foo
+        valid_post:
+            request:
+                method: post
+                data:
+                    password_field: foo
+            expected_output:
+                - foo
+        invalid_post:
+            request:
+                method: post
+                data:
+                    password_field: foo
+            expected_output:
+                - foo
+
+password_retype_field:
+    template: "{{ wtforms_helpers.govukInput(form, 'password_retype_field') }}"
+    scenarios:
+        empty:
+            expected_output:
+                - foo
+        valid_post:
+            request:
+                method: post
+                data:
+                    password_retype_field: foo
+            expected_output:
+                - foo
+        invalid_post:
+            request:
+                method: post
+                data:
+                    password_retype_field: foo
+            expected_output:
+                - foo

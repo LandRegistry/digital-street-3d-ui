@@ -34,7 +34,9 @@
 
         {{ wtforms_helpers.govukInput(form, 'email_field', {
           'type': 'email',
-          'hint': 'This is a hint'
+          'hint': {
+            'text': 'This is a hint'
+          }
         }) }}
 
         {{ wtforms_helpers.govukInput(form, 'float_field')}}
