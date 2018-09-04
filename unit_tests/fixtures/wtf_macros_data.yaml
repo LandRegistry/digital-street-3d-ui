@@ -1,34 +1,34 @@
 ---
 string_field:
-  template: "{{ wtforms_helpers.govukInput(form, 'string_field')}}"
-  scenarios:
-    empty:
-      expected_output:
-      - <input class="govuk-input" id="string_field" name="string_field" type="text">
-      - <label class="govuk-label" for="string_field">\s*StringField\s*</label>
-    valid_post:
-      request:
-        method: post
-        data:
-          string_field: John Smith
-      expected_output:
-      - <input class="govuk-input" id="string_field" name="string_field" type="text" value="John Smith">
-      - <label class="govuk-label" for="string_field">\s*StringField\s*</label>
-    invalid_post:
-      request:
-        method: post
-        data:
-          string_field: foo
-      expected_output:
-      - <input class="govuk-input govuk-input--error" id="string_field" name="string_field" type="text" value="foo" aria-describedby="string_field-error">
-      - <label class="govuk-label" for="string_field">\s*StringField\s*</label>
-      - <span id="string_field-error" class="govuk-error-message">\s*Example serverside error - type &#34;John Smith&#34; into this field to suppress it\s*</span>
-      - <div class="govuk-form-group govuk-form-group--error">
+    template: "{{ wtforms_helpers.govukInput(form, 'string_field')}}"
+    scenarios:
+        empty_get:
+            expected_output:
+                - <input class="govuk-input" id="string_field" name="string_field" type="text">
+                - <label class="govuk-label" for="string_field">\s*StringField\s*</label>
+        valid_post:
+            request:
+                method: post
+                data:
+                    string_field: John Smith
+            expected_output:
+                - <input class="govuk-input" id="string_field" name="string_field" type="text" value="John Smith">
+                - <label class="govuk-label" for="string_field">\s*StringField\s*</label>
+        invalid_post:
+            request:
+                method: post
+                data:
+                    string_field: foo
+            expected_output:
+                - <input class="govuk-input govuk-input--error" id="string_field" name="string_field" type="text" value="foo" aria-describedby="string_field-error">
+                - <label class="govuk-label" for="string_field">\s*StringField\s*</label>
+                - <span id="string_field-error" class="govuk-error-message">\s*Example serverside error - type &#34;John Smith&#34; into this field to suppress it\s*</span>
+                - <div class="govuk-form-group govuk-form-group--error">
 
 email_field:
     template: "{{ wtforms_helpers.govukInput(form, 'email_field', {'type': 'email', 'hint': {'text': 'This is a hint'}}) }}"
     scenarios:
-        empty:
+        empty_get:
             expected_output:
                 - <span id="email_field-hint" class="govuk-hint">\s*This is a hint\s*</span>
                 - <label class="govuk-label" for="email_field">\s*Email address\s*</label>
@@ -37,42 +37,53 @@ email_field:
             request:
                 method: post
                 data:
-                    email_field: foo
+                    email_field: foo@bar.com
             expected_output:
-                - foo
+                - <span id="email_field-hint" class="govuk-hint">\s*This is a hint\s*</span>
+                - <label class="govuk-label" for="email_field">\s*Email address\s*</label>
+                - <input class="govuk-input" id="email_field" name="email_field" type="email" value="foo@bar.com" aria-describedby="email_field-hint">
         invalid_post:
             request:
                 method: post
                 data:
                     email_field: foo
             expected_output:
-                - foo
+                - <span id="email_field-error" class="govuk-error-message">\s*Invalid email address.\s*</span>
+                - <span id="email_field-hint" class="govuk-hint">\s*This is a hint\s*</span>
+                - <label class="govuk-label" for="email_field">\s*Email address\s*</label>
+                - <input class="govuk-input govuk-input--error" id="email_field" name="email_field" type="email" value="foo" aria-describedby="email_field-hint email_field-error">
+                - <div class="govuk-form-group govuk-form-group--error">
 
 float_field:
     template: "{{ wtforms_helpers.govukInput(form, 'float_field') }}"
     scenarios:
-        empty:
+        empty_get:
             expected_output:
-                - foo
+                - <input class="govuk-input" id="float_field" name="float_field" type="text">
+                - <label class="govuk-label" for="float_field">\s*FloatField\s*</label>
         valid_post:
             request:
                 method: post
                 data:
-                    float_field: foo
+                    float_field: 1.4
             expected_output:
-                - foo
+                - <input class="govuk-input" id="float_field" name="float_field" type="text" value="1.4">
+                - <label class="govuk-label" for="float_field">\s*FloatField\s*</label>
         invalid_post:
             request:
                 method: post
                 data:
                     float_field: foo
             expected_output:
-                - foo
+                - <input class="govuk-input govuk-input--error" id="float_field" name="float_field" type="text" value="foo" aria-describedby="float_field-error">
+                - <label class="govuk-label" for="float_field">\s*FloatField\s*</label>
+                - <span id="float_field-error" class="govuk-error-message">\s* Not a valid float value\s*</span>
+                - <div class="govuk-form-group govuk-form-group--error">
 
 integer_field:
     template: "{{ wtforms_helpers.govukInput(form, 'integer_field') }}"
     scenarios:
-        empty:
+        empty_get:
             expected_output:
                 - foo
         valid_post:
@@ -93,7 +104,7 @@ integer_field:
 decimal_field:
     template: "{{ wtforms_helpers.govukInput(form, 'decimal_field') }}"
     scenarios:
-        empty:
+        empty_get:
             expected_output:
                 - foo
         valid_post:
@@ -114,7 +125,7 @@ decimal_field:
 textarea_field:
     template: "{{ wtforms_helpers.govukInput(form, 'textarea_field') }}"
     scenarios:
-        empty:
+        empty_get:
             expected_output:
                 - foo
         valid_post:
@@ -135,7 +146,7 @@ textarea_field:
 boolean_field:
     template: "{{ wtforms_helpers.govukInput(form, 'boolean_field') }}"
     scenarios:
-        empty:
+        empty_get:
             expected_output:
                 - foo
         valid_post:
@@ -156,7 +167,7 @@ boolean_field:
 select_field:
     template: "{{ wtforms_helpers.govukInput(form, 'select_field') }}"
     scenarios:
-        empty:
+        empty_get:
             expected_output:
                 - foo
         valid_post:
@@ -177,7 +188,7 @@ select_field:
 select_multiple_field:
     template: "{{ wtforms_helpers.govukInput(form, 'select_multiple_field') }}"
     scenarios:
-        empty:
+        empty_get:
             expected_output:
                 - foo
         valid_post:
@@ -198,7 +209,7 @@ select_multiple_field:
 radio_field:
     template: "{{ wtforms_helpers.govukInput(form, 'radio_field') }}"
     scenarios:
-        empty:
+        empty_get:
             expected_output:
                 - foo
         valid_post:
@@ -219,7 +230,7 @@ radio_field:
 file_field:
     template: "{{ wtforms_helpers.govukInput(form, 'file_field') }}"
     scenarios:
-        empty:
+        empty_get:
             expected_output:
                 - foo
         valid_post:
@@ -240,7 +251,7 @@ file_field:
 multiple_file_field:
     template: "{{ wtforms_helpers.govukInput(form, 'multiple_file_field') }}"
     scenarios:
-        empty:
+        empty_get:
             expected_output:
                 - foo
         valid_post:
@@ -261,7 +272,7 @@ multiple_file_field:
 submit_button:
     template: "{{ wtforms_helpers.govukInput(form, 'submit_button') }}"
     scenarios:
-        empty:
+        empty_get:
             expected_output:
                 - foo
         valid_post:
@@ -282,7 +293,7 @@ submit_button:
 password_field:
     template: "{{ wtforms_helpers.govukInput(form, 'password_field') }}"
     scenarios:
-        empty:
+        empty_get:
             expected_output:
                 - foo
         valid_post:
@@ -303,7 +314,7 @@ password_field:
 password_retype_field:
     template: "{{ wtforms_helpers.govukInput(form, 'password_retype_field') }}"
     scenarios:
-        empty:
+        empty_get:
             expected_output:
                 - foo
         valid_post:

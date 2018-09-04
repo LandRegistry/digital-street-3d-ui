@@ -15,6 +15,7 @@ from wtforms.fields import SubmitField
 from wtforms.validators import InputRequired
 from wtforms.validators import EqualTo
 from wtforms.validators import ValidationError
+from wtforms.validators import Email
 
 class ExampleForm(FlaskForm):
     string_field = StringField('StringField',
@@ -22,7 +23,7 @@ class ExampleForm(FlaskForm):
                                )
 
     email_field = StringField('Email address',
-                              validators=[InputRequired(message='Email address is required')]
+                              validators=[Email()]
                               )
 
     float_field = FloatField('FloatField',

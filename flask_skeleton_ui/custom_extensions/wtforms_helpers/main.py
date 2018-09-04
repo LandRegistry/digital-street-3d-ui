@@ -78,7 +78,7 @@ def wtforms_field(form, name, params={}):
         'label': {
             'text': el.label.text
         },
-        'value': el.data if el.data else '',
+        'value': el._value() if hasattr(el, '_value') else '',
         'attributes': {}
     }
 
@@ -94,7 +94,7 @@ def wtforms_field(form, name, params={}):
                 {
                     'id': el.id,
                     'text': el.label.text,
-                    'checked': el.data,
+                    'checked': el._value(),
                     'value': el._value()
                 }
             ]
@@ -114,7 +114,7 @@ def wtforms_field(form, name, params={}):
                         'name': name,
                         'value': option[0],
                         'text': option[1],
-                        'checked': option[0] in el.data if el.data else False
+                        'checked': option[0] in el.data
                     }
         wtforms_params['items'] = list(map(wtforms_checkbox_option, enumerate(el.choices)))
 
