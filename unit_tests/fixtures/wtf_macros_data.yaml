@@ -136,7 +136,7 @@ TestDecimalField:
             expected_output:
                 - <input class="govuk-input govuk-input--error" id="decimal_field" name="decimal_field" type="text" value="foo" aria-describedby="decimal_field-error">
                 - <label class="govuk-label" for="decimal_field">\s*DecimalField\s*</label>
-                - <span id="decimal_field-error" class="govuk-error-message">\s*Not a valid float value\s*</span>
+                - <span id="decimal_field-error" class="govuk-error-message">\s*Not a valid decimal value\s*</span>
                 - <div class="govuk-form-group govuk-form-group--error">
 
 TestTextAreaField:
@@ -336,14 +336,14 @@ TestFileField:
                 - <label class="govuk-label" for="file_field">\s*FileField\s*</label>
                 - <input class="govuk-file-upload" id="file_field" name="file_field" type="file">
 
-TestMultipleFieldField:
+TestMultipleFileField:
     template: "{{ wtforms_helpers.govukFileUpload(form, 'multiple_file_field') }}"
     tests:
         test_empty_get:
             expected_output:
                 - <div class="govuk-form-group">
-                - <label class="govuk-label" for="file_field">\s*FileField\s*</label>
-                - <input class="govuk-file-upload" id="file_field" name="file_field" type="file" multiple>
+                - <label class="govuk-label" for="multiple_file_field">\s*MultipleFileField\s*</label>
+                - <input class="govuk-file-upload" id="multiple_file_field" name="multiple_file_field" type="file" multiple="multiple">
 
 TestSubmitButton:
     template: "{{ wtforms_helpers.govukButton(form, 'submit_button') }}"
