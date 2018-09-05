@@ -37,30 +37,27 @@ class FlaskWtfMacroTestBase(unittest.TestCase):
                                         form=self.form).strip()
 
 
-def make_test_function(template, scenario_data):
+def make_test_function(template, test_data):
 
     def test(self):
-        if 'request' in scenario_data:
-            self.request(**scenario_data['request'])
+        if 'request' in test_data:
+            self.request(**test_data['request'])
         else:
             self.request()
 
         output = self.render(template)
 
-        for expectation in scenario_data['expected_output']:
+        for expectation in test_data['expected_output']:
             self.assertRegex(output, expectation)
 
     return test
 
 test_data = yaml.load(open('unit_tests/fixtures/wtf_macros_data.yaml').read())
 
-for element_name, params in test_data.items():
+for klassname, params in test_data.items():
     methods = {}
-    for scenario_name, scenario_data in params['scenarios'].items():
-        test_func = make_test_function(params['template'], scenario_data)
-        methods['test_{0}'.format(scenario_name)] = test_func
-
-    klassname = 'Test{}'.format(params['class'])
+    for test_name, test_data in params['tests'].items():
+        methods[test_name] = make_test_function(params['template'], test_data)
 
     globals()[klassname] = type(klassname, (FlaskWtfMacroTestBase,), methods)
 
