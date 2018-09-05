@@ -353,22 +353,33 @@ TestSubmitButton:
                 - <button value="y" name="submit_button" type="submit" class="govuk-button">
 
 TestPasswordField:
-    template: "{{ wtforms_helpers.govukInput(form, 'password_field') }}"
+    template: "{{ wtforms_helpers.govukInput(form, 'password_field', {'type': 'password'}) }}"
     tests:
         test_empty_get:
             expected_output:
-                - foo
+                - <div class="govuk-form-group">
+                - <label class="govuk-label" for="password_field">\s*PasswordField\s*</label>
+                - <input class="govuk-input" id="password_field" name="password_field" type="password">
         test_valid_post:
             request:
                 method: post
                 data:
                     password_field: foo
+                    password_retype_field: foo
             expected_output:
-                - foo
+                - <div class="govuk-form-group">
+                - <label class="govuk-label" for="password_field">\s*PasswordField\s*</label>
+                # Ensure that passwords are not represented in the output for security reasons
+                - <input class="govuk-input" id="password_field" name="password_field" type="password">
         test_invalid_post:
             request:
                 method: post
                 data:
                     password_field: foo
+                    password_retype_field: bar
             expected_output:
-                - foo
+                - <div class="govuk-form-group govuk-form-group--error">
+                - <label class="govuk-label" for="password_field">\s*PasswordField\s*</label>
+                - <span id="password_field-error" class="govuk-error-message">\s*Please ensure both password fields match\s*</span>
+                # Ensure that passwords are not represented in the output for security reasons
+                - <input class="govuk-input govuk-input--error" id="password_field" name="password_field" type="password" aria-describedby="password_field-error">
