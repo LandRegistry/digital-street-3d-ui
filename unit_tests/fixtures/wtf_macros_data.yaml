@@ -242,46 +242,90 @@ TestSelectMultipleField:
 
 
 TestSelectField:
-    template: "{{ wtforms_helpers.govukInput(form, 'select_field') }}"
+    template: "{{ wtforms_helpers.govukSelect(form, 'select_field') }}"
     tests:
         test_empty_get:
             expected_output:
-                - foo
+                - <div class="govuk-form-group">
+                - <label class="govuk-label" for="select_field">\s*SelectField\s*</label>
+                - <select class="govuk-select" id="select_field" name="select_field">
+                - <option value="" selected>Please select</option>
+                - <option value="one">One</option>
+                - <option value="two">Two</option>
+                - <option value="three">Three</option>
         test_valid_post:
             request:
                 method: post
                 data:
-                    select_field: foo
+                    select_field: one
             expected_output:
-                - foo
+                - <div class="govuk-form-group">
+                - <label class="govuk-label" for="select_field">\s*SelectField\s*</label>
+                - <select class="govuk-select" id="select_field" name="select_field">
+                - <option value="">Please select</option>
+                - <option value="one" selected>One</option>
+                - <option value="two">Two</option>
+                - <option value="three">Three</option>
         test_invalid_post:
             request:
                 method: post
                 data:
                     select_field: foo
             expected_output:
-                - foo
+                - <div class="govuk-form-group govuk-form-group--error">
+                - <label class="govuk-label" for="select_field">\s*SelectField\s*</label>
+                - <select class="govuk-select govuk-select--error" id="select_field" name="select_field" aria-describedby="select_field-error">
+                - <span id="select_field-error" class="govuk-error-message">\s*Not a valid choice\s*</span>
+                - <option value="" selected>Please select</option>
+                - <option value="one">One</option>
+                - <option value="two">Two</option>
+                - <option value="three">Three</option>
 
 TestRadioField:
-    template: "{{ wtforms_helpers.govukInput(form, 'radio_field') }}"
+    template: "{{ wtforms_helpers.govukRadios(form, 'radio_field') }}"
     tests:
         test_empty_get:
             expected_output:
-                - foo
+                - <div class="govuk-form-group">
+                - <div class="govuk-radios">
+                - <div class="govuk-radios__item">
+                - <input class="govuk-radios__input" id="radio_field-0" name="radio_field" type="radio" value="one">
+                - <label class="govuk-label govuk-radios__label" for="radio_field-0">\s*One\s*</label>
+                - <input class="govuk-radios__input" id="radio_field-1" name="radio_field" type="radio" value="two">
+                - label class="govuk-label govuk-radios__label" for="radio_field-1">\s*Two\s*</label>
+                - <input class="govuk-radios__input" id="radio_field-2" name="radio_field" type="radio" value="three">
+                - <label class="govuk-label govuk-radios__label" for="radio_field-2">\s*Three\s*</label>
         test_valid_post:
             request:
                 method: post
                 data:
-                    radio_field: foo
+                    radio_field: two
             expected_output:
-                - foo
+                - <div class="govuk-form-group">
+                - <div class="govuk-radios">
+                - <div class="govuk-radios__item">
+                - <input class="govuk-radios__input" id="radio_field-0" name="radio_field" type="radio" value="one">
+                - <label class="govuk-label govuk-radios__label" for="radio_field-0">\s*One\s*</label>
+                - <input class="govuk-radios__input" id="radio_field-1" name="radio_field" type="radio" value="two" checked>
+                - label class="govuk-label govuk-radios__label" for="radio_field-1">\s*Two\s*</label>
+                - <input class="govuk-radios__input" id="radio_field-2" name="radio_field" type="radio" value="three">
+                - <label class="govuk-label govuk-radios__label" for="radio_field-2">\s*Three\s*</label>
         test_invalid_post:
             request:
                 method: post
                 data:
                     radio_field: foo
             expected_output:
-                - foo
+                - <div class="govuk-form-group govuk-form-group--error">
+                - <span id="radio_field-error" class="govuk-error-message">\s*Not a valid choice\s*</span>
+                - <div class="govuk-radios">
+                - <div class="govuk-radios__item">
+                - <input class="govuk-radios__input" id="radio_field-0" name="radio_field" type="radio" value="one">
+                - <label class="govuk-label govuk-radios__label" for="radio_field-0">\s*One\s*</label>
+                - <input class="govuk-radios__input" id="radio_field-1" name="radio_field" type="radio" value="two">
+                - label class="govuk-label govuk-radios__label" for="radio_field-1">\s*Two\s*</label>
+                - <input class="govuk-radios__input" id="radio_field-2" name="radio_field" type="radio" value="three">
+                - <label class="govuk-label govuk-radios__label" for="radio_field-2">\s*Three\s*</label>
 
 TestFileField::
     template: "{{ wtforms_helpers.govukInput(form, 'file_field') }}"

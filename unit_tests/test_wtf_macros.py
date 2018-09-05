@@ -60,4 +60,3 @@ for klassname, params in test_data.items():
         methods[test_name] = make_test_function(params['template'], test_data)
 
     globals()[klassname] = type(klassname, (FlaskWtfMacroTestBase,), methods)
-
