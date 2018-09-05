@@ -175,25 +175,33 @@ textarea_field:
 
 boolean_field:
     class: BooleanField
-    template: "{{ wtforms_helpers.govukInput(form, 'boolean_field') }}"
+    template: "{{ wtforms_helpers.govukCheckboxes(form, 'boolean_field') }}"
     scenarios:
         empty_get:
             expected_output:
-                - foo
+                - <div class="govuk-checkboxes">
+                - <div class="govuk-checkboxes__item">
+                - <input class="govuk-checkboxes__input" id="boolean_field" name="boolean_field" type="checkbox" value="y">
+                - <label class="govuk-label govuk-checkboxes__label" for="boolean_field">\s*BooleanField\s*</label>
         valid_post:
             request:
                 method: post
                 data:
-                    boolean_field: foo
+                    boolean_field: y
             expected_output:
-                - foo
+                - <div class="govuk-checkboxes">
+                - <div class="govuk-checkboxes__item">
+                - <input class="govuk-checkboxes__input" id="boolean_field" name="boolean_field" type="checkbox" value="y" checked>
+                - <label class="govuk-label govuk-checkboxes__label" for="boolean_field">\s*BooleanField\s*</label>
         invalid_post:
             request:
                 method: post
-                data:
-                    boolean_field: foo
             expected_output:
-                - foo
+                - <span id="boolean_field-error" class="govuk-error-message">\s*Please tick the box\s*</span>
+                - <div class="govuk-checkboxes">
+                - <div class="govuk-checkboxes__item">
+                - <input class="govuk-checkboxes__input" id="boolean_field" name="boolean_field" type="checkbox" value="y">
+                - <label class="govuk-label govuk-checkboxes__label" for="boolean_field">\s*BooleanField\s*</label>
 
 select_field:
     class: SelectField
