@@ -201,21 +201,45 @@ TestSelectMultipleField:
     tests:
         test_empty_get:
             expected_output:
-                - foo
+                - <div class="govuk-checkboxes">
+                - <div class="govuk-checkboxes__item">
+                - <input class="govuk-checkboxes__input" id="select_multiple_field-0" name="select_multiple_field" type="checkbox" value="one">
+                - <label class="govuk-label govuk-checkboxes__label" for="select_multiple_field-0">\s*One\s*</label>
+                - <input class="govuk-checkboxes__input" id="select_multiple_field-1" name="select_multiple_field" type="checkbox" value="two">
+                - <label class="govuk-label govuk-checkboxes__label" for="select_multiple_field-1">\s*Two\s*</label>
+                - <input class="govuk-checkboxes__input" id="select_multiple_field-2" name="select_multiple_field" type="checkbox" value="three">
+                - <label class="govuk-label govuk-checkboxes__label" for="select_multiple_field-2">\s*Three\s*</label>
         test_valid_post:
             request:
                 method: post
                 data:
-                    select_multiple_field: foo
+                    select_multiple_field:
+                        - one
+                        - two
             expected_output:
-                - foo
+                - <div class="govuk-checkboxes">
+                - <div class="govuk-checkboxes__item">
+                - <input class="govuk-checkboxes__input" id="select_multiple_field-0" name="select_multiple_field" type="checkbox" value="one" checked>
+                - <label class="govuk-label govuk-checkboxes__label" for="select_multiple_field-0">\s*One\s*</label>
+                - <input class="govuk-checkboxes__input" id="select_multiple_field-1" name="select_multiple_field" type="checkbox" value="two" checked>
+                - <label class="govuk-label govuk-checkboxes__label" for="select_multiple_field-1">\s*Two\s*</label>
+                - <input class="govuk-checkboxes__input" id="select_multiple_field-2" name="select_multiple_field" type="checkbox" value="three">
+                - <label class="govuk-label govuk-checkboxes__label" for="select_multiple_field-2">\s*Three\s*</label>
         test_invalid_post:
             request:
                 method: post
                 data:
                     select_multiple_field: foo
             expected_output:
-                - foo
+                - <div class="govuk-form-group govuk-form-group--error">
+                - <span id="select_multiple_field-error" class="govuk-error-message">\s*&#39;foo&#39; is not a valid choice for this field\s*</span>
+                - <input class="govuk-checkboxes__input" id="select_multiple_field-0" name="select_multiple_field" type="checkbox" value="one">
+                - <label class="govuk-label govuk-checkboxes__label" for="select_multiple_field-0">\s*One\s*</label>
+                - <input class="govuk-checkboxes__input" id="select_multiple_field-1" name="select_multiple_field" type="checkbox" value="two">
+                - <label class="govuk-label govuk-checkboxes__label" for="select_multiple_field-1">\s*Two\s*</label>
+                - <input class="govuk-checkboxes__input" id="select_multiple_field-2" name="select_multiple_field" type="checkbox" value="three">
+                - <label class="govuk-label govuk-checkboxes__label" for="select_multiple_field-2">\s*Three\s*</label>
+
 
 TestSelectField:
     template: "{{ wtforms_helpers.govukInput(form, 'select_field') }}"
