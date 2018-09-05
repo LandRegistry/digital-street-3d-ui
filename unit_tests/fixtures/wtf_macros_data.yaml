@@ -327,68 +327,30 @@ TestRadioField:
                 - <input class="govuk-radios__input" id="radio_field-2" name="radio_field" type="radio" value="three">
                 - <label class="govuk-label govuk-radios__label" for="radio_field-2">\s*Three\s*</label>
 
-TestFileField::
-    template: "{{ wtforms_helpers.govukInput(form, 'file_field') }}"
+TestFileField:
+    template: "{{ wtforms_helpers.govukFileUpload(form, 'file_field') }}"
     tests:
         test_empty_get:
             expected_output:
-                - foo
-        test_valid_post:
-            request:
-                method: post
-                data:
-                    file_field: foo
-            expected_output:
-                - foo
-        test_invalid_post:
-            request:
-                method: post
-                data:
-                    file_field: foo
-            expected_output:
-                - foo
+                - <div class="govuk-form-group">
+                - <label class="govuk-label" for="file_field">\s*FileField\s*</label>
+                - <input class="govuk-file-upload" id="file_field" name="file_field" type="file">
 
 TestMultipleFieldField:
-    template: "{{ wtforms_helpers.govukInput(form, 'multiple_file_field') }}"
+    template: "{{ wtforms_helpers.govukFileUpload(form, 'multiple_file_field') }}"
     tests:
         test_empty_get:
             expected_output:
-                - foo
-        test_valid_post:
-            request:
-                method: post
-                data:
-                    multiple_file_field: foo
-            expected_output:
-                - foo
-        test_invalid_post:
-            request:
-                method: post
-                data:
-                    multiple_file_field: foo
-            expected_output:
-                - foo
+                - <div class="govuk-form-group">
+                - <label class="govuk-label" for="file_field">\s*FileField\s*</label>
+                - <input class="govuk-file-upload" id="file_field" name="file_field" type="file" multiple>
 
 TestSubmitButton:
-    template: "{{ wtforms_helpers.govukInput(form, 'submit_button') }}"
+    template: "{{ wtforms_helpers.govukButton(form, 'submit_button') }}"
     tests:
         test_empty_get:
             expected_output:
-                - foo
-        test_valid_post:
-            request:
-                method: post
-                data:
-                    submit_button: foo
-            expected_output:
-                - foo
-        test_invalid_post:
-            request:
-                method: post
-                data:
-                    submit_button: foo
-            expected_output:
-                - foo
+                - <button value="y" name="submit_button" type="submit" class="govuk-button">
 
 TestPasswordField:
     template: "{{ wtforms_helpers.govukInput(form, 'password_field') }}"

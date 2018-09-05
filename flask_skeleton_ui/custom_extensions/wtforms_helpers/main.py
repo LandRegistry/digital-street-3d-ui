@@ -153,7 +153,7 @@ def wtforms_field(form, name, params={}):
     #
     # Just need to grab button text which wtforms stores in the "label"
     if el.type in ['SubmitField']:
-        wtforms_params['text'] = el.label
+        wtforms_params['text'] = el.label.text
 
     # Assign errors to individual inputs
     if name in form.errors:
