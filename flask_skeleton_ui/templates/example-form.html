@@ -9,7 +9,7 @@
 {%- endblock %}
 
 {% block content %}
-  {{ wtforms_helpers.govukErrorSummary(form) }}
+  {# {{ wtforms_helpers.govukErrorSummary(form) }} #}
 
   <form method="POST" action="{{url_for('example_form.index')}}" novalidate>
       {% call govukFieldset({
@@ -21,8 +21,19 @@
       }) %}
 
         {{ form.csrf_token }}
+        {{ form['string_field'](params={
+          'hint': {
+            'html': 'Hint with some <em>HTML</em> in'
+          },
+          'attributes': {
+            'wibble': 'bar'
+          }
+        }) }}
 
-        {{ wtforms_helpers.govukInput(form, 'string_field')}}
+        {{ form['password_field'] }}
+        {{ form['password_retype_field'] }}
+
+        {#{{ wtforms_helpers.govukInput(form, 'string_field')}}
 
         {{ wtforms_helpers.govukInput(form, 'password_field', {
           'type': 'password'
@@ -65,7 +76,9 @@
         {{ wtforms_helpers.govukFileUpload(form, 'file_field') }}
         {{ wtforms_helpers.govukFileUpload(form, 'multiple_file_field') }}
 
-        {{ wtforms_helpers.govukButton(form, 'submit_button') }}
+        {{ wtforms_helpers.govukButton(form, 'submit_button') }}#}
+
+        <input type="submit" value="go">
       {% endcall %}
   </form>
 

@@ -21,6 +21,8 @@ from wtforms.validators import InputRequired
 from wtforms.validators import EqualTo
 from wtforms.validators import ValidationError
 
+from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovTextInput, GovPasswordInput
+
 
 # This is the blueprint object that gets registered into the app in blueprints.py.
 example_form = Blueprint('example_form', __name__)
@@ -43,8 +45,20 @@ def session_storage():
 
 class ExampleForm(FlaskForm):
     string_field = StringField('StringField',
+                               widget=GovTextInput(),
                                validators=[InputRequired(message='StringField is required')],
                                )
+
+    password_field = PasswordField('PasswordField',
+                                   widget=GovPasswordInput(),
+                                   validators=[
+                                       InputRequired('Password is required'),
+                                       EqualTo('password_retype_field', message='Please ensure both password fields match'),
+                                   ])
+
+    password_retype_field = PasswordField('Re-type your password',
+                                          widget=GovPasswordInput(),
+                                          validators=[InputRequired('Please retype your password')])
 
     email_field = StringField('Email address',
                               validators=[InputRequired(message='Email address is required')]
@@ -93,14 +107,6 @@ class ExampleForm(FlaskForm):
                                             [InputRequired(message='Please upload a file')])
 
     submit_button = SubmitField('SubmitField')
-
-    password_field = PasswordField('PasswordField', validators=[
-        InputRequired('Password is required'),
-        EqualTo('password_retype_field', message='Please ensure both password fields match'),
-    ])
-
-    password_retype_field = PasswordField('Re-type your password',
-                                          validators=[InputRequired('Please retype your password')])
 
     def validate_string_field(self, field):
         if field.data != 'John Smith':
