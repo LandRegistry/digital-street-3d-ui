@@ -12,6 +12,8 @@ class GovFormBase(object):
     Some of our subclasses then extend these base utilities for their
     specific use cases
     """
+    def __call__(self, field, **kwargs):
+        return self.render(self.map_gov_params(field, **kwargs))
 
     def map_gov_params(self, field, **kwargs):
         """Map WTForms' html params to govuk macros
@@ -20,7 +22,6 @@ class GovFormBase(object):
         which matches the structure that the govuk macros are expecting
         """
         params = {
-            'type': kwargs['type'],
             'id': kwargs['id'],
             'name': field.name,
             'label': {
@@ -29,15 +30,24 @@ class GovFormBase(object):
             'attributes': {}
         }
 
+        if 'value' in kwargs:
+            params['value'] = kwargs['value']
+            del kwargs['value']
+
+        # Not all form elements have a type so guard against it not existing
+        if 'type' in kwargs:
+            params['type'] = kwargs['type']
+            del kwargs['type']
+
         # Remove items that we've already used from the kwargs
-        del kwargs['type']
         del kwargs['id']
 
         # Merge in any extra params passed in from the template layer
-        # And then remove it, to make sure it doesn't make it's way into the attributes below
         if 'params' in kwargs:
             params = self.merge_params(params, kwargs['params'])
-            # del kwargs['params']
+
+            # And then remove it, to make sure it doesn't make it's way into the attributes below
+            del kwargs['params']
 
         # Map error messages
         if field.errors:
@@ -46,12 +56,9 @@ class GovFormBase(object):
             }
 
         # And then Merge any remaining attributes directly to the attributes param
-        #
-        # TODO: Do we want to do this? It matches the WTForms API, but it duplicates
-        # the ability to set custom attributes directly with the gov options.
-        # Currently thinking *not* to have this line in...
-        #
-        # params['attributes'] = self.merge_params(params['attributes'], kwargs)
+        # This catches anything set in the more traditional WTForms manner
+        # i.e. directly as kwargs passed into the field when it's rendered
+        params['attributes'] = self.merge_params(params['attributes'], kwargs)
 
         return params
 

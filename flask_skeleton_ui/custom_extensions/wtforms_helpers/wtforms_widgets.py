@@ -30,7 +30,8 @@ class GovInput(GovFormBase, Input):
         if "required" not in kwargs and "required" in getattr(field, "flags", []):
             kwargs["required"] = True
 
-        return self.render(self.map_gov_params(field, **kwargs))
+        return super().__call__(field, **kwargs)
+
 
 
 class GovTextInput(GovInput, TextInput):
@@ -63,11 +64,53 @@ class GovCheckboxInput(GovInput, CheckboxInput):
     """
 
     input_type = "checkbox"
+    template = 'wtforms_gov/checkboxes.html'
 
     def __call__(self, field, **kwargs):
         if getattr(field, "checked", field.data):
             kwargs["checked"] = True
         return super().__call__(field, **kwargs)
+
+    def map_gov_params(self, field, **kwargs):
+        """Completely override the params mapping for this input type
+
+        WTForms BooleanInput is a flat structure, whereas the gov macro
+        simply expects a list of one item to represent a single checkbox
+        But some params stay at the top level"""
+        params = {
+            'name': field.name,
+            'items': [
+                {
+                    'value': kwargs['value'],
+                    'text': field.label.text
+                }
+            ]
+        }
+
+        if 'checked' in kwargs:
+            params['items'][0]['checked'] = kwargs['checked']
+            del kwargs['checked']
+
+        # Merge in any extra params passed in from the template layer
+        if 'params' in kwargs:
+
+            # Merge items individually as otherwise the merge will append new ones
+            if 'items' in kwargs['params']:
+                for index, item in enumerate(kwargs['params']['items']):
+                    item = self.merge_params(params['items'][index], item)
+
+                del kwargs['params']['items']
+
+
+            params = self.merge_params(params, kwargs['params'])
+
+        if field.errors:
+            params['errorMessage'] = {
+                'text': field.errors[0]
+            }
+
+        return params
+
 
 
 class GovRadioInput(GovInput, RadioInput):
@@ -113,12 +156,13 @@ class GovSubmitInput(GovInput, SubmitInput):
         return super().__call__(field, **kwargs)
 
 
-class GovTextArea(TextArea):
+class GovTextArea(GovFormBase, TextArea):
     """
     Renders a multi-line text area.
 
     `rows` and `cols` ought to be passed as keyword args when rendering.
     """
+    template = 'wtforms_gov/textarea.html'
 
     def __call__(self, field, **kwargs):
         kwargs.setdefault("id", field.id)

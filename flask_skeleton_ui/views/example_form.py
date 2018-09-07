@@ -21,7 +21,7 @@ from wtforms.validators import InputRequired
 from wtforms.validators import EqualTo
 from wtforms.validators import ValidationError
 
-from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovTextInput, GovPasswordInput
+from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovTextInput, GovPasswordInput, GovTextArea, GovCheckboxInput
 
 
 # This is the blueprint object that gets registered into the app in blueprints.py.
@@ -61,26 +61,32 @@ class ExampleForm(FlaskForm):
                                           validators=[InputRequired('Please retype your password')])
 
     email_field = StringField('Email address',
+                              widget=GovTextInput(),
                               validators=[InputRequired(message='Email address is required')]
                               )
 
     float_field = FloatField('FloatField',
+                             widget=GovTextInput(),
                              validators=[InputRequired(message='FloatField is required')]
                              )
 
     integer_field = IntegerField('IntegerField',
+                                 widget=GovTextInput(),
                                  validators=[InputRequired(message='IntegerField is required')]
                                  )
 
     decimal_field = DecimalField('DecimalField',
+                                 widget=GovTextInput(),
                                  validators=[InputRequired(message='DecimalField is required')]
                                  )
 
     textarea_field = TextAreaField('TextAreaField',
+                                   widget=GovTextArea(),
                                    validators=[InputRequired(message='TextAreaField is required')]
                                    )
 
     boolean_field = BooleanField('BooleanField',
+                                 widget=GovCheckboxInput(),
                                  validators=[InputRequired(message='Please tick the box')]
                                  )
 

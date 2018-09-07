@@ -21,40 +21,40 @@
       }) %}
 
         {{ form.csrf_token }}
+
         {{ form['string_field'](params={
           'hint': {
             'html': 'Hint with some <em>HTML</em> in'
           },
           'attributes': {
-            'wibble': 'bar'
+            'data-foo': 'bar'
           }
         }) }}
 
         {{ form['password_field'] }}
         {{ form['password_retype_field'] }}
 
-        {#{{ wtforms_helpers.govukInput(form, 'string_field')}}
-
-        {{ wtforms_helpers.govukInput(form, 'password_field', {
-          'type': 'password'
-        })}}
-
-        {{ wtforms_helpers.govukInput(form, 'password_retype_field', {
-          'type': 'password'
-        })}}
-
-        {{ wtforms_helpers.govukInput(form, 'email_field', {
-          'type': 'email',
-          'hint': {
-            'text': 'This is a hint'
-          }
+        {{ form['email_field'](params={
+          'type': 'email'
         }) }}
 
-        {{ wtforms_helpers.govukInput(form, 'float_field')}}
-        {{ wtforms_helpers.govukInput(form, 'integer_field')}}
-        {{ wtforms_helpers.govukInput(form, 'decimal_field')}}
+        {{ form['float_field'] }}
+        {{ form['integer_field'] }}
+        {{ form['decimal_field'] }}
 
-        {{ wtforms_helpers.govukTextarea(form, 'textarea_field')}}
+        {{ form['textarea_field'] }}
+
+        {{ form['boolean_field'](params={
+          'items': [
+            {
+              'hint': {
+                'text': 'This is a hint'
+              }
+            }
+          ]
+        }) }}
+
+        {#
 
         {{ wtforms_helpers.govukCheckboxes(form, 'boolean_field')}}
 
