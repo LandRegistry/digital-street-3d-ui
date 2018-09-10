@@ -2,7 +2,8 @@ from markupsafe import Markup, escape
 from wtforms.widgets.core import Input, TextInput, PasswordInput, CheckboxInput, RadioInput, FileInput, SubmitInput, TextArea, Select
 from wtforms.compat import iteritems, text_type
 from flask import render_template
-from flask_skeleton_ui.custom_extensions.wtforms_helpers.gov_form_base import GovFormBase
+from flask_skeleton_ui.custom_extensions.wtforms_helpers.gov_form_base import GovFormBase, GovIterableBase
+from flask_skeleton_ui.exceptions import ApplicationError
 
 """Lifted from WTForms and modified to generate GOV.UK markup
 
@@ -56,7 +57,7 @@ class GovPasswordInput(GovInput, PasswordInput):
         return super().__call__(field, **kwargs)
 
 
-class GovCheckboxesInput(GovFormBase):
+class GovCheckboxesInput(GovIterableBase):
     """Multiple checkboxes, from a SelectMultipleField
 
     This widget type doesn't exist in WTForms - the recommendation
@@ -90,36 +91,7 @@ class GovCheckboxesInput(GovFormBase):
 
         return super().__call__(field, **kwargs)
 
-    def map_gov_params(self, field, **kwargs):
-        """Completely override the params mapping for this input type
 
-        It bears little resemblance to that of a normal field
-        because these fields are effectively collections of
-        fields wrapped in an iterable"""
-
-        params = {
-            'name': field.name,
-            'items': kwargs['items']
-        }
-
-        # Merge in any extra params passed in from the template layer
-        if 'params' in kwargs:
-
-            # Merge items individually as otherwise the merge will append new ones
-            if 'items' in kwargs['params']:
-                for index, item in enumerate(kwargs['params']['items']):
-                    item = self.merge_params(params['items'][index], item)
-
-                del kwargs['params']['items']
-
-            params = self.merge_params(params, kwargs['params'])
-
-        if field.errors:
-            params['errorMessage'] = {
-                'text': field.errors[0]
-            }
-
-        return params
 
 
 class GovCheckboxInput(GovCheckboxesInput):
@@ -215,7 +187,7 @@ class GovTextArea(GovFormBase, TextArea):
         return super().__call__(field, **kwargs)
 
 
-class GovSelect(Select):
+class GovSelect(GovFormBase, Select):
     """
     Renders a select field.
 
@@ -226,21 +198,35 @@ class GovSelect(Select):
     call on rendering; this method must yield tuples of
     `(value, label, selected)`.
     """
-
-    def __init__(self, multiple=False):
-        self.multiple = multiple
+    template = 'wtforms_gov/select.html'
 
     def __call__(self, field, **kwargs):
-        kwargs.setdefault("id", field.id)
         if self.multiple:
-            kwargs["multiple"] = True
+            raise ApplicationError('Please do not render mutliselect elements as a select box - you should use checkboxes instead in order to comply with the GOV.UK service manual')
+
+        kwargs.setdefault("id", field.id)
+
         if "required" not in kwargs and "required" in getattr(field, "flags", []):
             kwargs["required"] = True
 
-        # html = ["<select %s>" % html_params(name=field.name, **kwargs)]
-        # for val, label, selected in field.iter_choices():
-        #     html.append(self.render_option(val, label, selected))
-        # html.append("</select>")
-        # return Markup("".join(html))
+        kwargs['items'] = []
+
+        # Construct select box choices
+        for val, label, selected in field.iter_choices():
+            item = {
+                'text': label,
+                'value': val,
+                'selected': selected
+            }
+
+            kwargs['items'].append(item)
 
         return super().__call__(field, **kwargs)
+
+    def map_gov_params(self, field, **kwargs):
+
+        params = super().map_gov_params(field, **kwargs)
+
+        params['items'] = kwargs['items']
+
+        return params

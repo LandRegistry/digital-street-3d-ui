@@ -83,3 +83,35 @@ class GovFormBase(object):
 
     def render(self, params):
         return Markup(render_template(self.template, params=params))
+
+class GovIterableBase(GovFormBase):
+    def map_gov_params(self, field, **kwargs):
+        """Completely override the params mapping for this input type
+
+        It bears little resemblance to that of a normal field
+        because these fields are effectively collections of
+        fields wrapped in an iterable"""
+
+        params = {
+            'name': field.name,
+            'items': kwargs['items']
+        }
+
+        # Merge in any extra params passed in from the template layer
+        if 'params' in kwargs:
+
+            # Merge items individually as otherwise the merge will append new ones
+            if 'items' in kwargs['params']:
+                for index, item in enumerate(kwargs['params']['items']):
+                    item = self.merge_params(params['items'][index], item)
+
+                del kwargs['params']['items']
+
+            params = self.merge_params(params, kwargs['params'])
+
+        if field.errors:
+            params['errorMessage'] = {
+                'text': field.errors[0]
+            }
+
+        return params
