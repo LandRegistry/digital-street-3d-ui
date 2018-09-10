@@ -21,7 +21,7 @@ from wtforms.validators import InputRequired
 from wtforms.validators import EqualTo
 from wtforms.validators import ValidationError
 
-from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovTextInput, GovPasswordInput, GovTextArea, GovCheckboxInput
+from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovTextInput, GovPasswordInput, GovTextArea, GovCheckboxInput, GovCheckboxesInput
 
 
 # This is the blueprint object that gets registered into the app in blueprints.py.
@@ -90,27 +90,28 @@ class ExampleForm(FlaskForm):
                                  validators=[InputRequired(message='Please tick the box')]
                                  )
 
+    select_multiple_field = SelectMultipleField('SelectMultipleField',
+                                                widget=GovCheckboxesInput(),
+                                                validators=[InputRequired(message='Please select an option')],
+                                                choices=[('one', 'One'), ('two', 'Two'), ('three', 'Three')]
+                                                )
+
     select_field = SelectField('SelectField',
-                               [InputRequired(message='Please select an option')],
+                               validators=[InputRequired(message='Please select an option')],
                                choices=[('', 'Please select'), ('one', 'One'), ('two', 'Two'), ('three', 'Three')],
                                default=''
                                )
 
-    select_multiple_field = SelectMultipleField('SelectMultipleField',
-                                                [InputRequired(message='Please select an option')],
-                                                choices=[('one', 'One'), ('two', 'Two'), ('three', 'Three')]
-                                                )
-
     radio_field = RadioField('RadioField',
-                             [InputRequired(message='Please select an option')],
+                             validators=[InputRequired(message='Please select an option')],
                              choices=[('one', 'One'), ('two', 'Two'), ('three', 'Three')]
                              )
 
     file_field = FileField('FileField',
-                           [InputRequired(message='Please upload a file')])
+                           validators=[InputRequired(message='Please upload a file')])
 
     multiple_file_field = MultipleFileField('MultipleFileField',
-                                            [InputRequired(message='Please upload a file')])
+                                            validators=[InputRequired(message='Please upload a file')])
 
     submit_button = SubmitField('SubmitField')
 

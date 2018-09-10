@@ -56,40 +56,51 @@ class GovPasswordInput(GovInput, PasswordInput):
         return super().__call__(field, **kwargs)
 
 
-class GovCheckboxInput(GovInput, CheckboxInput):
-    """
-    Render a checkbox.
+class GovCheckboxesInput(GovFormBase):
+    """Multiple checkboxes, from a SelectMultipleField
 
-    The ``checked`` HTML attribute is set if the field's data is a non-false value.
-    """
+    This widget type doesn't exist in WTForms - the recommendation
+    there is to use a combination of the list and checkbox widgets.
+    However in the GOV.UK macros this type of field is not simply
+    a list of smaller widgets - multiple checkboxes are a single
+    construct of their own."""
 
-    input_type = "checkbox"
     template = 'wtforms_gov/checkboxes.html'
+    input_type = 'checkbox'
 
     def __call__(self, field, **kwargs):
-        if getattr(field, "checked", field.data):
-            kwargs["checked"] = True
+        kwargs.setdefault("id", field.id)
+
+        if "required" not in kwargs and "required" in getattr(field, "flags", []):
+            kwargs["required"] = True
+
+        kwargs['items'] = []
+
+        # This field is constructed as an iterable of subfields
+        for subfield in field:
+            item = {
+                'text': subfield.label.text,
+                'value': subfield._value()
+            }
+
+            if getattr(subfield, "checked", subfield.data):
+                item["checked"] = True
+
+            kwargs['items'].append(item)
+
         return super().__call__(field, **kwargs)
 
     def map_gov_params(self, field, **kwargs):
         """Completely override the params mapping for this input type
 
-        WTForms BooleanInput is a flat structure, whereas the gov macro
-        simply expects a list of one item to represent a single checkbox
-        But some params stay at the top level"""
+        It bears little resemblance to that of a normal field
+        because these fields are effectively collections of
+        fields wrapped in an iterable"""
+
         params = {
             'name': field.name,
-            'items': [
-                {
-                    'value': kwargs['value'],
-                    'text': field.label.text
-                }
-            ]
+            'items': kwargs['items']
         }
-
-        if 'checked' in kwargs:
-            params['items'][0]['checked'] = kwargs['checked']
-            del kwargs['checked']
 
         # Merge in any extra params passed in from the template layer
         if 'params' in kwargs:
@@ -101,7 +112,6 @@ class GovCheckboxInput(GovInput, CheckboxInput):
 
                 del kwargs['params']['items']
 
-
             params = self.merge_params(params, kwargs['params'])
 
         if field.errors:
@@ -111,6 +121,40 @@ class GovCheckboxInput(GovInput, CheckboxInput):
 
         return params
 
+
+class GovCheckboxInput(GovCheckboxesInput):
+    """
+    Render a single checkbox (i.e. a WTForms BooleanField).
+    """
+    def __call__(self, field, **kwargs):
+        # We are subclassing GovCheckboxesInput which expects
+        # the field to be an iterable yielding each checkbox "subfield"
+        # In order to make our single BooleanField comply with this, we
+        # need to provide it with a similar construct, but which only
+        # yields a single checkbox
+        class IterableField(object):
+            def __init__(self, field):
+                self.field = field
+                self.max = 1
+
+            def __iter__(self):
+                self.index = 0
+                return self
+
+            def __next__(self):
+                if self.index < self.max:
+                    self.index += 1
+
+                    return self.field
+                else:
+                    raise StopIteration
+
+            def __getattr__(self, name):
+                return getattr(self.field, name)
+
+        field_group = IterableField(field)
+
+        return super().__call__(field_group, **kwargs)
 
 
 class GovRadioInput(GovInput, RadioInput):

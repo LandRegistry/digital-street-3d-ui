@@ -54,9 +54,26 @@
           ]
         }) }}
 
-        {#
+        {{ form['select_multiple_field'](params={
+          'fieldset': {
+            'legend': {
+              'text': 'SelectMultipleField rendered as checkboxes'
+            }
+          },
+          'hint': {
+            'text': 'Please note that SelectMultipleField elements should never be rendered as <select multiple> elements since users find these extremely difficult to interact with.'
+          },
+          'items': [
+            {},
+            {
+              'hint': {
+                'text': 'This checkbox item has it\'s own hint'
+              }
+            }
+          ]
+        }) }}
 
-        {{ wtforms_helpers.govukCheckboxes(form, 'boolean_field')}}
+        {#
 
         {{ wtforms_helpers.govukSelect(form, 'select_field')}}
 
