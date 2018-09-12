@@ -1,5 +1,5 @@
 from markupsafe import Markup, escape
-from wtforms.widgets.core import Input, TextInput, PasswordInput, CheckboxInput, RadioInput, FileInput, SubmitInput, TextArea, Select
+from wtforms.widgets.core import Input, TextInput, PasswordInput, Input, RadioInput, FileInput, SubmitInput, TextArea, Select
 from wtforms.compat import iteritems, text_type
 from flask import render_template
 from flask_skeleton_ui.custom_extensions.wtforms_helpers.gov_form_base import GovFormBase, GovIterableBase
@@ -69,35 +69,9 @@ class GovCheckboxesInput(GovIterableBase):
     template = 'wtforms_gov/checkboxes.html'
     input_type = 'checkbox'
 
-    def __call__(self, field, **kwargs):
-        kwargs.setdefault("id", field.id)
-
-        if "required" not in kwargs and "required" in getattr(field, "flags", []):
-            kwargs["required"] = True
-
-        kwargs['items'] = []
-
-        # This field is constructed as an iterable of subfields
-        for subfield in field:
-            item = {
-                'text': subfield.label.text,
-                'value': subfield._value()
-            }
-
-            if getattr(subfield, "checked", subfield.data):
-                item["checked"] = True
-
-            kwargs['items'].append(item)
-
-        return super().__call__(field, **kwargs)
-
-
-
 
 class GovCheckboxInput(GovCheckboxesInput):
-    """
-    Render a single checkbox (i.e. a WTForms BooleanField).
-    """
+    """Render a single checkbox (i.e. a WTForms BooleanField)."""
     def __call__(self, field, **kwargs):
         # We are subclassing GovCheckboxesInput which expects
         # the field to be an iterable yielding each checkbox "subfield"
@@ -129,20 +103,9 @@ class GovCheckboxInput(GovCheckboxesInput):
         return super().__call__(field_group, **kwargs)
 
 
-class GovRadioInput(GovInput, RadioInput):
-    """
-    Render a single radio button.
-
-    This widget is most commonly used in conjunction with ListWidget or some
-    other listing, as singular radio buttons are not very useful.
-    """
-
-    input_type = "radio"
-
-    def __call__(self, field, **kwargs):
-        if field.checked:
-            kwargs["checked"] = True
-        return super().__call__(field, **kwargs)
+class GovRadioInput(GovIterableBase):
+    template = 'wtforms_gov/radios.html'
+    input_type = 'radio'
 
 
 class GovFileInput(GovInput, FileInput):

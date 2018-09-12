@@ -85,6 +85,28 @@ class GovFormBase(object):
         return Markup(render_template(self.template, params=params))
 
 class GovIterableBase(GovFormBase):
+    def __call__(self, field, **kwargs):
+        kwargs.setdefault("id", field.id)
+
+        if "required" not in kwargs and "required" in getattr(field, "flags", []):
+            kwargs["required"] = True
+
+        kwargs['items'] = []
+
+        # This field is constructed as an iterable of subfields
+        for subfield in field:
+            item = {
+                'text': subfield.label.text,
+                'value': subfield._value()
+            }
+
+            if getattr(subfield, "checked", subfield.data):
+                item["checked"] = True
+
+            kwargs['items'].append(item)
+
+        return super().__call__(field, **kwargs)
+
     def map_gov_params(self, field, **kwargs):
         """Completely override the params mapping for this input type
 
