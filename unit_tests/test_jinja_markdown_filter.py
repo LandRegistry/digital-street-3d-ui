@@ -23,30 +23,46 @@ class TestJinjaMarkdownFilter(unittest.TestCase):
 
     def test_render_returns_govuk_html_for_headings(self):
         markdown_to_html = {
-            '# 1': '<h1 class="heading-xlarge">1</h1>',
-            '## 2': '<h2 class="heading-large">2</h2>',
-            '### 3': '<h3 class="heading-medium">3</h3>',
-            '#### 4': '<h4 class="heading-small">4</h4>',
-            '##### 5': '<h5 class="heading-small">5</h5>',
-            '###### 6': '<h6 class="heading-small">6</h6>'
+            '# 1': '<h1 class="govuk-heading-xl">1</h1>',
+            '## 2': '<h2 class="govuk-heading-l">2</h2>',
+            '### 3': '<h3 class="govuk-heading-m">3</h3>',
+            '#### 4': '<h4 class="govuk-heading-s">4</h4>',
+            '##### 5': '<h5 class="govuk-heading-s">5</h5>',
+            '###### 6': '<h6 class="govuk-heading-s">6</h6>'
         }
 
         self.check_rendering(markdown_to_html)
 
     def test_render_returns_govuk_html_for_lists(self):
         markdown_to_html = {
-            '- Foo\n- Bar\n- Wibble': '<ul class="list list-bullet">'
+            '- Foo\n- Bar\n- Wibble': '<ul class="govuk-list govuk-list--bullet">'
                                       '<li>Foo</li>\n<li>Bar</li>\n<li>Wibble</li>\n</ul>',
-            '1. Foo\n2. Bar\n3. Wibble': '<ol class="list list-number">'
+            '1. Foo\n2. Bar\n3. Wibble': '<ol class="govuk-list govuk-list--number">'
                                          '<li>Foo</li>\n<li>Bar</li>\n<li>Wibble</li>\n</ol>'
         }
 
         self.check_rendering(markdown_to_html)
 
-    def test_render_returns_govuk_html_for_double_emphasis(self):
+    def test_render_returns_govuk_html_for_hrule(self):
         markdown_to_html = {
-            '**Foo**': '<p><strong class="bold">Foo</strong></p>',
-            '**Foo** **bar**': '<p><strong class="bold">Foo</strong> <strong class="bold">bar</strong></p>'
+            '---': '<hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">',
+
+        }
+
+        self.check_rendering(markdown_to_html)
+
+    def test_render_returns_govuk_html_for_paragraph(self):
+        markdown_to_html = {
+            'Foo\n\nBar\n\nWibble': '<p class="govuk-body">Foo</p><p class="govuk-body">Bar</p><p class="govuk-body">Wibble</p>',
+
+        }
+
+        self.check_rendering(markdown_to_html)
+
+    def test_render_returns_govuk_html_for_link(self):
+        markdown_to_html = {
+            '[Foo](http://foo.com)': '<p class="govuk-body"><a class="govuk-link" href="http://foo.com">Foo</a></p>',
+            '[Foo](http://foo.com "Title here")': '<p class="govuk-body"><a class="govuk-link" href="http://foo.com" title="Title here">Foo</a></p>'
         }
 
         self.check_rendering(markdown_to_html)
