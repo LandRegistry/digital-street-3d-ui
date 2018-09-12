@@ -4,6 +4,8 @@ Note that requirements updates are not listed here unless they result in more ch
 
 | Date | Summary | Comparison to previous |
 |---|---|---|
+| 2018-09-12 | Fixed bug with cachebusted URLs which would throw an error with the new design system | [Here](!29) |
+|            | Fixed custom markdown rendered to generate markup to match the new design system | |
 | 2018-08-29 | Added in additional govuk-frontend macros that were previously ommited (Mostly form related) | [Here](!27) |
 | 2018-08-22 | Fixed bugs with unit tests running on Windows machines | [Here](!23) |
 | 2018-08-14 | Removed old GOV.UK toolkits and switched to new govuk design system. **🔥 This is a large breaking change** - please read these notes carefully and refer to the attached merge request for details of code changes:<br><ul><li>main.js and main.scss updated to include new initialisation code for GOV components</li><li>Cookie banner code moved into skeleton app since the new kit does not yet define one.</li><li>skeleton layout.html updated significantly to account for new design system.</li><li>jQuery dependency removed since GOV.UK no longer use it. (_Feel free to re-add if your app needs it, but for new applications please favour vanilla JS where feasible._)</li><li>land-registry-elements and govuk-elements-jinja-macros dependencies temporarily removed while these are ported to new kit (To be re-added in a future release). Note: *Any teams already using these would be better to wait for this subsequent release*</li><li>Gulp tasks and package.json tweaked to build new kit</li><li>New GOV.UK documentation can be found here: https://design-system.service.gov.uk/</li></ul>| [Here](!25) |
