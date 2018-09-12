@@ -21,7 +21,7 @@ from wtforms.validators import InputRequired
 from wtforms.validators import EqualTo
 from wtforms.validators import ValidationError
 
-from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovTextInput, GovPasswordInput, GovTextArea, GovCheckboxInput, GovCheckboxesInput, GovSelect, GovRadioInput
+from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovTextInput, GovPasswordInput, GovTextArea, GovCheckboxInput, GovCheckboxesInput, GovSelect, GovRadioInput, GovSubmitInput, GovFileInput
 
 
 # This is the blueprint object that gets registered into the app in blueprints.py.
@@ -110,12 +110,14 @@ class ExampleForm(FlaskForm):
                              )
 
     file_field = FileField('FileField',
+                           widget=GovFileInput(),
                            validators=[InputRequired(message='Please upload a file')])
 
     multiple_file_field = MultipleFileField('MultipleFileField',
+                                            widget=GovFileInput(multiple=True),
                                             validators=[InputRequired(message='Please upload a file')])
 
-    submit_button = SubmitField('SubmitField')
+    submit_button = SubmitField('SubmitField', widget=GovSubmitInput())
 
     def validate_string_field(self, field):
         if field.data != 'John Smith':

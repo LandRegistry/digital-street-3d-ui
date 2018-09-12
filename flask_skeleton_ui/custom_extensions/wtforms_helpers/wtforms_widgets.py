@@ -113,6 +113,8 @@ class GovFileInput(GovInput, FileInput):
 
     :param multiple: allow choosing multiple files
     """
+    template='wtforms_gov/file-upload.html'
+
     def __call__(self, field, **kwargs):
         # browser ignores value of file input for security
         kwargs["value"] = False
@@ -130,9 +132,20 @@ class GovSubmitInput(GovInput, SubmitInput):
     The field's label is used as the text of the submit button instead of the
     data on the field.
     """
+    template='wtforms_gov/button.html'
+
     def __call__(self, field, **kwargs):
-        kwargs.setdefault("value", field.label.text)
         return super().__call__(field, **kwargs)
+
+    def map_gov_params(self, field, **kwargs):
+        params = super().map_gov_params(field, **kwargs)
+
+        params.setdefault('text', field.label.text)
+        params.setdefault('element', 'button')
+
+        del params['value']
+
+        return params
 
 
 class GovTextArea(GovFormBase, TextArea):

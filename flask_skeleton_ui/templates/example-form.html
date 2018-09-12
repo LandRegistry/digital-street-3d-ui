@@ -77,15 +77,11 @@
 
         {{ form['radio_field'] }}
 
-        {#
+        {{ form['file_field'] }}
 
+        {{ form['multiple_file_field'] }}
 
-        {{ wtforms_helpers.govukFileUpload(form, 'file_field') }}
-        {{ wtforms_helpers.govukFileUpload(form, 'multiple_file_field') }}
-
-        {{ wtforms_helpers.govukButton(form, 'submit_button') }}#}
-
-        <input type="submit" value="go">
+        {{ form['submit_button'] }}
       {% endcall %}
   </form>
 
