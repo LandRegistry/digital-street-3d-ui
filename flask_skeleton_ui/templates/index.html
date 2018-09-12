@@ -55,14 +55,36 @@
 {% endblock %}
 
 {% block content %}
-  <h1 class="govuk-heading-xl">flask-skeleton-ui</h1>
-  <p class="govuk-body">This skeleton is intentionally bare as a starting point. Please see <a href="http://192.168.249.38/gadgets/gadget-govuk-ui">gadgets/gadget-govuk-ui</a> for a fuller example</p>
 
-  <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+  {% filter markdown %}
+# flask-skeleton-ui
 
-  <h2 class="govuk-heading-s">govuk-frontend macros kitchen sink</h2>
-  <p class="govuk-body">govuk-frontend supplies macros for generating compliant html. These are converted from nunjucks to jinja and made available to the skeleton. See the README.md for more information.</p>
-  <p class="govuk-body">Since the nunjucks source undergoes several transformations before it can be used in jinja, we need to check they don't throw any errors. Therefore, we render absolutely everything on this page as a sanity check.</p>
+This skeleton is intentionally bare as a starting point. Please see [gadgets/gadget-govuk-ui](http://192.168.249.38/gadgets/gadget-govuk-ui) for a fuller example
+
+## govuk-frontend macros kitchen sink
+---
+
+govuk-frontend supplies macros for generating compliant html. These are converted from nunjucks to jinja and made available to the skeleton. See the README.md for more information.
+Since the nunjucks source undergoes several transformations before it can be used in jinja, we need to check they don't throw any errors. Therefore, we render absolutely everything on this page as a sanity check.
+
+- This
+- Is
+- a
+- list
+
+
+
+1. This
+2. Is
+3. a
+4. List
+
+
+**bold**
+
+_italic_
+
+  {% endfilter %}
 
   <div class="govuk-!-margin-top-9">
     {{ govukErrorSummary({
