@@ -77,17 +77,6 @@ class TestCachebustStaticAssets(unittest.TestCase):
 
         os.remove(filename)
 
-    def test_non_existent_file_doesnt_throw_exception_but_logs_instead(self):
-        with app.test_request_context('/'):
-            app.preprocess_request()
-
-            with self.assertLogs(level='ERROR') as logs:
-
-                render_template_string("{{ url_for('static', filename='doesnt-exist.txt') }}")
-                # Test would fail if an exception was raised above
-                self.assertRegexpMatches(str(logs),
-                                         'File not found: /.*/flask_skeleton_ui/assets/dist/doesnt-exist.txt')
-
     def test_hashed_url_for_only_runs_for_static_asset_routes(self):
         with app.test_request_context('/'):
             output = render_template_string("{{ url_for('index.index_page') }}")

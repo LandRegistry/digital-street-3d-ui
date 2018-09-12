@@ -34,21 +34,17 @@ def hashed_url_for(endpoint, **values):
         if filename:
             file_path = os.path.join(current_app.root_path, current_app.static_folder, filename)
 
-            # Store the hashes in a dict so that on subsequent
-            # requests we don't have to md5 the file every time
-            cached_hash = cache_busting_values.get(file_path)
+            if os.path.isfile(file_path):
+                # Store the hashes in a dict so that on subsequent
+                # requests we don't have to md5 the file every time
+                cached_hash = cache_busting_values.get(file_path)
 
-            if cached_hash:
-                values['cache'] = cached_hash
-            else:
-                try:
+                if cached_hash:
+                    values['cache'] = cached_hash
+                else:
                     file_hash = md5_for_file(file_path, hexdigest=True)
                     cache_busting_values[file_path] = file_hash
                     values['cache'] = file_hash
-                except FileNotFoundError as e:
-                    # If the asset that is linked to from the HTML doesn't exist,
-                    # we don't want to just die completely so catch the exception but log it
-                    current_app.logger.info('File not found: {}'.format(file_path), exc_info=e)
 
     return url_for(endpoint, **values)
 
