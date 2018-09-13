@@ -343,7 +343,9 @@ TestMultipleFileField:
             expected_output:
                 - <div class="govuk-form-group">
                 - <label class="govuk-label" for="multiple_file_field">\s*MultipleFileField\s*</label>
-                - <input class="govuk-file-upload" id="multiple_file_field" name="multiple_file_field" type="file" multiple="multiple" required="required">
+                - <input class="govuk-file-upload" id="multiple_file_field" name="multiple_file_field" type="file"
+                - multiple="multiple"  # Split out into individual tests because the ordering of these
+                - required="required"  # attributes varies randomly.
 
 TestSubmitButton:
     template: "{{ form['submit_button'] }}"
