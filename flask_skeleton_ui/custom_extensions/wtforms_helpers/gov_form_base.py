@@ -42,6 +42,8 @@ class GovFormBase(object):
 
         # Remove items that we've already used from the kwargs
         del kwargs['id']
+        if 'items' in kwargs:
+            del kwargs['items']
 
         # Merge in any extra params passed in from the template layer
         if 'params' in kwargs:
@@ -60,6 +62,11 @@ class GovFormBase(object):
         # This catches anything set in the more traditional WTForms manner
         # i.e. directly as kwargs passed into the field when it's rendered
         params['attributes'] = self.merge_params(params['attributes'], kwargs)
+
+        # Map attributes such as required="True" to required="required"
+        for key, value in params['attributes'].items():
+            if value == True:
+                params['attributes'][key] = key
 
         return params
 

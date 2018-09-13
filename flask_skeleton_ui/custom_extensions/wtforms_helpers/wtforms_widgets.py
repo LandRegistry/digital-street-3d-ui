@@ -158,6 +158,8 @@ class GovTextArea(GovFormBase, TextArea):
 
     def __call__(self, field, **kwargs):
         kwargs.setdefault("id", field.id)
+        if "value" not in kwargs:
+            kwargs["value"] = field._value()
         if "required" not in kwargs and "required" in getattr(field, "flags", []):
             kwargs["required"] = True
         return super().__call__(field, **kwargs)

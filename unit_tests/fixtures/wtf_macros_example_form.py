@@ -26,7 +26,7 @@ class ExampleForm(FlaskForm):
 
     email_field = StringField('Email address',
                               widget=GovTextInput(),
-                              validators=[Email()]
+                              validators=[InputRequired(message='Email address is required'), Email()]
                               )
 
     float_field = FloatField('FloatField',
@@ -78,7 +78,7 @@ class ExampleForm(FlaskForm):
                            validators=[InputRequired(message='Please upload a file')])
 
     multiple_file_field = MultipleFileField('MultipleFileField',
-                                            widget=GovFileInput(),
+                                            widget=GovFileInput(multiple=True),
                                             validators=[InputRequired(message='Please upload a file')])
 
     password_field = PasswordField('PasswordField',
