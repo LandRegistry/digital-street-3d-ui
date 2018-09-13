@@ -1,8 +1,7 @@
-import re
-from deepmerge import Merger
 from flask import render_template
 from jinja2 import Markup
 from flask_skeleton_ui.custom_extensions.wtforms_helpers.main import merger
+
 
 class GovFormBase(object):
     """Collection of helpers
@@ -65,7 +64,7 @@ class GovFormBase(object):
 
         # Map attributes such as required="True" to required="required"
         for key, value in params['attributes'].items():
-            if value == True:
+            if value is True:
                 params['attributes'][key] = key
 
         return params
@@ -75,6 +74,7 @@ class GovFormBase(object):
 
     def render(self, params):
         return Markup(render_template(self.template, params=params))
+
 
 class GovIterableBase(GovFormBase):
     def __call__(self, field, **kwargs):

@@ -12,11 +12,20 @@ from wtforms.fields import DecimalField
 from wtforms.fields import FileField
 from wtforms.fields import MultipleFileField
 from wtforms.fields import SubmitField
-from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovTextInput, GovPasswordInput, GovTextArea, GovCheckboxInput, GovCheckboxesInput, GovSelect, GovRadioInput, GovSubmitInput, GovFileInput
+from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovTextInput
+from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovPasswordInput
+from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovTextArea
+from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovCheckboxInput
+from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovCheckboxesInput
+from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovSelect
+from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovRadioInput
+from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovSubmitInput
+from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovFileInput
 from wtforms.validators import InputRequired
 from wtforms.validators import EqualTo
 from wtforms.validators import ValidationError
 from wtforms.validators import Email
+
 
 class ExampleForm(FlaskForm):
     string_field = StringField('StringField',
@@ -82,11 +91,12 @@ class ExampleForm(FlaskForm):
                                             validators=[InputRequired(message='Please upload a file')])
 
     password_field = PasswordField('PasswordField',
-        widget=GovPasswordInput(),
-        validators=[
-            InputRequired('Password is required'),
-            EqualTo('password_retype_field', message='Please ensure both password fields match'),
-        ])
+                                   widget=GovPasswordInput(),
+                                   validators=[
+                                       InputRequired('Password is required'),
+                                       EqualTo('password_retype_field',
+                                               message='Please ensure both password fields match'),
+                                   ])
 
     password_retype_field = PasswordField('Re-type your password',
                                           widget=GovPasswordInput(),

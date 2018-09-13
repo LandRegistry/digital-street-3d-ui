@@ -1,7 +1,4 @@
-from markupsafe import Markup, escape
-from wtforms.widgets.core import Input, TextInput, PasswordInput, Input, RadioInput, FileInput, SubmitInput, TextArea, Select
-from wtforms.compat import iteritems, text_type
-from flask import render_template
+from wtforms.widgets.core import Input, TextInput, PasswordInput, FileInput, SubmitInput, TextArea, Select
 from flask_skeleton_ui.custom_extensions.wtforms_helpers.gov_form_base import GovFormBase, GovIterableBase
 from flask_skeleton_ui.exceptions import ApplicationError
 
@@ -34,13 +31,11 @@ class GovInput(GovFormBase, Input):
         return super().__call__(field, **kwargs)
 
 
-
 class GovTextInput(GovInput, TextInput):
     """
     Render a single-line text input.
     """
     input_type = "text"
-
 
 
 class GovPasswordInput(GovInput, PasswordInput):
@@ -113,7 +108,7 @@ class GovFileInput(GovInput, FileInput):
 
     :param multiple: allow choosing multiple files
     """
-    template='wtforms_gov/file-upload.html'
+    template = 'wtforms_gov/file-upload.html'
 
     def __call__(self, field, **kwargs):
         # browser ignores value of file input for security
@@ -132,7 +127,7 @@ class GovSubmitInput(GovInput, SubmitInput):
     The field's label is used as the text of the submit button instead of the
     data on the field.
     """
-    template='wtforms_gov/button.html'
+    template = 'wtforms_gov/button.html'
 
     def __call__(self, field, **kwargs):
         return super().__call__(field, **kwargs)
@@ -180,7 +175,9 @@ class GovSelect(GovFormBase, Select):
 
     def __call__(self, field, **kwargs):
         if self.multiple:
-            raise ApplicationError('Please do not render mutliselect elements as a select box - you should use checkboxes instead in order to comply with the GOV.UK service manual')
+            raise ApplicationError('Please do not render mutliselect elements as a select box'
+                                   ' - you should use checkboxes instead in order to comply with'
+                                   ' the GOV.UK service manual')
 
         kwargs.setdefault("id", field.id)
 

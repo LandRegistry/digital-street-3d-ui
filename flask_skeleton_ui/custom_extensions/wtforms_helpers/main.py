@@ -1,5 +1,4 @@
 from deepmerge import Merger
-from jinja2 import TemplateError
 
 
 class WTFormsHelpers(object):

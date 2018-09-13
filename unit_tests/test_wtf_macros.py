@@ -1,8 +1,5 @@
-import json
 import unittest
-import re
 import yaml
-from unittest import mock
 from flask import render_template_string
 from flask_skeleton_ui.main import app
 from unit_tests.fixtures.wtf_macros_example_form import ExampleForm
@@ -49,6 +46,7 @@ def make_test_function(template, test_data):
             self.assertRegex(output, expectation)
 
     return test
+
 
 test_data = yaml.load(open('unit_tests/fixtures/wtf_macros_data.yaml').read())
 
