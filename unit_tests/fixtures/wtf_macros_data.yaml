@@ -1,10 +1,10 @@
 ---
 TestStringField:
-    template: "{{ wtforms_helpers.govukInput(form, 'string_field')}}"
+    template: "{{ form['string_field'] }}"
     tests:
         test_empty_get:
             expected_output:
-                - <input class="govuk-input" id="string_field" name="string_field" type="text">
+                - <input class="govuk-input" id="string_field" name="string_field" type="text" required="True">
                 - <label class="govuk-label" for="string_field">\s*StringField\s*</label>
         test_output_sanitized:
             request:
@@ -12,14 +12,14 @@ TestStringField:
                 data:
                     string_field: <script>alert("Hello")</script>
             expected_output:
-                - <input class="govuk-input govuk-input--error" id="string_field" name="string_field" type="text" value="&lt;script&gt;alert\(&#34;Hello&#34;\)&lt;/script&gt;" aria-describedby="string_field-error">
+                - <input class="govuk-input govuk-input--error" id="string_field" name="string_field" type="text" value="&lt;script&gt;alert\(&#34;Hello&#34;\)&lt;/script&gt;" aria-describedby="string_field-error" required="True">
         test_valid_post:
             request:
                 method: post
                 data:
                     string_field: John Smith
             expected_output:
-                - <input class="govuk-input" id="string_field" name="string_field" type="text" value="John Smith">
+                - <input class="govuk-input" id="string_field" name="string_field" type="text" value="John Smith" required="True">
                 - <label class="govuk-label" for="string_field">\s*StringField\s*</label>
         test_invalid_post:
             request:
@@ -27,7 +27,7 @@ TestStringField:
                 data:
                     string_field: foo
             expected_output:
-                - <input class="govuk-input govuk-input--error" id="string_field" name="string_field" type="text" value="foo" aria-describedby="string_field-error">
+                - <input class="govuk-input govuk-input--error" id="string_field" name="string_field" type="text" value="foo" aria-describedby="string_field-error" required="True">
                 - <label class="govuk-label" for="string_field">\s*StringField\s*</label>
                 - <span id="string_field-error" class="govuk-error-message">\s*Example serverside error - type &#34;John Smith&#34; into this field to suppress it\s*</span>
                 - <div class="govuk-form-group govuk-form-group--error">

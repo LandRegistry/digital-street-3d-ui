@@ -12,6 +12,7 @@ from wtforms.fields import DecimalField
 from wtforms.fields import FileField
 from wtforms.fields import MultipleFileField
 from wtforms.fields import SubmitField
+from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovTextInput, GovPasswordInput, GovTextArea, GovCheckboxInput, GovCheckboxesInput, GovSelect, GovRadioInput, GovSubmitInput, GovFileInput
 from wtforms.validators import InputRequired
 from wtforms.validators import EqualTo
 from wtforms.validators import ValidationError
@@ -19,64 +20,79 @@ from wtforms.validators import Email
 
 class ExampleForm(FlaskForm):
     string_field = StringField('StringField',
+                               widget=GovTextInput(),
                                validators=[InputRequired(message='StringField is required')],
                                )
 
     email_field = StringField('Email address',
+                              widget=GovTextInput(),
                               validators=[Email()]
                               )
 
     float_field = FloatField('FloatField',
+                             widget=GovTextInput(),
                              validators=[InputRequired(message='FloatField is required')]
                              )
 
     integer_field = IntegerField('IntegerField',
+                                 widget=GovTextInput(),
                                  validators=[InputRequired(message='IntegerField is required')]
                                  )
 
     decimal_field = DecimalField('DecimalField',
+                                 widget=GovTextInput(),
                                  validators=[InputRequired(message='DecimalField is required')]
                                  )
 
     textarea_field = TextAreaField('TextAreaField',
+                                   widget=GovTextArea(),
                                    validators=[InputRequired(message='TextAreaField is required')]
                                    )
 
     boolean_field = BooleanField('BooleanField',
+                                 widget=GovCheckboxInput(),
                                  validators=[InputRequired(message='Please tick the box')]
                                  )
 
     select_field = SelectField('SelectField',
-                               [InputRequired(message='Please select an option')],
+                               widget=GovSelect(),
+                               validators=[InputRequired(message='Please select an option')],
                                choices=[('', 'Please select'), ('one', 'One'), ('two', 'Two'), ('three', 'Three')],
                                default=''
                                )
 
     select_multiple_field = SelectMultipleField('SelectMultipleField',
-                                                [InputRequired(message='Please select an option')],
+                                                widget=GovCheckboxesInput(),
+                                                validators=[InputRequired(message='Please select an option')],
                                                 choices=[('one', 'One'), ('two', 'Two'), ('three', 'Three')]
                                                 )
 
     radio_field = RadioField('RadioField',
-                             [InputRequired(message='Please select an option')],
+                             widget=GovRadioInput(),
+                             validators=[InputRequired(message='Please select an option')],
                              choices=[('one', 'One'), ('two', 'Two'), ('three', 'Three')]
                              )
 
     file_field = FileField('FileField',
-                           [InputRequired(message='Please upload a file')])
+                           widget=GovFileInput(),
+                           validators=[InputRequired(message='Please upload a file')])
 
     multiple_file_field = MultipleFileField('MultipleFileField',
-                                            [InputRequired(message='Please upload a file')])
+                                            widget=GovFileInput(),
+                                            validators=[InputRequired(message='Please upload a file')])
 
-    submit_button = SubmitField('SubmitField')
-
-    password_field = PasswordField('PasswordField', validators=[
-        InputRequired('Password is required'),
-        EqualTo('password_retype_field', message='Please ensure both password fields match'),
-    ])
+    password_field = PasswordField('PasswordField',
+        widget=GovPasswordInput(),
+        validators=[
+            InputRequired('Password is required'),
+            EqualTo('password_retype_field', message='Please ensure both password fields match'),
+        ])
 
     password_retype_field = PasswordField('Re-type your password',
+                                          widget=GovPasswordInput(),
                                           validators=[InputRequired('Please retype your password')])
+
+    submit_button = SubmitField('SubmitField', widget=GovSubmitInput())
 
     def validate_string_field(self, field):
         if field.data != 'John Smith':

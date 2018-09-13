@@ -17,7 +17,6 @@ class FlaskWtfMacroTestBase(unittest.TestCase):
 
     def setup_method(self, method):
         self.app = app.test_client()
-        self.base_template = "{% import 'app/macros/wtforms_helpers.html' as wtforms_helpers %}"
         app.jinja_env.lstrip_blocks = True
         app.jinja_env.trim_blocks = True
 
@@ -33,8 +32,7 @@ class FlaskWtfMacroTestBase(unittest.TestCase):
 
     def render(self, template):
         """Helper method to render a snippet of a form"""
-        return render_template_string(self.base_template + template,
-                                        form=self.form).strip()
+        return render_template_string(template, form=self.form).strip()
 
 
 def make_test_function(template, test_data):
