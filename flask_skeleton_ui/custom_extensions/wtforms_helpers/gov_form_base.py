@@ -2,6 +2,7 @@ import re
 from deepmerge import Merger
 from flask import render_template
 from jinja2 import Markup
+from flask_skeleton_ui.custom_extensions.wtforms_helpers.main import merger
 
 class GovFormBase(object):
     """Collection of helpers
@@ -63,22 +64,6 @@ class GovFormBase(object):
         return params
 
     def merge_params(self, a, b):
-        merger = Merger(
-            # pass in a list of tuple, with the
-            # strategies you are looking to apply
-            # to each type.
-            [
-                (list, ["append"]),
-                (dict, ["merge"])
-            ],
-            # next, choose the fallback strategies,
-            # applied to all other types:
-            ["override"],
-            # finally, choose the strategies in
-            # the case where the types conflict:
-            ["override"]
-        )
-
         return merger.merge(a, b)
 
     def render(self, params):

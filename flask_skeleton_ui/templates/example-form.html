@@ -1,4 +1,5 @@
 {% from 'app/vendor/.govuk-frontend/components/fieldset/macro.html' import govukFieldset %}
+{% from 'app/vendor/.govuk-frontend/components/error-summary/macro.html' import govukErrorSummary %}
 {% import 'app/macros/wtforms_helpers.html' as wtforms_helpers %}
 
 {% extends "app/layout.html" %}
@@ -9,7 +10,9 @@
 {%- endblock %}
 
 {% block content %}
-  {# {{ wtforms_helpers.govukErrorSummary(form) }} #}
+  {% if form.errors %}
+    {{ govukErrorSummary(wtforms_errors(form)) }}
+  {% endif %}
 
   <form method="POST" action="{{url_for('example_form.index')}}" novalidate>
       {% call govukFieldset({
