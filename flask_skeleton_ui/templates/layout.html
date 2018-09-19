@@ -50,14 +50,14 @@
     },
     'html': 'This is a new service – your <a class="govuk-link" href="#">feedback</a> will help us to improve it.'
   }) }}
-
-  {% include 'app/includes/flashed_messages.html' %}
 {% endblock %}
 
 {% block content %}
   {% if form and form.errors %}
     {{ govukErrorSummary(wtforms_errors(form)) }}
   {% endif %}
+
+  {% include 'app/includes/flashed_messages.html' %}
 
   {% block inner_content %}{% endblock %}
 {% endblock %}
