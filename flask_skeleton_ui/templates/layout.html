@@ -12,7 +12,7 @@
   <!--[if IE 8]><link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/main-ie8.css') }}" /><![endif]-->
 {% endblock %}
 
-{% block pageTitle %}{% block title %}{% endblock %}{%if self.title() %} - {% endif %}{{ service_name }}{% endblock %}
+{% block pageTitle %}{%- if form and form.errors %}Error: {% endif -%}{% block title %}{% endblock %}{%if self.title() %} - {% endif %}{{ service_name }}{% endblock %}
 
 {% block bodyEnd %}
   <!--[if gt IE 8]><!-->
@@ -52,6 +52,14 @@
   }) }}
 
   {% include 'app/includes/flashed_messages.html' %}
+{% endblock %}
+
+{% block inner_content %}
+  {% if form and form.errors %}
+    {{ govukErrorSummary(wtforms_errors(form)) }}
+  {% endif %}
+
+  {% block inner_content %}{% endblock %}
 {% endblock %}
 
 {% block footer %}

@@ -4,15 +4,10 @@
 {% extends "app/layout.html" %}
 
 {% block title -%}
-  {%- if form.errors %}Error: {% endif -%}
   Example GOV.UK styled Flask-WTF form
 {%- endblock %}
 
-{% block content %}
-  {% if form.errors %}
-    {{ govukErrorSummary(wtforms_errors(form)) }}
-  {% endif %}
-
+{% block inner_content %}
   <form method="POST" action="{{url_for('example_form.index')}}" novalidate>
       {% call govukFieldset({
         'legend': {
