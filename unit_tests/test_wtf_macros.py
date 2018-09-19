@@ -17,6 +17,8 @@ class FlaskWtfMacroTestBase(unittest.TestCase):
         app.jinja_env.lstrip_blocks = True
         app.jinja_env.trim_blocks = True
 
+        app.config['WTF_CSRF_ENABLED'] = False
+
     def request(self, **kwargs):
         self.ctx = app.test_request_context('/', **kwargs)
         self.ctx.push()
@@ -26,6 +28,8 @@ class FlaskWtfMacroTestBase(unittest.TestCase):
 
     def teardown_method(self, method):
         self.ctx.pop()
+
+        app.config['WTF_CSRF_ENABLED'] = True
 
     def render(self, template):
         """Helper method to render a snippet of a form"""
