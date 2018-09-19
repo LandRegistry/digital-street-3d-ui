@@ -54,7 +54,7 @@
   {% include 'app/includes/flashed_messages.html' %}
 {% endblock %}
 
-{% block inner_content %}
+{% block content %}
   {% if form and form.errors %}
     {{ govukErrorSummary(wtforms_errors(form)) }}
   {% endif %}

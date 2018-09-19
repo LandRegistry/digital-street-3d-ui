@@ -42,8 +42,13 @@ def make_test_function(template, test_data):
 
         output = self.render(template)
 
-        for expectation in test_data['expected_output']:
-            self.assertRegex(output, expectation)
+        if 'expected_output' in test_data:
+            for expectation in test_data['expected_output']:
+                self.assertRegex(output, expectation)
+
+        if 'not_expected_output' in test_data:
+            for expectation in test_data['not_expected_output']:
+                self.assertNotRegex(output, expectation)
 
     return test
 

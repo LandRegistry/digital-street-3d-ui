@@ -13,6 +13,8 @@ TestStringField:
                     string_field: <script>alert("Hello")</script>
             expected_output:
                 - <input class="govuk-input govuk-input--error" id="string_field" name="string_field" type="text" value="&lt;script&gt;alert\(&#34;Hello&#34;\)&lt;/script&gt;" aria-describedby="string_field-error" required="required">
+            not_expected_output:
+                - <script>alert("Hello")</script>
         test_valid_post:
             request:
                 method: post
@@ -40,6 +42,15 @@ TestEmailField:
                 - <span id="email_field-hint" class="govuk-hint">\s*This is a hint\s*</span>
                 - <label class="govuk-label" for="email_field">\s*Email address\s*</label>
                 - <input class="govuk-input" id="email_field" name="email_field" type="email" aria-describedby="email_field-hint" required="required">
+        test_output_sanitized:
+            request:
+                method: post
+                data:
+                    email_field: <script>alert("Hello")</script>
+            expected_output:
+                - <input class="govuk-input govuk-input--error" id="email_field" name="email_field" type="email" value="&lt;script&gt;alert\(&#34;Hello&#34;\)&lt;/script&gt;" aria-describedby="email_field-hint email_field-error" required="required">
+            not_expected_output:
+                - <script>alert("Hello")</script>
         test_valid_post:
             request:
                 method: post
@@ -68,6 +79,15 @@ TestFloatField:
             expected_output:
                 - <input class="govuk-input" id="float_field" name="float_field" type="text" required="required">
                 - <label class="govuk-label" for="float_field">\s*FloatField\s*</label>
+        test_output_sanitized:
+            request:
+                method: post
+                data:
+                    float_field: <script>alert("Hello")</script>
+            expected_output:
+                - <input class="govuk-input govuk-input--error" id="float_field" name="float_field" type="text" value="&lt;script&gt;alert\(&#34;Hello&#34;\)&lt;/script&gt;" aria-describedby="float_field-error" required="required">
+            not_expected_output:
+                - <script>alert("Hello")</script>
         test_valid_post:
             request:
                 method: post
@@ -94,6 +114,15 @@ TestIntegerField:
             expected_output:
                 - <input class="govuk-input" id="integer_field" name="integer_field" type="text" required="required">
                 - <label class="govuk-label" for="integer_field">\s*IntegerField\s*</label>
+        test_output_sanitized:
+            request:
+                method: post
+                data:
+                    integer_field: <script>alert("Hello")</script>
+            expected_output:
+                - <input class="govuk-input govuk-input--error" id="integer_field" name="integer_field" type="text" value="&lt;script&gt;alert\(&#34;Hello&#34;\)&lt;/script&gt;" aria-describedby="integer_field-error" required="required">
+            not_expected_output:
+                - <script>alert("Hello")</script>
         test_valid_post:
             request:
                 method: post
@@ -120,6 +149,15 @@ TestDecimalField:
             expected_output:
                 - <input class="govuk-input" id="decimal_field" name="decimal_field" type="text" required="required">
                 - <label class="govuk-label" for="decimal_field">\s*DecimalField\s*</label>
+        test_output_sanitized:
+            request:
+                method: post
+                data:
+                    decimal_field: <script>alert("Hello")</script>
+            expected_output:
+                - <input class="govuk-input govuk-input--error" id="decimal_field" name="decimal_field" type="text" value="&lt;script&gt;alert\(&#34;Hello&#34;\)&lt;/script&gt;" aria-describedby="decimal_field-error" required="required">
+            not_expected_output:
+                - <script>alert("Hello")</script>
         test_valid_post:
             request:
                 method: post
@@ -146,6 +184,15 @@ TestTextAreaField:
             expected_output:
                 - <textarea class="govuk-textarea" id="textarea_field" name="textarea_field" rows="5" required="required"></textarea>
                 - <label class="govuk-label" for="textarea_field">\s*TextAreaField\s*</label>
+        test_output_sanitized:
+            request:
+                method: post
+                data:
+                    textarea_field: <script>alert("Hello")</script>
+            expected_output:
+                - <textarea class="govuk-textarea" id="textarea_field" name="textarea_field" rows="5" required="required">&lt;script&gt;alert\(&#34;Hello&#34;\)&lt;/script&gt;\s*</textarea>
+            not_expected_output:
+                - <script>alert("Hello")</script>
         test_valid_post:
             request:
                 method: post
@@ -176,6 +223,18 @@ TestBooleanField:
                 - <div class="govuk-checkboxes__item">
                 - <input class="govuk-checkboxes__input" id="boolean_field-1" name="boolean_field" type="checkbox" value="y">
                 - <label class="govuk-label govuk-checkboxes__label" for="boolean_field-1">\s*BooleanField\s*</label>
+        test_output_sanitized:
+            request:
+                method: post
+                data:
+                    boolean_field: <script>alert("Hello")</script>
+            expected_output:
+                - <div class="govuk-checkboxes">
+                - <div class="govuk-checkboxes__item">
+                - <input class="govuk-checkboxes__input" id="boolean_field-1" name="boolean_field" type="checkbox" value="&lt;script&gt;alert\(&#34;Hello&#34;\)&lt;/script&gt;" checked>
+                - <label class="govuk-label govuk-checkboxes__label" for="boolean_field-1">\s*BooleanField\s*</label>
+            not_expected_output:
+                - <script>alert("Hello")</script>
         test_valid_post:
             request:
                 method: post
@@ -209,6 +268,22 @@ TestSelectMultipleField:
                 - <label class="govuk-label govuk-checkboxes__label" for="select_multiple_field-2">\s*Two\s*</label>
                 - <input class="govuk-checkboxes__input" id="select_multiple_field-3" name="select_multiple_field" type="checkbox" value="three">
                 - <label class="govuk-label govuk-checkboxes__label" for="select_multiple_field-3">\s*Three\s*</label>
+        test_output_sanitized:
+            request:
+                method: post
+                data:
+                    select_multiple_field: <script>alert("Hello")</script>
+            expected_output:
+                - <div class="govuk-form-group govuk-form-group--error">
+                - <span id="select_multiple_field-error" class="govuk-error-message">\s*&#39;&lt;script&gt;alert\(&#34;Hello&#34;\)&lt;/script&gt;&#39; is not a valid choice for this field\s*</span>
+                - <input class="govuk-checkboxes__input" id="select_multiple_field-1" name="select_multiple_field" type="checkbox" value="one">
+                - <label class="govuk-label govuk-checkboxes__label" for="select_multiple_field-1">\s*One\s*</label>
+                - <input class="govuk-checkboxes__input" id="select_multiple_field-2" name="select_multiple_field" type="checkbox" value="two">
+                - <label class="govuk-label govuk-checkboxes__label" for="select_multiple_field-2">\s*Two\s*</label>
+                - <input class="govuk-checkboxes__input" id="select_multiple_field-3" name="select_multiple_field" type="checkbox" value="three">
+                - <label class="govuk-label govuk-checkboxes__label" for="select_multiple_field-3">\s*Three\s*</label>
+            not_expected_output:
+                - <script>alert("Hello")</script>
         test_valid_post:
             request:
                 method: post
@@ -253,6 +328,22 @@ TestSelectField:
                 - <option value="one">One</option>
                 - <option value="two">Two</option>
                 - <option value="three">Three</option>
+        test_output_sanitized:
+            request:
+                method: post
+                data:
+                    select_field: <script>alert("Hello")</script>
+            expected_output:
+                - <div class="govuk-form-group govuk-form-group--error">
+                - <label class="govuk-label" for="select_field">\s*SelectField\s*</label>
+                - <select class="govuk-select govuk-select--error" id="select_field" name="select_field" aria-describedby="select_field-error" required="required">
+                - <span id="select_field-error" class="govuk-error-message">\s*Not a valid choice\s*</span>
+                - <option value="">Please select</option>
+                - <option value="one">One</option>
+                - <option value="two">Two</option>
+                - <option value="three">Three</option>
+            not_expected_output:
+                - <script>alert("Hello")</script>
         test_valid_post:
             request:
                 method: post
@@ -295,6 +386,24 @@ TestRadioField:
                 - label class="govuk-label govuk-radios__label" for="radio_field-2">\s*Two\s*</label>
                 - <input class="govuk-radios__input" id="radio_field-3" name="radio_field" type="radio" value="three">
                 - <label class="govuk-label govuk-radios__label" for="radio_field-3">\s*Three\s*</label>
+        test_output_sanitized:
+            request:
+                method: post
+                data:
+                    radio_field: <script>alert("Hello")</script>
+            expected_output:
+                - <div class="govuk-form-group govuk-form-group--error">
+                - <span id="radio_field-error" class="govuk-error-message">\s*Not a valid choice\s*</span>
+                - <div class="govuk-radios">
+                - <div class="govuk-radios__item">
+                - <input class="govuk-radios__input" id="radio_field-1" name="radio_field" type="radio" value="one">
+                - <label class="govuk-label govuk-radios__label" for="radio_field-1">\s*One\s*</label>
+                - <input class="govuk-radios__input" id="radio_field-2" name="radio_field" type="radio" value="two">
+                - label class="govuk-label govuk-radios__label" for="radio_field-2">\s*Two\s*</label>
+                - <input class="govuk-radios__input" id="radio_field-3" name="radio_field" type="radio" value="three">
+                - <label class="govuk-label govuk-radios__label" for="radio_field-3">\s*Three\s*</label>
+            not_expected_output:
+                - <script>alert("Hello")</script>
         test_valid_post:
             request:
                 method: post
@@ -335,6 +444,17 @@ TestFileField:
                 - <div class="govuk-form-group">
                 - <label class="govuk-label" for="file_field">\s*FileField\s*</label>
                 - <input class="govuk-file-upload" id="file_field" name="file_field" type="file" required="required">
+        test_output_sanitized:
+            request:
+                method: post
+                data:
+                    file_field: <script>alert("Hello")</script>
+            expected_output:
+                - <div class="govuk-form-group">
+                - <label class="govuk-label" for="file_field">\s*FileField\s*</label>
+                - <input class="govuk-file-upload" id="file_field" name="file_field" type="file" required="required">
+            not_expected_output:
+                - <script>alert("Hello")</script>
 
 TestMultipleFileField:
     template: "{{ form['multiple_file_field'] }}"
@@ -346,6 +466,19 @@ TestMultipleFileField:
                 - <input class="govuk-file-upload" id="multiple_file_field" name="multiple_file_field" type="file"
                 - multiple="multiple"  # Split out into individual tests because the ordering of these
                 - required="required"  # attributes varies randomly.
+        test_output_sanitized:
+            request:
+                method: post
+                data:
+                    multiple_file_field: <script>alert("Hello")</script>
+            expected_output:
+                - <div class="govuk-form-group">
+                - <label class="govuk-label" for="multiple_file_field">\s*MultipleFileField\s*</label>
+                - <input class="govuk-file-upload" id="multiple_file_field" name="multiple_file_field" type="file"
+                - multiple="multiple"  # Split out into individual tests because the ordering of these
+                - required="required"  # attributes varies randomly.
+            not_expected_output:
+                - <script>alert("Hello")</script>
 
 TestSubmitButton:
     template: "{{ form['submit_button'] }}"
@@ -362,6 +495,18 @@ TestPasswordField:
                 - <div class="govuk-form-group">
                 - <label class="govuk-label" for="password_field">\s*PasswordField\s*</label>
                 - <input class="govuk-input" id="password_field" name="password_field" type="password" required="required">
+        test_output_sanitized:
+            request:
+                method: post
+                data:
+                    password_field: <script>alert("Hello")</script>
+                    password_retype_field: <script>alert("Hello")</script>
+            expected_output:
+                # No error here - the data will merely have been accepted as a valid password
+                # But we still want to ensure the value hasn't made it into the html unsanitized
+                - <input class="govuk-input" id="password_field" name="password_field" type="password" required="required">
+            not_expected_output:
+                - <script>alert("Hello")</script>
         test_valid_post:
             request:
                 method: post
