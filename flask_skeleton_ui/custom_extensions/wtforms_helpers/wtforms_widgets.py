@@ -1,6 +1,9 @@
-from wtforms.widgets.core import Input, TextInput, PasswordInput, FileInput, SubmitInput, TextArea, Select
-from flask_skeleton_ui.custom_extensions.wtforms_helpers.gov_form_base import GovFormBase, GovIterableBase
+from flask_skeleton_ui.custom_extensions.wtforms_helpers.gov_form_base import (GovFormBase,
+                                                                               GovIterableBase)
 from flask_skeleton_ui.exceptions import ApplicationError
+from wtforms.widgets.core import (FileInput, Input, PasswordInput, Select,
+                                  SubmitInput, TextArea, TextInput)
+
 
 """Lifted from WTForms and modified to generate GOV.UK markup
 

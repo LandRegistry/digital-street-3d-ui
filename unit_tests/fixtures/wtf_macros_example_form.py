@@ -1,30 +1,18 @@
+from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import (GovCheckboxesInput,
+                                                                                 GovCheckboxInput,
+                                                                                 GovFileInput,
+                                                                                 GovPasswordInput,
+                                                                                 GovRadioInput,
+                                                                                 GovSelect,
+                                                                                 GovSubmitInput,
+                                                                                 GovTextArea,
+                                                                                 GovTextInput)
 from flask_wtf import FlaskForm
-from wtforms.fields import BooleanField
-from wtforms.fields import RadioField
-from wtforms.fields import SelectField
-from wtforms.fields import SelectMultipleField
-from wtforms.fields import StringField
-from wtforms.fields import TextAreaField
-from wtforms.fields import PasswordField
-from wtforms.fields import FloatField
-from wtforms.fields import IntegerField
-from wtforms.fields import DecimalField
-from wtforms.fields import FileField
-from wtforms.fields import MultipleFileField
-from wtforms.fields import SubmitField
-from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovTextInput
-from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovPasswordInput
-from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovTextArea
-from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovCheckboxInput
-from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovCheckboxesInput
-from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovSelect
-from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovRadioInput
-from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovSubmitInput
-from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovFileInput
-from wtforms.validators import InputRequired
-from wtforms.validators import EqualTo
-from wtforms.validators import ValidationError
-from wtforms.validators import Email
+from wtforms.fields import (BooleanField, DecimalField, FileField, FloatField,
+                            IntegerField, MultipleFileField, PasswordField,
+                            RadioField, SelectField, SelectMultipleField,
+                            StringField, SubmitField, TextAreaField)
+from wtforms.validators import Email, EqualTo, InputRequired, ValidationError
 
 
 class ExampleForm(FlaskForm):

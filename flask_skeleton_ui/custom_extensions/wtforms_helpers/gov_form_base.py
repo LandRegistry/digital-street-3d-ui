@@ -1,6 +1,6 @@
 from flask import render_template
-from jinja2 import Markup
 from flask_skeleton_ui.custom_extensions.wtforms_helpers.main import merger
+from jinja2 import Markup
 
 
 class GovFormBase(object):
