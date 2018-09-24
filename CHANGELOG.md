@@ -4,6 +4,12 @@ Note that requirements updates are not listed here unless they result in more ch
 
 | Date | Summary | Comparison to previous |
 |---|---|---|
+| 2018-09-20 | Introducing a wtforms_helpers extension which provides WTForms widgets which generate GOV.UK style markup | [Here](!30) |
+|            | Fixed the error pages which had out of date markup                                                   | |
+|            | Fixed flash() messages using out of date markup | |
+|            | Tweaked docker compose fragment to work with new dev env | |
+|            | Fixed markdown filter unit tests | |
+|            | Note that after a brief blip being called `content`, the main jinja template block is back to being called `inner_content` | |
 | 2018-09-12 | Fixed bug with cachebusted URLs which would throw an error with the new design system | [Here](!29) |
 |            | Fixed custom markdown rendered to generate markup to match the new design system | |
 | 2018-08-29 | Added in additional govuk-frontend macros that were previously ommited (Mostly form related) | [Here](!27) |

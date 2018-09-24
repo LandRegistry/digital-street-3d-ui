@@ -5,3 +5,4 @@ Flask==0.12.2
 requests==2.18.4
 Flask-WTF==0.14.2
 misaka==2.1.0
+deepmerge==0.0.4

@@ -12,7 +12,8 @@ app = LandRegistryFlask(__name__,
 
 # Set Jinja up to be able to load templates from packages (See gadget-govuk-ui for a full example)
 app.jinja_loader = PrefixLoader({
-    'app': PackageLoader('flask_skeleton_ui')
+    'app': PackageLoader('flask_skeleton_ui'),
+    'wtforms_gov': PackageLoader('flask_skeleton_ui.custom_extensions.wtforms_helpers')
 })
 
 app.config.from_pyfile("config.py")

@@ -168,35 +168,6 @@ The GOV.UK template is pulled in automatically from the npm package that gets in
 
 If you need to customise the file, make a copy of it and change your other templates to extend your copy instead of the original. When the GOV.UK kit gets updated, you then have a reference to use when bringing the updates in.
 
-### GOV.UK frontend macros
-
-The [govuk-frontend](https://github.com/alphagov/govuk-frontend) repository contains Nunjucks/NodeJS macros that allow you to create govuk style html without having to type it manually. These are converted to Jinja2/Python by the skeleton so that they can be used inside Flask.
-
-For example, to render the GOV.UK style header, you import the macro as follows:
-
-```
-{% from 'app/vendor/.govuk-frontend/components/header/macro.html' import govukHeader %}
-```
-
-And then call it with the appropriate data:
-
-```
-  {{ govukHeader({
-    'homepageUrl': "#",
-    'serviceName': "Service name",
-    'serviceUrl': "#",
-    'navigation': [
-      {
-        'href': "#1",
-        'text': "Navigation item 1",
-        'active': True
-      }
-    ]
-  }) }}
-```
-
-You will find examples like this all throughout the GOV.UK design system. These will work almost identically in Python/Jinja. An important difference however is that the Nunjucks examples will not have quoted keys in dicts (objects in JS parlance), but Python must. Therefore, when copying and pasting examples from the GOV.UK documentation make sure to add these in.
-
 ### Removing the GOV.UK frontend code
 
 If you want to remove the GOV.UK frontend code in order to do something else such as Bootstrap or just custom stuff, you will need to make the following changes:
@@ -259,13 +230,9 @@ In order to use the toolkit elsewhere you therefore need to stop using these. Th
 Messages registered with the Flask `flash()` method will appear at the top of the page in a styled box.
 `flash('Something something', 'error')` will raise a message using the error style, whereas `flash('Message')` will produce a more neutral looking "information" style message.
 
-### Flask-WTForms
+#### GOV.UK Jinja macros
 
-[Flask-WTForms](https://flask-wtf.readthedocs.io/en/stable/) is included and should be used for all forms.
-
-#### Jinja macros
-
-The GOV.UK design system includes a range of macros for generating their markup. Using these is beneficial because your markup will always keep in step with the version of the kit you are using. These macros are ported to Jinja from their Nunjucks equivalents automatically by the nodejs build process. Due to compatibility issues, this does not currently include the form macros.
+The GOV.UK design system includes a range of macros for generating their markup. Using these is beneficial because your markup will always keep in step with the version of the kit you are using. These macros are ported to Jinja from their Nunjucks equivalents automatically by the nodejs build process.
 
 The GOV.UK macros can be imported into your template as follows:
 
@@ -290,6 +257,12 @@ There are important differences to bear in mind though, as follows:
 
 - When invoking macros with a dict as above, remember that keys should be quoted. Because the GOV.UK design system is written for Nunjucks/Node.JS they do not quote their keys and so copying and pasting their code examples directly will not work.
 - Import paths for the macros are different to those in the documentation. Note how in the above for example the macro is pulled from `app/vendor/.govuk-frontend/components` and the file extension is `.html` instead of `.njk`
+
+### Flask-WTForms
+
+[Flask-WTForms](https://flask-wtf.readthedocs.io/en/stable/) is included and should be used for all forms.
+
+This has been extended by the use of custom widgets which make it extremely easy to generate GOV.UK style forms. See [flask_skeleton_ui/custom_extensions/wtforms_helpers](flask_skeleton_ui/custom_extensions/wtforms_helpers) for detailed usage instructions.
 
 #### CSRF protection
 

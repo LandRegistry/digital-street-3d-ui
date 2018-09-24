@@ -12,7 +12,7 @@
   <!--[if IE 8]><link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/main-ie8.css') }}" /><![endif]-->
 {% endblock %}
 
-{% block pageTitle %}{% block title %}{% endblock %}{%if self.title() %} - {% endif %}{{ service_name }}{% endblock %}
+{% block pageTitle %}{%- if form and form.errors %}Error: {% endif -%}{% block title %}{% endblock %}{%if self.title() %} - {% endif %}{{ service_name }}{% endblock %}
 
 {% block bodyEnd %}
   <!--[if gt IE 8]><!-->
@@ -50,8 +50,16 @@
     },
     'html': 'This is a new service – your <a class="govuk-link" href="#">feedback</a> will help us to improve it.'
   }) }}
+{% endblock %}
+
+{% block content %}
+  {% if form and form.errors %}
+    {{ govukErrorSummary(wtforms_errors(form)) }}
+  {% endif %}
 
   {% include 'app/includes/flashed_messages.html' %}
+
+  {% block inner_content %}{% endblock %}
 {% endblock %}
 
 {% block footer %}
