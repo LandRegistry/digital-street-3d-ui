@@ -1,6 +1,8 @@
 from flask_skeleton_ui.custom_extensions.content_security_policy import reporting
 from flask import url_for
 from flask import g
+from flask import request
+from flask.wrappers import Response
 
 
 class ContentSecurityPolicy(object):
@@ -52,6 +54,9 @@ class ContentSecurityPolicy(object):
 
         @app.after_request
         def after_request(response):
+            if isinstance(response, ResponseWithoutCSP):
+                return response
+
             csp = self.csp % {
                 'report_uri': url_for('reporting.report', trace_id=g.trace_id),
                 'govuk_script_hashes': " ".join(govuk_script_hashes)
@@ -63,3 +68,16 @@ class ContentSecurityPolicy(object):
                 response.headers['Content-Security-Policy'] = csp
 
             return response
+
+
+class ResponseWithoutCSP(Response):
+    """Return this type of Response from your views if you want to withhold the CSP
+
+    Uses cases for this so far include:
+        - Withholding CSP from views which return a PDF. When Chrome renders these it puts them in an html page
+          which violates the CSP
+
+    NOTE:
+    The CSP is here for a reason, don't withhold it just because it makes development easier
+    (e.g. using inline styles etc)
+    """

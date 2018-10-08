@@ -3,6 +3,7 @@ import unittest
 from unittest import mock
 from flask_skeleton_ui.main import app
 from flask_skeleton_ui.custom_extensions.content_security_policy.main import ContentSecurityPolicy
+from flask_skeleton_ui.custom_extensions.content_security_policy.main import ResponseWithoutCSP
 
 
 class TestContentSecurityPolicy(unittest.TestCase):
@@ -19,13 +20,13 @@ class TestContentSecurityPolicy(unittest.TestCase):
         app.config['CONTENT_SECURITY_POLICY_MODE'] = 'report-only'
 
         response = self.app.get('/')
-        assert 'script-src' in response.headers['Content-Security-Policy-Report-Only']
+        self.assertIn('script-src', response.headers['Content-Security-Policy-Report-Only'])
 
     def test_full_mode(self):
         app.config['CONTENT_SECURITY_POLICY_MODE'] = 'full'
 
         response = self.app.get('/')
-        assert 'script-src' in response.headers['Content-Security-Policy']
+        self.assertIn('script-src', response.headers['Content-Security-Policy'])
 
     @mock.patch('flask_skeleton_ui.custom_extensions.content_security_policy.reporting.logger.error')
     def test_report_route(self, mock_logger):
@@ -37,4 +38,13 @@ class TestContentSecurityPolicy(unittest.TestCase):
             'content_security_policy_report': {'foo': 'bar'}
         })
 
-        assert response.status_code == 204
+        self.assertEqual(response.status_code, 204)
+
+    def test_exemptions(self):
+        with app.test_request_context('/'):
+            app.preprocess_request()
+
+            response = ResponseWithoutCSP(response='Foo')
+            response = app.process_response(response)
+
+            self.assertNotIn('Content-Security-Policy', response.headers)
