@@ -63,11 +63,7 @@ class EnhancedLogging(object):
                 }
             },
             'loggers': {
-                app_module_name: {
-                    'handlers': ['console'],
-                    'level': app.config['FLASK_LOG_LEVEL']
-                },
-                app_module_name.replace("_", "-"): {
+                app.logger.name: {
                     'handlers': ['console'],
                     'level': app.config['FLASK_LOG_LEVEL']
                 },
