@@ -4,6 +4,7 @@ Note that requirements updates are not listed here unless they result in more ch
 
 | Date | Summary | Comparison to previous |
 |---|---|---|
+| 2018-10-24 | Updating Python and NodeJS requirements (Including gov kit). Updates made to gulp tasks and webpack config to compensate for changes | [Here](!34) |
 | 2018-09-20 | Introducing a wtforms_helpers extension which provides WTForms widgets which generate GOV.UK style markup | [Here](!30) |
 |            | Fixed the error pages which had out of date markup                                                   | |
 |            | Fixed flash() messages using out of date markup | |
