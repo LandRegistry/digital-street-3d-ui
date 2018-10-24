@@ -76,7 +76,8 @@ module.exports = (gulp, config) => {
           'item.hint.text': '(item.hint.text if item.hint and item.hint.text)',
           'item.hint.html': '(item.hint.html if item.hint and item.hint.html)',
           'item.label.attributes': '(item.label.attributes if item.label and item.label.attributes)',
-          "(' ' + item.label.classes if item.label.classes else '')": "(' ' + item.label.classes if item.classes and item.label.classes else '')"
+          "(' ' + item.label.classes if item.label.classes else '')": "(' ' + item.label.classes if item.classes and item.label.classes else '')",
+          "' govuk-textarea--error' if params.errorMessage": "' govuk-textarea--error' if params.errorMessage else ''"
         }
 
         for (key in replacements) {

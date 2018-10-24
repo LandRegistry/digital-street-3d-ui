@@ -23,6 +23,7 @@
 {% from 'app/vendor/.govuk-frontend/components/radios/macro.html' import govukRadios %}
 {% from 'app/vendor/.govuk-frontend/components/select/macro.html' import govukSelect %}
 {% from 'app/vendor/.govuk-frontend/components/textarea/macro.html' import govukTextarea %}
+{% from 'app/vendor/.govuk-frontend/components/character-count/macro.html' import govukCharacterCount %}
 
 
 {% block title %}Index{% endblock %}
@@ -654,6 +655,20 @@ _italic_
       },
       'hint': {
         'text': "Don’t include personal or financial information, eg your National Insurance number or credit card details."
+      }
+    }) }}
+  </div>
+
+  <div class="govuk-!-margin-top-9">
+    {{ govukCharacterCount({
+      'name': "with-hint",
+      'id': "with-hint",
+      'maxlength': 200,
+      'label': {
+        'text': "Can you provide more detail?"
+      },
+      'hint': {
+        'text': "Do not include personal or financial information, for example, your National Insurance number or credit card details."
       }
     }) }}
   </div>
