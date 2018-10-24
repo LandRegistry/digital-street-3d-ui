@@ -1,5 +1,3 @@
-var path = require('path')
-
 module.exports = {
   'applicationPath': './flask_skeleton_ui',
   'sourcePath': './flask_skeleton_ui/assets/src',

@@ -1,7 +1,6 @@
 from flask_skeleton_ui.custom_extensions.content_security_policy import reporting
 from flask import url_for
 from flask import g
-from flask import request
 from flask.wrappers import Response
 
 
