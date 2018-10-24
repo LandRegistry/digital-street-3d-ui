@@ -25,6 +25,8 @@ class ContentSecurityPolicy(object):
         # Build up the content security policy header
         self.csp = ("default-src 'self';"
                     "script-src 'self' www.google-analytics.com %(govuk_script_hashes)s;"
+                    "connect-src 'self' www.google-analytics.com;"
+                    "img-src 'self' www.google-analytics.com;"
                     "font-src 'self' data:;"  # GOV.UK template loads it's fonts with a data URI
                     "block-all-mixed-content;"
                     # "require-sri-for script style;"  # Desirable, but disabled until browsers implement this
