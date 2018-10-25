@@ -12,7 +12,7 @@ services:
       - "3996:3996"
     volumes:
       # Our convention is (for python) to always map the app files to /src within the container
-      - ${PWD}/apps/flask-skeleton-ui:/src
+      - ./flask-skeleton-ui:/src
     # Redirect all the logs to a logstash server. Logstash is set up to parse RFC5424 format messages.
     logging:
       driver: syslog
