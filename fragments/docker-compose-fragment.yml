@@ -3,7 +3,7 @@ services:
   # Notice how the service name, container name and repo directory (where the Dockerfile lives) all match.
   flask-skeleton-ui:
     container_name: flask-skeleton-ui
-    build: ${PWD}/apps/flask-skeleton-ui
+    build: ./flask-skeleton-ui
     restart: on-failure
     ports:
       # The base Flask Dockerfile tells gunicorn to use 8080 by default, we expose it here and map it to a unique
