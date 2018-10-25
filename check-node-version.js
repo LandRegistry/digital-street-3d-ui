@@ -2,7 +2,7 @@ var exec = require('child_process').execSync
 var semver = require('semver')
 var packageJson = require('./package.json')
 
-var installedNpm = exec('npm -v', {encoding: 'utf8'}).trim()
+var installedNpm = exec('npm -v', { encoding: 'utf8' }).trim()
 
 var npmOK = semver.satisfies(installedNpm, packageJson.engines.npm)
 var nodeOK = semver.satisfies(process.versions.node, packageJson.engines.node)

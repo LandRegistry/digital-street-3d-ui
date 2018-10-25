@@ -8,23 +8,23 @@ module.exports = (gulp, config) => {
 
   const templateFilter = filter([
     '**',
-    '!**/components/**/template.njk'  // We want everything *except* the templates (i.e. just the macros)
+    '!**/components/**/template.njk' // We want everything *except* the templates (i.e. just the macros)
   ])
 
   gulp.task('copyGovTemplates', () => {
     return gulp
       .src(path.join(govukTemplatePath, '**/*.njk'))
       .pipe(templateFilter)
-      .pipe(es.map(function(file, cb) {
+      .pipe(es.map(function (file, cb) {
         var contents = file.contents.toString()
 
         // "Unwrap" the include directly inside the macro since it causes problems in Jinja,
         // and the only reason it's done this way is for the govuk design system's demo code
-        matches = contents.match(/(?:{%-? include [\'\"](.*)[\"\'] -?%})/)
+        const matches = contents.match(/(?:{%-? include ['"](.*)["'] -?%})/)
 
         if (matches) {
-          includePath = path.join(path.dirname(file.path), matches[1])
-          templateContents = fs.readFileSync(includePath)
+          const includePath = path.join(path.dirname(file.path), matches[1])
+          const templateContents = fs.readFileSync(includePath)
           contents = contents.replace(matches[0], templateContents)
         }
 
@@ -43,7 +43,7 @@ module.exports = (gulp, config) => {
         contents = contents.replace(/\.items/g, "['items']")
 
         // No such thing as elseif - it's elif in Python
-        contents = contents.replace(/elseif/g, "elif")
+        contents = contents.replace(/elseif/g, 'elif')
 
         // Python doesn't like inline ifs that don't have elses
         // See phase banner for example
@@ -71,15 +71,16 @@ module.exports = (gulp, config) => {
         // Hardcoded replacements for deeply nested dict access, which requires
         // more protection in Python than it does in JS
         // Not perfect to have to keep this hardcoded here, but at the time of writing, there's only a handful of examples
-        replacements = {
+        const replacements = {
           'params.hint.classes': '(params.hint.classes if params.hint and params.hint.classes)',
           'item.hint.text': '(item.hint.text if item.hint and item.hint.text)',
           'item.hint.html': '(item.hint.html if item.hint and item.hint.html)',
           'item.label.attributes': '(item.label.attributes if item.label and item.label.attributes)',
-          "(' ' + item.label.classes if item.label.classes else '')": "(' ' + item.label.classes if item.classes and item.label.classes else '')"
+          "(' ' + item.label.classes if item.label.classes else '')": "(' ' + item.label.classes if item.classes and item.label.classes else '')",
+          "' govuk-textarea--error' if params.errorMessage": "' govuk-textarea--error' if params.errorMessage else ''"
         }
 
-        for (key in replacements) {
+        for (const key in replacements) {
           contents = contents.replace(key, replacements[key])
         }
 
@@ -88,8 +89,7 @@ module.exports = (gulp, config) => {
       }))
 
       .pipe(gulp.dest(path.join(config.applicationPath, 'templates/vendor/.govuk-frontend')))
-    }
-  )
+  })
 
   gulp.task('copyGovAssets', () =>
     gulp

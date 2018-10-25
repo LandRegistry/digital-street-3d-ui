@@ -10,10 +10,7 @@
   padding-right: govuk-spacing(3);
   padding-bottom: govuk-spacing(3);
   padding-left: govuk-spacing(3);
-  background-color: lighten(desaturate(govuk-colour("light-blue"), 8.46), 42.55);
-}
-
-.app-cookie-banner {
+  background-color: lighten(desaturate(govuk-colour('light-blue'), 8.46), 42.55);
   display: none;
 }
 
@@ -23,6 +20,6 @@
 
 @include govuk-media-query($media-type: print) {
   .app-cookie-banner {
-    display: none !important;
+    display: none !important; // sass-lint:disable-line no-important
   }
 }
