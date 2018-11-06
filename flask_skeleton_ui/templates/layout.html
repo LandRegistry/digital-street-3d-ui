@@ -2,6 +2,7 @@
 {% from "app/vendor/.govuk-frontend/components/header/macro.html" import govukHeader %}
 {% from "app/vendor/.govuk-frontend/components/phase-banner/macro.html" import govukPhaseBanner %}
 {% from "app/vendor/.govuk-frontend/components/footer/macro.html" import govukFooter %}
+{% from "app/vendor/.govuk-frontend/components/error-summary/macro.html" import govukErrorSummary %}
 
 {% extends "app/vendor/.govuk-frontend/template.html" %}
 
@@ -35,12 +36,29 @@
 
 {% block header %}
   {{ govukHeader({
-      'homepageUrl': "#",
-      'containerClasses': "govuk-width-container",
-      'serviceName': "Service name",
-      'serviceUrl': "#",
-    })
-  }}
+    'homepageUrl': "#",
+    'serviceName': "Service name",
+    'serviceUrl': "#",
+    'navigation': [
+      {
+        'href': "#1",
+        'text': "Navigation item 1",
+        'active': True
+      },
+      {
+        'href': "#2",
+        'text': "Navigation item 2"
+      },
+      {
+        'href': "#3",
+        'text': "Navigation item 3"
+      },
+      {
+        'href': "#4",
+        'text': "Navigation item 4"
+      }
+    ]
+  }) }}
 {% endblock %}
 
 {% block beforeContent %}

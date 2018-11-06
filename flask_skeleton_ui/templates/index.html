@@ -28,33 +28,6 @@
 
 {% block title %}Index{% endblock %}
 
-{% block header %}
-  {{ govukHeader({
-    'homepageUrl': "#",
-    'serviceName': "Service name",
-    'serviceUrl': "#",
-    'navigation': [
-      {
-        'href': "#1",
-        'text': "Navigation item 1",
-        'active': True
-      },
-      {
-        'href': "#2",
-        'text': "Navigation item 2"
-      },
-      {
-        'href': "#3",
-        'text': "Navigation item 3"
-      },
-      {
-        'href': "#4",
-        'text': "Navigation item 4"
-      }
-    ]
-  }) }}
-{% endblock %}
-
 {% block inner_content %}
 
   {% filter markdown %}
