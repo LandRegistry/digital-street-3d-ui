@@ -23,13 +23,26 @@ def wtforms_errors(form, params={}):
         'errorList': []
     }
 
-    for key, errors in form.errors.items():
-        wtforms_params['errorList'].append({
-            'text': errors[0],
-            'href': '#%s-error' % key
-        })
+    wtforms_params['errorList'] = flatten_errors(form.errors)
 
     return merger.merge(wtforms_params, params)
+
+
+def flatten_errors(errors, prefix=''):
+    errorList = []
+
+    for key, value in errors.items():
+
+        if isinstance(value, dict):
+            # Recurse to handle subforms
+            errorList += flatten_errors(value, prefix=prefix + key + '-')
+        else:
+            errorList.append({
+                'text': value[0],
+                'href': '#{}{}-error'.format(prefix, key)
+            })
+
+    return errorList
 
 
 merger = Merger(
