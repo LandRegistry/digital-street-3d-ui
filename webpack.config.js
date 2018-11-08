@@ -20,16 +20,10 @@ module.exports = {
     filename: '[name].js'
   },
   resolve: {
-    modules: [
-      process.env.NODE_PATH,
-      'node_modules'
-    ]
+    modules: config.nodePath
   },
   resolveLoader: {
-    modules: [
-      process.env.NODE_PATH,
-      'node_modules'
-    ]
+    modules: config.nodePath
   },
   module: {
     rules: [
