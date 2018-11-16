@@ -15,15 +15,15 @@ flask-script==2.0.6
 flask-wtf==0.14.2
 flask==1.0.2
 idna==2.7                 # via requests
-itsdangerous==0.24        # via flask
+itsdangerous==1.1.0       # via flask
 jinja2==2.10              # via flask
 logconfig==0.4.0          # via flask-logconfig
 logutils==0.3.5           # via logconfig
-markupsafe==1.0           # via jinja2
+markupsafe==1.1.0         # via jinja2
 misaka==2.1.0
 pycparser==2.19           # via cffi
 pyyaml==3.13              # via logconfig
-requests==2.20.0
-urllib3==1.24             # via requests
+requests==2.20.1
+urllib3==1.24.1           # via requests
 werkzeug==0.14.1          # via flask
 wtforms==2.2.1            # via flask-wtf
