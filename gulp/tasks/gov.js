@@ -72,6 +72,7 @@ module.exports = (gulp, config) => {
         // more protection in Python than it does in JS
         // Not perfect to have to keep this hardcoded here, but at the time of writing, there's only a handful of examples
         const replacements = {
+          'if params.formGroup.classes': 'if params.formGroup and params.formGroup.classes',
           'params.hint.classes': '(params.hint.classes if params.hint and params.hint.classes)',
           'item.hint.text': '(item.hint.text if item.hint and item.hint.text)',
           'item.hint.html': '(item.hint.html if item.hint and item.hint.html)',
