@@ -252,7 +252,7 @@ TestBooleanField:
                 - <span id="boolean_field-error" class="govuk-error-message">\s*Please tick the box\s*</span>
                 - <div class="govuk-checkboxes">
                 - <div class="govuk-checkboxes__item">
-                - <input class="govuk-checkboxes__input" id="boolean_field-1" name="boolean_field" type="checkbox" value="y">
+                - <input class="govuk-checkboxes__input" id="boolean_field-1" name="boolean_field" type="checkbox" value="y" aria-describedby="boolean_field-error">
                 - <label class="govuk-label govuk-checkboxes__label" for="boolean_field-1">\s*BooleanField\s*</label>
 
 TestSelectMultipleField:
@@ -276,11 +276,11 @@ TestSelectMultipleField:
             expected_output:
                 - <div class="govuk-form-group govuk-form-group--error">
                 - <span id="select_multiple_field-error" class="govuk-error-message">\s*&#39;&lt;script&gt;alert\(&#34;Hello&#34;\)&lt;/script&gt;&#39; is not a valid choice for this field\s*</span>
-                - <input class="govuk-checkboxes__input" id="select_multiple_field-1" name="select_multiple_field" type="checkbox" value="one">
+                - <input class="govuk-checkboxes__input" id="select_multiple_field-1" name="select_multiple_field" type="checkbox" value="one" aria-describedby="select_multiple_field-error">
                 - <label class="govuk-label govuk-checkboxes__label" for="select_multiple_field-1">\s*One\s*</label>
-                - <input class="govuk-checkboxes__input" id="select_multiple_field-2" name="select_multiple_field" type="checkbox" value="two">
+                - <input class="govuk-checkboxes__input" id="select_multiple_field-2" name="select_multiple_field" type="checkbox" value="two" aria-describedby="select_multiple_field-error">
                 - <label class="govuk-label govuk-checkboxes__label" for="select_multiple_field-2">\s*Two\s*</label>
-                - <input class="govuk-checkboxes__input" id="select_multiple_field-3" name="select_multiple_field" type="checkbox" value="three">
+                - <input class="govuk-checkboxes__input" id="select_multiple_field-3" name="select_multiple_field" type="checkbox" value="three" aria-describedby="select_multiple_field-error">
                 - <label class="govuk-label govuk-checkboxes__label" for="select_multiple_field-3">\s*Three\s*</label>
             not_expected_output:
                 - <script>alert("Hello")</script>
@@ -308,11 +308,11 @@ TestSelectMultipleField:
             expected_output:
                 - <div class="govuk-form-group govuk-form-group--error">
                 - <span id="select_multiple_field-error" class="govuk-error-message">\s*&#39;foo&#39; is not a valid choice for this field\s*</span>
-                - <input class="govuk-checkboxes__input" id="select_multiple_field-1" name="select_multiple_field" type="checkbox" value="one">
+                - <input class="govuk-checkboxes__input" id="select_multiple_field-1" name="select_multiple_field" type="checkbox" value="one" aria-describedby="select_multiple_field-error">
                 - <label class="govuk-label govuk-checkboxes__label" for="select_multiple_field-1">\s*One\s*</label>
-                - <input class="govuk-checkboxes__input" id="select_multiple_field-2" name="select_multiple_field" type="checkbox" value="two">
+                - <input class="govuk-checkboxes__input" id="select_multiple_field-2" name="select_multiple_field" type="checkbox" value="two" aria-describedby="select_multiple_field-error">
                 - <label class="govuk-label govuk-checkboxes__label" for="select_multiple_field-2">\s*Two\s*</label>
-                - <input class="govuk-checkboxes__input" id="select_multiple_field-3" name="select_multiple_field" type="checkbox" value="three">
+                - <input class="govuk-checkboxes__input" id="select_multiple_field-3" name="select_multiple_field" type="checkbox" value="three" aria-describedby="select_multiple_field-error">
                 - <label class="govuk-label govuk-checkboxes__label" for="select_multiple_field-3">\s*Three\s*</label>
 
 
