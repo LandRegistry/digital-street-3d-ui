@@ -141,8 +141,6 @@ class GovSubmitInput(GovInput, SubmitInput):
         params.setdefault('text', field.label.text)
         params.setdefault('element', 'button')
 
-        del params['value']
-
         return params
 
 
