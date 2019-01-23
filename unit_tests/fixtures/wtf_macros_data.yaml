@@ -485,7 +485,7 @@ TestSubmitButton:
     tests:
         test_empty_get:
             expected_output:
-                - <button name="submit_button" type="submit" class="govuk-button">
+                - <button value="y" name="submit_button" type="submit" class="govuk-button">
 
 TestPasswordField:
     template: "{{ form['password_field'](params={'type': 'password'}) }}"
