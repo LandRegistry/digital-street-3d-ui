@@ -4,6 +4,7 @@ Note that requirements updates are not listed here unless they result in more ch
 
 | Date | Summary | Comparison to previous |
 |---|---|---|
+| 2019-01-23 | Fixed failing test data (in `unit_tests/fixtures/wtf_macros_data.yaml`), following change made in 4b5b4b41 | [Here](http://git.dev.ctp.local/skeletons/flask-skeleton-ui/merge_requests/39) |
 | 2018-11-21 | Tweak behaviour of govuk button widget so that wtforms can detect which button was pressed | [Here](http://git.dev.ctp.local/skeletons/flask-skeleton-ui/commit/4b5b4b41a1edb58eceeb2c61708a34d82b4b27df) |
 | 2018-11-20 | Update govuk-frontend to 2.4.0. Changes made to `unit_tests/fixtures/wtf_macros_data.yaml` to compensate | [Here](http://git.dev.ctp.local/skeletons/flask-skeleton-ui/merge_requests/36) |
 | 2018-11-16 | Update gulp tasks to account for changes upstream in updated requirements (Gov kit) | [Here](http://git.dev.ctp.local/skeletons/flask-skeleton-ui/merge_requests/35) |
