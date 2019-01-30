@@ -7,7 +7,7 @@ ARG OUTSIDE_GID
 
 RUN yum install -y -q libffi-devel openssl
 
-RUN groupadd --gid $OUTSIDE_GID containergroup
+RUN groupadd --force --gid $OUTSIDE_GID containergroup
 RUN useradd --uid $OUTSIDE_UID --gid $OUTSIDE_GID containeruser
 
 # HTTPS cert
