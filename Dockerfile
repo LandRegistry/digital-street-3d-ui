@@ -2,7 +2,13 @@
 
 FROM hmlandregistry/dev_base_python_flask:4
 
+ARG OUTSIDE_UID
+ARG OUTSIDE_GID
+
 RUN yum install -y -q libffi-devel openssl
+
+RUN groupadd --gid $OUTSIDE_GID containergroup
+RUN useradd --uid $OUTSIDE_UID --gid $OUTSIDE_GID containeruser
 
 # HTTPS cert
 RUN mkdir -p /supporting-files && \
@@ -52,5 +58,8 @@ ENV APP_NAME=flask-skeleton-ui \
   CONTENT_SECURITY_POLICY_MODE='full' \
   STATIC_ASSETS_MODE='development'
 
-CMD ["./run.sh"]
+# When creating files inside the docker container, this prevents the files being created
+# as the root user on linux hosts
+USER containeruser
 
+CMD ["./run.sh"]
