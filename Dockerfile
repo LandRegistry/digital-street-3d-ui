@@ -5,10 +5,10 @@ FROM hmlandregistry/dev_base_python_flask:4
 ARG OUTSIDE_UID
 ARG OUTSIDE_GID
 
-RUN yum install -y -q libffi-devel openssl
+RUN groupadd --force --gid $OUTSIDE_GID containergroup && \
+ useradd --uid $OUTSIDE_UID --gid $OUTSIDE_GID containeruser
 
-RUN groupadd --force --gid $OUTSIDE_GID containergroup
-RUN useradd --uid $OUTSIDE_UID --gid $OUTSIDE_GID containeruser
+RUN yum install -y -q libffi-devel openssl
 
 # HTTPS cert
 RUN mkdir -p /supporting-files && \
