@@ -403,3 +403,4 @@ https://www.owasp.org/index.php/Content_Security_Policy_Cheat_Sheet
 If you are looking to use ADFS for authenticating users, see this section on techdocs:
 
 [OAuth2 for Internal Users via ADFS - Implementation Guide](http://techdocs.dev.ctp.local/index.php/OAuth2_for_Internal_Users_via_ADFS_-_Implementation_Guide)
+
