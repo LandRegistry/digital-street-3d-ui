@@ -24,6 +24,8 @@
 {% from 'app/vendor/.govuk-frontend/components/select/macro.html' import govukSelect %}
 {% from 'app/vendor/.govuk-frontend/components/textarea/macro.html' import govukTextarea %}
 {% from 'app/vendor/.govuk-frontend/components/character-count/macro.html' import govukCharacterCount %}
+{% from 'app/vendor/.govuk-frontend/components/summary-list/macro.html' import govukSummaryList %}
+{% from 'app/vendor/.govuk-frontend/components/accordion/macro.html' import govukAccordion %}
 
 
 {% block title %}Index{% endblock %}
@@ -643,6 +645,76 @@ _italic_
       'hint': {
         'text': "Do not include personal or financial information, for example, your National Insurance number or credit card details."
       }
+    }) }}
+  </div>
+
+    <div class="govuk-!-margin-top-9">
+
+      {{ govukSummaryList({
+        'rows': [
+          {
+            'key': {
+              'text': 'Name'
+            },
+            'value': {
+              'text': 'Freddy Frontend'
+            },
+            'actions': {
+              'items': [
+                {
+                  'href': '#',
+                  'text': 'Change',
+                  'visuallyHiddenText': 'name'
+                }
+              ]
+            }
+          },
+          {
+            'key': {
+              'text': 'Address'
+            },
+            'value': {
+              'html': '1 The Street<br>Plymouth<br>PL1 2PP'
+            },
+            'actions': {
+              'items': [
+                {
+                  'href': '#',
+                  'text': 'Change',
+                  'visuallyHiddenText': 'address'
+                }
+              ]
+            }
+          }
+        ]
+      }) }}
+    </div>
+
+  <div class="govuk-!-margin-top-9">
+    {{ govukAccordion({
+      'id': 'accordion-default',
+      'items': [
+        {
+          'heading': {
+            'text': 'Accordion item 1'
+          },
+          'summary': {
+            'text': 'This is a summary for accordion item 1.'
+          },
+          'content': {
+            'html': '<p class="govuk-body">This is the content for the first accordion item.</p>'
+          }
+        },
+        {
+          'heading': {
+            'text': 'Accordion item 2'
+          },
+          'summary': {},
+          'content': {
+            'html': '<p class="govuk-body">This is the content for the second accordion item.</p>'
+          }
+        }
+      ]
     }) }}
   </div>
 </div>
