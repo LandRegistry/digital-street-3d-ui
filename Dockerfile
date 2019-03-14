@@ -1,6 +1,6 @@
 # Set the base image to the base image
 
-FROM hmlandregistry/dev_base_python_flask:4
+FROM hmlandregistry/dev_base_python_flask:5
 
 ARG OUTSIDE_UID
 ARG OUTSIDE_GID
