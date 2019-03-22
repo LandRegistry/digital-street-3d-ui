@@ -65,8 +65,8 @@ module.exports = (gulp, config) => {
         contents = contents.replace(/in (.*).attributes %}/g, 'in ($1.attributes.items() if $1.attributes else {}.items()) %}', contents)
 
         // Resolve paths to the templates as jinja does not support relative paths as nunjucks does
-        contents = contents.replace(/\.\.\//g, 'app/vendor/.govuk-frontend/' + path.relative(govukTemplatePath, path.dirname(path.resolve(file.path, '..'))) + '/')
-        contents = contents.replace(/\.\//g, 'app/vendor/.govuk-frontend/' + path.relative(govukTemplatePath, path.dirname(file.path)) + '/')
+        contents = contents.replace(/\.\.\//g, 'app/vendor/govuk-frontend/' + path.relative(govukTemplatePath, path.dirname(path.resolve(file.path, '..'))) + '/')
+        contents = contents.replace(/\.\//g, 'app/vendor/govuk-frontend/' + path.relative(govukTemplatePath, path.dirname(file.path)) + '/')
 
         // Hardcoded replacements for deeply nested dict access, which requires
         // more protection in Python than it does in JS
@@ -89,13 +89,13 @@ module.exports = (gulp, config) => {
         cb(null, file)
       }))
 
-      .pipe(gulp.dest(path.join(config.applicationPath, 'templates/vendor/.govuk-frontend')))
+      .pipe(gulp.dest(path.join(config.applicationPath, 'templates/vendor/govuk-frontend')))
   })
 
   gulp.task('copyGovAssets', () =>
     gulp
       .src(path.join(govukTemplatePath, 'assets/**/*.*'))
-      .pipe(gulp.dest(path.join(config.destinationPath, '.govuk-frontend')))
+      .pipe(gulp.dest(path.join(config.destinationPath, 'govuk-frontend')))
   )
 
   gulp.task(

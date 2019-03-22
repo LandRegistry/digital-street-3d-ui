@@ -1,5 +1,5 @@
 {% macro govukCharacterCount(params) %}
-  {% from "app/vendor/.govuk-frontend/components/textarea/macro.html" import govukTextarea %}
+  {% from "app/vendor/govuk-frontend/components/textarea/macro.html" import govukTextarea %}
 
 <div class="govuk-character-count" data-module="character-count"
 {%- if params.maxlength %} data-maxlength="{{ params.maxlength }}"{% endif %}

@@ -237,7 +237,7 @@ The GOV.UK design system includes a range of macros for generating their markup.
 The GOV.UK macros can be imported into your template as follows:
 
 ```
-{% from "app/vendor/.govuk-frontend/components/phase-banner/macro.html" import govukPhaseBanner %}
+{% from "app/vendor/govuk-frontend/components/phase-banner/macro.html" import govukPhaseBanner %}
 ```
 
 and then used:
@@ -256,7 +256,7 @@ This is the broadly same as is documented in the GOV.UK design system so you can
 There are important differences to bear in mind though, as follows:
 
 - When invoking macros with a dict as above, remember that keys should be quoted. Because the GOV.UK design system is written for Nunjucks/Node.JS they do not quote their keys and so copying and pasting their code examples directly will not work.
-- Import paths for the macros are different to those in the documentation. Note how in the above for example the macro is pulled from `app/vendor/.govuk-frontend/components` and the file extension is `.html` instead of `.njk`
+- Import paths for the macros are different to those in the documentation. Note how in the above for example the macro is pulled from `app/vendor/govuk-frontend/components` and the file extension is `.html` instead of `.njk`
 
 ### Flask-WTForms
 

@@ -17,7 +17,7 @@ Alternatively, you can use `npm run dev` if you are going to be working on the C
 At the time of writing, the build does not run in the pipeline and must be run inside the Docker container on the developer's laptop. This means that the build artefacts need to be committed into the repository. The following files would need to be committed in, but _should not be manually modified_
 
 - `application/assets/dist/**/*.*`
-- `application/templates/vendor/.govuk-frontend/template.html` (This file is copied from the `govuk-frontend` module in `node_modules`. It is checked into the repository, but should not be modified manually.)
+- `application/templates/vendor/govuk-frontend/template.html` (This file is copied from the `govuk-frontend` module in `node_modules`. It is checked into the repository, but should not be modified manually.)
 
 Application specific frontend code is held in `application/assets/src` - this is the only place you should be manually editing files.
 
