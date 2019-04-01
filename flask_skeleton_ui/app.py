@@ -24,7 +24,7 @@ def inject_global_values():
     """Inject global template values
 
     Use this to inject values into the templates that are used globally.
-    This might be things such as google analytics keys, or even the current username
+    This might be things such as the current username
     """
 
     return dict(
