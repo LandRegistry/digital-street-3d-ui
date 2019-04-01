@@ -4,6 +4,7 @@ Note that requirements updates are not listed here unless they result in more ch
 
 | Date | Summary | Comparison to previous |
 |---|---|---|
+| 2019-03-22 | Removed dot prefix from non hidden folders | [Here](http://gitlab.service.dev.ctp.local/skeletons/flask-skeleton-ui/merge_requests/47)
 | 2019-03-14 | Update base image to v5 | [Here](http://git.dev.ctp.local/skeletons/flask-skeleton-ui/merge_requests/41) |
 | 2019-03-12 | Updated govuk-frontend dependency to v2.8.0 | [Here](http://git.dev.ctp.local/skeletons/flask-skeleton-ui/merge_requests/46)
 | 2019-02-14 | Fix files written inside the container being owned by root on Linux hosts. See https://github.com/LandRegistry/common-dev-env/releases/tag/v1.1.0 for corresponding dev-env change | [Here](http://git.dev.ctp.local/skeletons/flask-skeleton-ui/merge_requests/40) |

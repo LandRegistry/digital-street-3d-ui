@@ -1,12 +1,12 @@
-{% from "app/vendor/.govuk-frontend/components/skip-link/macro.html" import govukSkipLink %}
-{% from "app/vendor/.govuk-frontend/components/header/macro.html" import govukHeader %}
-{% from "app/vendor/.govuk-frontend/components/phase-banner/macro.html" import govukPhaseBanner %}
-{% from "app/vendor/.govuk-frontend/components/footer/macro.html" import govukFooter %}
-{% from "app/vendor/.govuk-frontend/components/error-summary/macro.html" import govukErrorSummary %}
+{% from "app/vendor/govuk-frontend/components/skip-link/macro.html" import govukSkipLink %}
+{% from "app/vendor/govuk-frontend/components/header/macro.html" import govukHeader %}
+{% from "app/vendor/govuk-frontend/components/phase-banner/macro.html" import govukPhaseBanner %}
+{% from "app/vendor/govuk-frontend/components/footer/macro.html" import govukFooter %}
+{% from "app/vendor/govuk-frontend/components/error-summary/macro.html" import govukErrorSummary %}
 
-{% extends "app/vendor/.govuk-frontend/template.html" %}
+{% extends "app/vendor/govuk-frontend/template.html" %}
 
-{% set assetPath = url_for('static', filename='.govuk-frontend').rstrip('/') %}
+{% set assetPath = url_for('static', filename='govuk-frontend').rstrip('/') %}
 
 {% block head %}
   <!--[if gt IE 8]><!--><link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/main.css') }}" /><!--<![endif]-->

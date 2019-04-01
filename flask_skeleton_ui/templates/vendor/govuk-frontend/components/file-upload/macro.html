@@ -1,7 +1,7 @@
-{% macro govukTextarea(params) %}
-  {% from "app/vendor/.govuk-frontend/components/error-message/macro.html" import govukErrorMessage -%}
-{% from "app/vendor/.govuk-frontend/components/hint/macro.html" import govukHint %}
-{% from "app/vendor/.govuk-frontend/components/label/macro.html" import govukLabel %}
+{% macro govukFileUpload(params) %}
+  {% from "app/vendor/govuk-frontend/components/error-message/macro.html" import govukErrorMessage -%}
+{% from "app/vendor/govuk-frontend/components/hint/macro.html" import govukHint %}
+{% from "app/vendor/govuk-frontend/components/label/macro.html" import govukLabel %}
 
 {#- a record of other elements that we need to associate with the input using
    aria-describedby – for example hints or error messages -#}
@@ -38,10 +38,10 @@
     'visuallyHiddenText': params.errorMessage.visuallyHiddenText
   }) }}
 {% endif %}
-  <textarea class="govuk-textarea {{- ' govuk-textarea--error' if params.errorMessage else '' }} {{- ' ' + params.classes if params.classes else ''}}" id="{{ params.id }}" name="{{ params.name }}" rows="{%if params.rows %} {{- params.rows -}} {% else %}5{%endif %}"
+  <input class="govuk-file-upload {%- if params.classes %} {{ params.classes }}{% endif %} {%- if params.errorMessage %} govuk-file-upload--error{% endif %}" id="{{ params.id }}" name="{{ params.name }}" type="file"
+  {%- if params.value %} value="{{ params.value }}"{% endif %}
   {%- if describedBy %} aria-describedby="{{ describedBy }}"{% endif %}
-  {%- if params.autocomplete %} autocomplete="{{ params.autocomplete}}"{% endif %}
-  {%- for attribute, value in (params.attributes.items() if params.attributes else {}.items()) %} {{attribute}}="{{value}}"{% endfor %}>{{ params.value }}</textarea>
+  {%- for attribute, value in (params.attributes.items() if params.attributes else {}.items()) %} {{attribute}}="{{value}}"{% endfor %}>
 </div>
 
 {% endmacro %}
