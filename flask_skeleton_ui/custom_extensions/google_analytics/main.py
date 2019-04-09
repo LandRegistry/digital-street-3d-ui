@@ -22,18 +22,18 @@ class GoogleAnalytics(object):
 def build_form_errors(data):
     ret = []
 
-    for group in data.items():
-        if isinstance(group[1], (list,)):
+    for key, value in data.items():
+        if isinstance(value, (list,)):
             ret.append({
-                'name': group[0],
-                'errors': group[1]
+                'name': key,
+                'errors': value
             })
         else:
-            sub_data = build_form_errors(group[1])
+            sub_data = build_form_errors(value)
 
             for item in sub_data:
                 ret.append({
-                    'name': '{}-{}'.format(group[0], item['name']),
+                    'name': '{}-{}'.format(key, item['name']),
                     'errors': item['errors']
                 })
 
