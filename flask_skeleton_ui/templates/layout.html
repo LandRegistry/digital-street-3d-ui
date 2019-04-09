@@ -23,7 +23,7 @@
       var analytics_script = document.querySelector('[data-analytics-id]');
       var google_analytics_id = analytics_script.getAttribute('data-analytics-id');
 
-      gtag('config', google_analytics_id);
+      gtag('config', google_analytics_id, { 'anonymize_ip': true });
     </script>
   {% endif %}
 {% endblock %}
@@ -83,7 +83,7 @@
 
     {# JSON block containing form errors to be sent to Google Analytics #}
     <script type="application/json" id="form-error-data" data-form-name="{{ form.__class__.__name__ }}">
-      {{ form.errors|tojson }}
+      {{ form.errors|build_form_errors|tojson }}
     </script>
   {% endif %}
 
