@@ -53,10 +53,9 @@ module.exports = (gulp, config) => {
         // Jinja has a specific operator for doing this
         contents = contents.replace(/\+ loop.index/g, '~ loop.index')
 
-        // Remove all indentation and trimming which causes problems in jinja whereby the
+        // Remove all indentation which causes problems in jinja whereby the
         // indent filter fails to mark stuff as safe, and instead escapes the html special characters
         // In addition, this kind of formatting is not necessary in production code and is an unnecessary overhead
-        contents = contents.replace(/\s?\|\s?trim/g, '', contents)
         contents = contents.replace(/\s?\|\s?indent(?:[(\d)]*)/g, '', contents)
 
         // Additional code needed for looping over dicts in python

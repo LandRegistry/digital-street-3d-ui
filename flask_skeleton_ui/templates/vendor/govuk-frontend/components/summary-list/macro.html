@@ -14,17 +14,17 @@
         {{ row.key.html | safe if row.key.html else row.key.text }}
       </dt>
       <dd class="govuk-summary-list__value {%- if row.value.classes %} {{ row.value.classes }}{% endif %}">
-        {{ row.value.html | safe if row.value.html else row.value.text }}
+        {{ row.value.html | trim | safe if row.value.html else row.value.text }}
       </dd>
       {% if row.actions['items'] %}
         <dd class="govuk-summary-list__actions {%- if row.actions.classes %} {{ row.actions.classes }}{% endif %}">
           {% if row.actions['items'].length == 1 %}
-            {{ _actionLink(row.actions['items'][0]) }}
+            {{ _actionLink(row.actions['items'][0]) | trim }}
           {% else %}
             <ul class="govuk-summary-list__actions-list">
               {% for action in row.actions['items'] %}
                 <li class="govuk-summary-list__actions-list-item">
-                  {{ _actionLink(action) }}
+                  {{ _actionLink(action) | trim }}
                 </li>
               {% endfor %}
             </ul>
