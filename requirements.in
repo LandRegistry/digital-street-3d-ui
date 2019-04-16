@@ -3,7 +3,7 @@ Flask-LogConfig==0.4.2
 Flask-Script==2.0.6
 Flask==1.0.2
 gunicorn==19.9.0
-requests==2.20.1
+requests==2.21.0
 Flask-WTF==0.14.2
-misaka==2.1.0
-deepmerge==0.0.4
+misaka==2.1.1
+deepmerge==0.0.5
