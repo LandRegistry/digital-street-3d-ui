@@ -12,7 +12,8 @@ client = app.test_client()
 
 def parse_log_output(capmanager):
     # Suppress stdout/stderr and capture the contents
-    out, err = capmanager.suspend_global_capture(in_=True)
+    capmanager.suspend_global_capture()
+    out, err = capmanager.read_global_capture()
     capmanager.resume_global_capture()
 
     # Try and parse it as json
@@ -27,7 +28,7 @@ def parse_log_output(capmanager):
         raise Exception("Error parsing log output as JSON.\nCaptured stdout was:"
                         "\n\n-------\n{}------\n\n"
                         "Captured stderr was:"
-                        "\n-------\n{}-------".format(out, err))
+                        "\n-------\n{}-------".format(out, err)) from e
 
 
 @freeze_time("2017-01-18")
