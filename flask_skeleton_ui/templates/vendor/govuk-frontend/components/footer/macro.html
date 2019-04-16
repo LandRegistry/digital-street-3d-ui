@@ -13,7 +13,7 @@
                   govuk-footer__list--columns-{{ nav.columns }}
                 {% endif %}
               {% endset %}
-              <ul class="govuk-footer__list {{ listClasses }}">
+              <ul class="govuk-footer__list {{ listClasses | trim }}">
                 {% for item in nav['items'] %}
                   {% if item.href and item.text %}
                     <li class="govuk-footer__list-item">

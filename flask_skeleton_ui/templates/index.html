@@ -32,6 +32,20 @@
 
 {% block inner_content %}
 
+  {{ govukErrorSummary({
+    'titleText': "There is a problem",
+    'errorList': [
+      {
+        'text': "Date of birth must be in the past",
+        'href': "#dob-error"
+      },
+      {
+        'text': "Enter a postcode, like AA1 1AA",
+        'href': "#postcode-error"
+      }
+    ]
+  }) }}
+
   {% filter markdown %}
 # flask-skeleton-ui
 
@@ -61,22 +75,6 @@ Since the nunjucks source undergoes several transformations before it can be use
 _italic_
 
   {% endfilter %}
-
-  <div class="govuk-!-margin-top-9">
-    {{ govukErrorSummary({
-      'titleText': "There is a problem",
-      'errorList': [
-        {
-          'text': "Date of birth must be in the past",
-          'href': "#dob-error"
-        },
-        {
-          'text': "Enter a postcode, like AA1 1AA",
-          'href': "#postcode-error"
-        }
-      ]
-    }) }}
-  </div>
 
   <div class="govuk-!-margin-top-9">
     {{ govukBackLink({
