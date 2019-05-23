@@ -32,8 +32,9 @@ module.exports = (gulp, config) => {
         file.path = file.path.replace('.njk', '.html')
 
         // Simple conversions from nunjucks/js to jinja/python
-        contents = contents.replace(/true/g, 'True')
-        contents = contents.replace(/false/g, 'False')
+        // But make sure not to replace true/false inside data attributes
+        contents = contents.replace(/(?<!")true(?!")/g, 'True')
+        contents = contents.replace(/(?<!")false(?!")/g, 'False')
         contents = contents.replace(/\.njk/g, '.html')
 
         // Quoting dict keys, because nunjucks doesn't require them but jinja does
