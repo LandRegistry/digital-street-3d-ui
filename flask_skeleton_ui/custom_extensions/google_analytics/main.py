@@ -20,6 +20,12 @@ class GoogleAnalytics(object):
 
 
 def build_form_errors(data):
+    """Build form errors
+
+    Recursive method to take wtforms' error structure and flatten it out.
+    This turns the nested structure (if you have nested sub-forms) into
+    a simpler list of form element names and associated errors, ready for
+    sending to Google Analytics"""
     ret = []
 
     for key, value in data.items():
