@@ -56,7 +56,8 @@ ENV APP_NAME=flask-skeleton-ui \
   SECRET_KEY='ABC' \
   FLASK_DEBUG=1 \
   CONTENT_SECURITY_POLICY_MODE='full' \
-  STATIC_ASSETS_MODE='development'
+  STATIC_ASSETS_MODE='development' \
+  GOOGLE_ANALYTICS_KEY='UA-126360441-1'
 
 # When creating files inside the docker container, this prevents the files being created
 # as the root user on linux hosts
