@@ -57,7 +57,7 @@ def make_test_function(template, test_data):
     return test
 
 
-test_data = yaml.load(open('unit_tests/fixtures/wtf_macros_data.yaml').read())
+test_data = yaml.safe_load(open('unit_tests/fixtures/wtf_macros_data.yaml').read())
 
 for klassname, params in test_data.items():
     methods = {}

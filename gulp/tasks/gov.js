@@ -32,8 +32,9 @@ module.exports = (gulp, config) => {
         file.path = file.path.replace('.njk', '.html')
 
         // Simple conversions from nunjucks/js to jinja/python
-        contents = contents.replace(/true/g, 'True')
-        contents = contents.replace(/false/g, 'False')
+        // But make sure not to replace true/false inside data attributes
+        contents = contents.replace(/(?<!")true(?!")/g, 'True')
+        contents = contents.replace(/(?<!")false(?!")/g, 'False')
         contents = contents.replace(/\.njk/g, '.html')
 
         // Quoting dict keys, because nunjucks doesn't require them but jinja does
@@ -53,10 +54,9 @@ module.exports = (gulp, config) => {
         // Jinja has a specific operator for doing this
         contents = contents.replace(/\+ loop.index/g, '~ loop.index')
 
-        // Remove all indentation and trimming which causes problems in jinja whereby the
+        // Remove all indentation which causes problems in jinja whereby the
         // indent filter fails to mark stuff as safe, and instead escapes the html special characters
         // In addition, this kind of formatting is not necessary in production code and is an unnecessary overhead
-        contents = contents.replace(/\s?\|\s?trim/g, '', contents)
         contents = contents.replace(/\s?\|\s?indent(?:[(\d)]*)/g, '', contents)
 
         // Additional code needed for looping over dicts in python
@@ -78,7 +78,8 @@ module.exports = (gulp, config) => {
           'item.hint.html': '(item.hint.html if item.hint and item.hint.html)',
           'item.label.attributes': '(item.label.attributes if item.label and item.label.attributes)',
           "(' ' + item.label.classes if item.label.classes else '')": "(' ' + item.label.classes if item.classes and item.label.classes else '')",
-          "' govuk-textarea--error' if params.errorMessage": "' govuk-textarea--error' if params.errorMessage else ''"
+          "' govuk-textarea--error' if params.errorMessage": "' govuk-textarea--error' if params.errorMessage else ''",
+          'item.summary.html or item.summary.text': 'item.summary and (item.summary.html or item.summary.text)'
         }
 
         for (const key in replacements) {
