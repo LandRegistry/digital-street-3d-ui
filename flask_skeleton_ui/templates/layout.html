@@ -81,10 +81,12 @@
   {% if form and form.errors %}
     {{ govukErrorSummary(wtforms_errors(form)) }}
 
-    {# JSON block containing form errors to be sent to Google Analytics #}
-    <script type="application/json" id="form-error-data" data-form-name="{{ form.__class__.__name__ }}">
-      {{ form.errors|build_form_errors|tojson }}
-    </script>
+    {% if google_analytics_key %}
+      {# JSON block containing form errors to be sent to Google Analytics #}
+      <script type="application/json" id="form-error-data" data-form-name="{{ form.__class__.__name__ }}">
+        {{ form.errors|build_form_errors|tojson }}
+      </script>
+    {% endif %}
   {% endif %}
 
   {% include 'app/includes/flashed_messages.html' %}
