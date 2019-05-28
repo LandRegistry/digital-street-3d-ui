@@ -48,6 +48,7 @@ CONTENT_SECURITY_POLICY_MODE = os.environ['CONTENT_SECURITY_POLICY_MODE']
 #   - Add cachebusters to static asset query strings to invalidate browsers' caches when necessary
 STATIC_ASSETS_MODE = os.environ['STATIC_ASSETS_MODE']
 
-# Using SQLAlchemy/Postgres?
-# The required variables (and required usage) can be found here:
-# http://192.168.249.38/gadgets/gadget-api/blob/master/gadget_api/config.py
+# Put your full google analytics key in here, such as UA-126360441-1
+# If you don't want google analytics, simply leave this line commented out and the config will default to False
+# thereby disabling analytics entirely
+# GOOGLE_ANALYTICS_KEY = os.environ['GOOGLE_ANALYTICS_KEY']

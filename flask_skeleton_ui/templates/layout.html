@@ -11,6 +11,21 @@
 {% block head %}
   <!--[if gt IE 8]><!--><link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/main.css') }}" /><!--<![endif]-->
   <!--[if IE 8]><link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/main-ie8.css') }}" /><![endif]-->
+
+  {% if google_analytics_key %}
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{google_analytics_key}}"></script>
+    <script data-analytics-id="{{google_analytics_key}}">
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      var analytics_script = document.querySelector('[data-analytics-id]');
+      var google_analytics_id = analytics_script.getAttribute('data-analytics-id');
+
+      gtag('config', google_analytics_id, { 'anonymize_ip': true });
+    </script>
+  {% endif %}
 {% endblock %}
 
 {% block pageTitle %}{%- if form and form.errors %}Error: {% endif -%}{% block title %}{% endblock %}{%if self.title() %} - {% endif %}{{ service_name }}{% endblock %}
@@ -21,20 +36,12 @@
   <!--<![endif]-->
 {% endblock %}
 
-{% block bodyStart %}
+
+{% block header %}
   <div class="app-cookie-banner js-cookie-banner">
     <p class="app-cookie-banner__message">HM Land Registry uses cookies to make the site simpler. <a href="https://www.gov.uk/help/cookies" class="govuk-link">Find out more about cookies</a></p>
   </div>
-{% endblock %}
 
-{% block skipLink %}
-  {{ govukSkipLink({
-    'href': "#main-content",
-    'text': "Skip to main content"
-  }) }}
-{% endblock %}
-
-{% block header %}
   {{ govukHeader({
     'homepageUrl': "#",
     'serviceName': "Service name",
@@ -73,6 +80,13 @@
 {% block content %}
   {% if form and form.errors %}
     {{ govukErrorSummary(wtforms_errors(form)) }}
+
+    {% if google_analytics_key %}
+      {# JSON block containing form errors to be sent to Google Analytics #}
+      <script type="application/json" id="form-error-data" data-form-name="{{ form.__class__.__name__ }}">
+        {{ form.errors|build_form_errors|tojson }}
+      </script>
+    {% endif %}
   {% endif %}
 
   {% include 'app/includes/flashed_messages.html' %}

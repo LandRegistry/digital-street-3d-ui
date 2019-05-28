@@ -279,6 +279,47 @@ def index_page():
     ...
 ```
 
+### Google Analytics
+
+Basic Google Analytics support is included out the box. Simply set the `GOOGLE_ANALYTICS_KEY` environment variable and you will get the following for free:
+
+- Pageviews logged (The most basic, standard Google Analytics feature)
+- Form validation errors logged as events (A custom implementation built into flask-skeleton-ui)
+
+If you don't want google analytics, simply remove the env var, and remove the entry in config.py. It will then default to False and be disabled.
+
+#### Form validation events in Google Analytics
+
+By default, form validation events are logged as follows in GA:
+
+```
+Category: FormValidation
+Action:   FormClassName: field_name
+```
+
+If you wish to also log the actual error, like this:
+
+```
+Category: FormValidation
+Action:   FormClassName: field_name
+Label:    Please enter a valid email address
+```
+
+Then you will need to go to `flask_skeleton_ui/assets/src/javascripts/modules/google-analytics/form-errors.js` and uncomment the line which says `'event_label': error`.
+
+🐉🐉 **HERE BE DRAGONS!** 🐉🐉
+
+If doing this, you must be aware that if your error messages contain any
+sensitive information such as email addresses, that this would be a problem from a
+GDPR and general privacy perspective, as well as potentially leaking other data to google.
+
+This might occur if you were to replay user input back to people in the error message, such as:
+"john.smith@example.com is not a valid email address" or "ABC123 is not a valid title number"
+
+If you are confident that this is not the case, and will never be the case with your errors,
+then you may uncomment this line.
+
+
 ### ApplicationError templates
 The ApplicationError class contains a code parameter when raising exceptions, such as:
 

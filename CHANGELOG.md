@@ -4,6 +4,7 @@ Note that requirements updates are not listed here unless they result in more ch
 
 | Date | Summary | Comparison to previous |
 |---|---|---|
+| 2019-05-24 | Added Google Analytics functionality. Both for basic pageviews as well as form validation events | [Here](http://git.dev.ctp.local/skeletons/flask-skeleton-ui/merge_requests/48) |
 | 2019-05-23 | Fixed bug with govuk button jinja macro, not correctly adding the `data-prevent-double-click` attribute | [Here](http://git.dev.ctp.local/skeletons/flask-skeleton-ui/merge_requests/51) |
 | 2019-05-23 | Fixed bug with govuk accordion jinja macro, if the summary of an item wasn't present | [Here](http://git.dev.ctp.local/skeletons/flask-skeleton-ui/merge_requests/50) |
 | 2019-04-16 | Updated Python and node requirements, including gov.uk frontend<br>Some changes required to compensate:<ul><li>Switched `gzip_static_assets` extension to `cachelib` package which has spun out of `werkzeug.contrib.cache`</li><li>Tweaked healthcheck to use `request.headers.to_wsgi_list` instead of deprecated `to_list` method</li><li>Tweaked `test_enhanced_logging.py` tests to use altered capturemanager from new version of pytest</li><li>Tweak `test_wtf_macros.py` to avoid using discouraged pattern for loading yaml.</li><li>Tweaked gov gulp task to re-instate the `trim` which is now required by the gov templates</li></ul> | [Here](http://gitlab.service.dev.ctp.local/skeletons/flask-skeleton-ui/merge_requests/49) |
