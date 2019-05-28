@@ -49,6 +49,6 @@ CONTENT_SECURITY_POLICY_MODE = os.environ['CONTENT_SECURITY_POLICY_MODE']
 STATIC_ASSETS_MODE = os.environ['STATIC_ASSETS_MODE']
 
 # Put your full google analytics key in here, such as UA-126360441-1
-# If you don't want google analytics, simply delete this line and the config will default to False
+# If you don't want google analytics, simply leave this line commented out and the config will default to False
 # thereby disabling analytics entirely
-GOOGLE_ANALYTICS_KEY = os.environ['GOOGLE_ANALYTICS_KEY']
+# GOOGLE_ANALYTICS_KEY = os.environ['GOOGLE_ANALYTICS_KEY']
