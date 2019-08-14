@@ -1,5 +1,5 @@
 from flask import render_template
-from flask_skeleton_ui.custom_extensions.wtforms_helpers.main import merger
+from search_index_map_ui.custom_extensions.wtforms_helpers.main import merger
 from jinja2 import Markup
 
 

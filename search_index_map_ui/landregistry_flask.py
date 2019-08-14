@@ -1,6 +1,6 @@
 from flask import Flask
 import os
-from flask_skeleton_ui import config
+from search_index_map_ui import config
 
 
 class LandRegistryFlask(Flask):

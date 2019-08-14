@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask import render_template
-from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovTextInput
+from search_index_map_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovTextInput
 from flask_wtf import FlaskForm
 from wtforms.fields import StringField
 from wtforms.validators import InputRequired

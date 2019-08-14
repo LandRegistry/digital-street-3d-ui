@@ -1,6 +1,6 @@
 # Import every blueprint file
-from flask_skeleton_ui.views import general
-from flask_skeleton_ui.views import index
+from search_index_map_ui.views import general
+from search_index_map_ui.views import index
 
 
 def register_blueprints(app):

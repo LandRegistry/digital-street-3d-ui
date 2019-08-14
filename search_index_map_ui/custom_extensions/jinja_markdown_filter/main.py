@@ -1,6 +1,6 @@
 import misaka
 from jinja2 import Markup
-from flask_skeleton_ui.custom_extensions.jinja_markdown_filter.gov_renderer import GovRenderer
+from search_index_map_ui.custom_extensions.jinja_markdown_filter.gov_renderer import GovRenderer
 
 
 class JinjaMarkdownFilter(object):

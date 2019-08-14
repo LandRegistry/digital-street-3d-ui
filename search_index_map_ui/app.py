@@ -1,4 +1,4 @@
-from flask_skeleton_ui.landregistry_flask import LandRegistryFlask
+from search_index_map_ui.landregistry_flask import LandRegistryFlask
 from jinja2 import PackageLoader
 from jinja2 import PrefixLoader
 
@@ -12,8 +12,8 @@ app = LandRegistryFlask(__name__,
 
 # Set Jinja up to be able to load templates from packages (See gadget-govuk-ui for a full example)
 app.jinja_loader = PrefixLoader({
-    'app': PackageLoader('flask_skeleton_ui'),
-    'wtforms_gov': PackageLoader('flask_skeleton_ui.custom_extensions.wtforms_helpers')
+    'app': PackageLoader('search_index_map_ui'),
+    'wtforms_gov': PackageLoader('search_index_map_ui.custom_extensions.wtforms_helpers')
 })
 
 app.config.from_pyfile("config.py")
@@ -28,5 +28,5 @@ def inject_global_values():
     """
 
     return dict(
-        service_name='Flask Skeleton UI'
+        service_name='Search Index Map'
     )

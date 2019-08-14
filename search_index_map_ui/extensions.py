@@ -1,13 +1,13 @@
-from flask_skeleton_ui import config
-from flask_skeleton_ui.custom_extensions.cachebust_static_assets.main import CachebustStaticAssets
-from flask_skeleton_ui.custom_extensions.enhanced_logging.main import EnhancedLogging
-from flask_skeleton_ui.custom_extensions.gzip_static_assets.main import GzipStaticAssets
-from flask_skeleton_ui.custom_extensions.security_headers.main import SecurityHeaders
-from flask_skeleton_ui.custom_extensions.jinja_markdown_filter.main import JinjaMarkdownFilter
-from flask_skeleton_ui.custom_extensions.csrf.main import CSRF
-from flask_skeleton_ui.custom_extensions.content_security_policy.main import ContentSecurityPolicy
-from flask_skeleton_ui.custom_extensions.wtforms_helpers.main import WTFormsHelpers
-from flask_skeleton_ui.custom_extensions.google_analytics.main import GoogleAnalytics
+from search_index_map_ui import config
+from search_index_map_ui.custom_extensions.cachebust_static_assets.main import CachebustStaticAssets
+from search_index_map_ui.custom_extensions.enhanced_logging.main import EnhancedLogging
+from search_index_map_ui.custom_extensions.gzip_static_assets.main import GzipStaticAssets
+from search_index_map_ui.custom_extensions.security_headers.main import SecurityHeaders
+from search_index_map_ui.custom_extensions.jinja_markdown_filter.main import JinjaMarkdownFilter
+from search_index_map_ui.custom_extensions.csrf.main import CSRF
+from search_index_map_ui.custom_extensions.content_security_policy.main import ContentSecurityPolicy
+from search_index_map_ui.custom_extensions.wtforms_helpers.main import WTFormsHelpers
+from search_index_map_ui.custom_extensions.google_analytics.main import GoogleAnalytics
 
 
 # Create empty extension objects here
