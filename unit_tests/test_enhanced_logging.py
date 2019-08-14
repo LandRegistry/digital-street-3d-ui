@@ -6,7 +6,7 @@ from flask_skeleton_ui.main import app
 from flask_skeleton_ui.custom_extensions.enhanced_logging.main import EnhancedLogging
 from werkzeug import Headers
 
-logger = logging.getLogger('flask-skeleton-ui')
+logger = logging.getLogger('search-index-map-ui')
 client = app.test_client()
 
 

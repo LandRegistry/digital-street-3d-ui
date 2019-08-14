@@ -1,10 +1,10 @@
 version: '2'
 services:
   # Notice how the service name, container name and repo directory (where the Dockerfile lives) all match.
-  flask-skeleton-ui:
-    container_name: flask-skeleton-ui
+  search-index-map-ui:
+    container_name: search-index-map-ui
     build:
-      context: ./flask-skeleton-ui
+      context: ./search-index-map-ui
       # To allow a matching user to the user running the dev env to be created for running the container
       args:
         - OUTSIDE_UID=${OUTSIDE_UID}
@@ -16,7 +16,7 @@ services:
       - "9996:8080"
     volumes:
       # Our convention is (for python) to always map the app files to /src within the container
-      - ./flask-skeleton-ui:/src
+      - ./search-index-map-ui:/src
     # Redirect all the logs to a logstash server. Logstash is set up to parse RFC5424 format messages.
     logging:
       driver: syslog
