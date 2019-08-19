@@ -64,6 +64,7 @@ class ContentSecurityPolicy(object):
                 'approved_script_hashes': " ".join(approved_script_hashes)
             }
 
+            print(app.config['CONTENT_SECURITY_POLICY_MODE'])
             if app.config['CONTENT_SECURITY_POLICY_MODE'] == 'report-only':
                 response.headers['Content-Security-Policy-Report-Only'] = csp
             else:

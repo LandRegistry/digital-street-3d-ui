@@ -55,7 +55,7 @@ ENV APP_NAME=search-index-map-ui \
   LOG_LEVEL=DEBUG \
   SECRET_KEY='ABC' \
   FLASK_DEBUG=1 \
-  CONTENT_SECURITY_POLICY_MODE='full' \
+  CONTENT_SECURITY_POLICY_MODE='report-only' \
   STATIC_ASSETS_MODE='development'
 
 # When creating files inside the docker container, this prevents the files being created
