@@ -2,8 +2,8 @@ from unittest import mock
 import logging
 import json
 from freezegun import freeze_time
-from flask_skeleton_ui.main import app
-from flask_skeleton_ui.custom_extensions.enhanced_logging.main import EnhancedLogging
+from search_index_map_ui.main import app
+from search_index_map_ui.custom_extensions.enhanced_logging.main import EnhancedLogging
 from werkzeug import Headers
 
 logger = logging.getLogger('search-index-map-ui')
@@ -94,7 +94,7 @@ def test_exc_info_in_log_entries_when_passed(pytestconfig):
     assert 'Exception: Hello' in ' '.join(record['exception'])
 
 
-@mock.patch('flask_skeleton_ui.custom_extensions.enhanced_logging.main.EnhancedLogging.init_app')
+@mock.patch('search_index_map_ui.custom_extensions.enhanced_logging.main.EnhancedLogging.init_app')
 def test_extension_alternative_init(mock_init_app):
     EnhancedLogging('foo')
     mock_init_app.assert_called_once_with('foo')

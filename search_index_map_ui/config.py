@@ -52,3 +52,5 @@ STATIC_ASSETS_MODE = os.environ['STATIC_ASSETS_MODE']
 # If you don't want google analytics, simply leave this line commented out and the config will default to False
 # thereby disabling analytics entirely
 # GOOGLE_ANALYTICS_KEY = os.environ['GOOGLE_ANALYTICS_KEY']
+
+# EEGEO_API_KEY = os.environ['EEGEO_API_KEY']

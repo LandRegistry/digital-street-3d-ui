@@ -1,7 +1,7 @@
 import unittest
 import yaml
 from flask import render_template_string
-from flask_skeleton_ui.main import app
+from search_index_map_ui.main import app
 from unit_tests.fixtures.wtf_macros_example_form import ExampleForm
 
 

@@ -1,11 +1,11 @@
-from flask_skeleton_ui.custom_extensions.google_analytics.main import build_form_errors
-from flask_skeleton_ui.main import app
+from search_index_map_ui.custom_extensions.google_analytics.main import build_form_errors
+from search_index_map_ui.main import app
 import unittest
 from unittest import mock
 from flask import render_template
 from flask_wtf import FlaskForm
 from wtforms.fields import StringField
-from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovTextInput
+from search_index_map_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovTextInput
 from wtforms.validators import InputRequired
 import re
 import json

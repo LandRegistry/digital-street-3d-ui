@@ -2,7 +2,7 @@
 
 [Flask-WTF](https://flask-wtf.readthedocs.io/) is used for building HTML forms, making things like form validation and rendering of errors much easier than having to build this yourself. The [Flask-WTF documentation](https://flask-wtf.readthedocs.io/) covers the standard use cases and you should refer to this.
 
-In addition to the standard use case however, flask-skeleton-ui includes custom widgets that can be used to render Flask-WTF forms in the GOV.​UK style. These widgets automatically render error messages in the appropriate places as well as showing an error summary at the top of the page in a fully GOV.​UK compliant manner.
+In addition to the standard use case however, flask-search_index_map_ui-ui includes custom widgets that can be used to render Flask-WTF forms in the GOV.​UK style. These widgets automatically render error messages in the appropriate places as well as showing an error summary at the top of the page in a fully GOV.​UK compliant manner.
 
 ## Defining a GOV.​UK style form
 

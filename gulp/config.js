@@ -1,7 +1,7 @@
 var config = {
-  'applicationPath': './flask_skeleton_ui',
-  'sourcePath': './flask_skeleton_ui/assets/src',
-  'destinationPath': './flask_skeleton_ui/assets/dist',
+  'applicationPath': './search_index_map_ui',
+  'sourcePath': './search_index_map_ui/assets/src',
+  'destinationPath': './search_index_map_ui/assets/dist',
   'sassPath': 'scss/*.scss',
   'sassIncludePaths': [
     'node_modules'

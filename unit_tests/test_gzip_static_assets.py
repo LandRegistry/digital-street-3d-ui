@@ -5,10 +5,10 @@ import gzip
 from werkzeug import Headers
 from flask_compress import Compress
 
-from flask_skeleton_ui.main import app
-from flask_skeleton_ui.custom_extensions.gzip_static_assets.main import GzipStaticAssets
-from flask_skeleton_ui.custom_extensions.gzip_static_assets.main import gzip_cache
-from flask_skeleton_ui.custom_extensions.gzip_static_assets.main import gzip_cache_key
+from search_index_map_ui.main import app
+from search_index_map_ui.custom_extensions.gzip_static_assets.main import GzipStaticAssets
+from search_index_map_ui.custom_extensions.gzip_static_assets.main import gzip_cache
+from search_index_map_ui.custom_extensions.gzip_static_assets.main import gzip_cache_key
 
 
 class TestGzipStaticAssets(unittest.TestCase):
@@ -16,7 +16,7 @@ class TestGzipStaticAssets(unittest.TestCase):
     def setUp(self):
         self.client = app.test_client()
 
-    @mock.patch('flask_skeleton_ui.custom_extensions.gzip_static_assets.main.GzipStaticAssets.init_app')
+    @mock.patch('search_index_map_ui.custom_extensions.gzip_static_assets.main.GzipStaticAssets.init_app')
     def test_extension_alternative_init(self, mock_init_app):
         GzipStaticAssets('foo')
         mock_init_app.assert_called_once_with('foo')
@@ -42,7 +42,7 @@ class TestGzipStaticAssets(unittest.TestCase):
 
     def test_gzipped_response(self):
         # Create test file
-        filename = 'flask_skeleton_ui/assets/dist/gzip-test.css'
+        filename = 'search_index_map_ui/assets/dist/gzip-test.css'
         file_contents = "* { content: 'Test. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip.'; }"   # noqa: E501
         with open(filename, 'w+') as test_file:
             test_file.write(file_contents)
@@ -74,7 +74,7 @@ class TestGzipStaticAssets(unittest.TestCase):
         cache.clear()
 
         # Create test file
-        filename = 'flask_skeleton_ui/assets/dist/gzip-test.css'
+        filename = 'search_index_map_ui/assets/dist/gzip-test.css'
         file_contents = "* { content: 'Test. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip. Padded out to trigger gzip.'; }"   # noqa: E501
         with open(filename, 'w+') as test_file:
             test_file.write(file_contents)

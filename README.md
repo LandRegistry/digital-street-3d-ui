@@ -1,11 +1,11 @@
-# flask-skeleton-ui
+# flask-search_index_map_ui-ui
 
 This repository contains a flask application structured in the way that all Land Registry flask user interfaces should be structured going forwards.
 
 ## Usage
 
 You can use this to create your own app.
-Take a copy of all the files, and change all occurences of `flask-skeleton-ui` and `flask_skeleton_ui` to your app name - including folders! There will be other places to tweak too such as the exposed port in docker-compose-fragment, so please look through every file before starting to extend it for your own use. There is a [more comprehensive guide](http://192.168.250.79/index.php/Diary_-_Creating_a_New_Application) available on TechDocs.
+Take a copy of all the files, and change all occurences of `flask-search_index_map_ui-ui` and `search_index_map_ui` to your app name - including folders! There will be other places to tweak too such as the exposed port in docker-compose-fragment, so please look through every file before starting to extend it for your own use. There is a [more comprehensive guide](http://192.168.250.79/index.php/Diary_-_Creating_a_New_Application) available on TechDocs.
 
 ## Quick start
 
@@ -14,8 +14,8 @@ Take a copy of all the files, and change all occurences of `flask-skeleton-ui` a
 This app supports the [universal dev-env](http://gitlab.service.dev.ctp.local/common/dev-env) so adding the following to your dev-env config file is enough:
 
 ```YAML
-  flask-skeleton-ui:
-    repo: git@gitlab.service.dev.ctp.local:skeletons/flask-skeleton-ui.git
+  flask-search_index_map_ui-ui:
+    repo: git@gitlab.service.dev.ctp.local:search_index_map_uis/flask-search_index_map_ui-ui.git
     branch: master
 ```
 
@@ -33,7 +33,7 @@ The Docker image it creates (and runs) will install all necessary requirements a
 
 ##### When not using gunicorn
 
-* FLASK_APP *(suggested value: flask_skeleton_ui/main.py)*
+* FLASK_APP *(suggested value: search_index_map_ui/main.py)*
 * FLASK_DEBUG *(suggested value: 1)*
 
 #### Running (when not using gunicorn)
@@ -67,7 +67,7 @@ make report="true" unittest
 
 These files get added to a test-output folder. The test-output folder is created if doesn't exist.
 
-You can run these commands in the app's running container via `docker-compose exec flask-skeleton-ui <command>` or `exec flask-skeleton-ui <command>`. There is also an alias: `unit-test flask-skeleton-ui` and `unit-test flask-skeleton-ui -r` will run tests and generate reports respectively.
+You can run these commands in the app's running container via `docker-compose exec flask-search_index_map_ui-ui <command>` or `exec flask-search_index_map_ui-ui <command>`. There is also an alias: `unit-test flask-search_index_map_ui-ui` and `unit-test flask-search_index_map_ui-ui -r` will run tests and generate reports respectively.
 
 ### Integration tests
 
@@ -80,7 +80,7 @@ make integrationtest
 
 This file gets added to the test-output folder. The test-output folder is created if doesn't exist.
 
-To run the integration tests if you are using the common dev-env you can run `docker-compose exec flask-skeleton-ui make integrationtest` or, using the alias, `integration-test flask-skeleton-ui`.
+To run the integration tests if you are using the common dev-env you can run `docker-compose exec flask-search_index_map_ui-ui make integrationtest` or, using the alias, `integration-test flask-search_index_map_ui-ui`.
 
 ## Application Framework implementation
 
@@ -155,7 +155,7 @@ The only (non-test related) requirements that should be changed by hand are thos
 
 ### Building frontend assets (CSS, JS etc)
 
-See [flask_skeleton_ui/assets](flask_skeleton_ui/assets) for more details.
+See [search_index_map_ui/assets](search_index_map_ui/assets) for more details.
 
 At a high level this includes:
 - Sass - because writing raw CSS is painful.
@@ -173,11 +173,11 @@ If you need to customise the file, make a copy of it and change your other templ
 If you want to remove the GOV.UK frontend code in order to do something else such as Bootstrap or just custom stuff, you will need to make the following changes:
 
 - Remove the reference to `land-registry-elements` from the `sassIncludePaths` array in `Gulpfile.js`
-- Remove references to GOV.UK from `flask_skeleton_ui/.gitignore`
-- Remove `govuk_elements_jinja_macros` and `land_registry_elements` from the template `PrefixLoader` in `flask_skeleton_ui/app.py`
+- Remove references to GOV.UK from `search_index_map_ui/.gitignore`
+- Remove `govuk_elements_jinja_macros` and `land_registry_elements` from the template `PrefixLoader` in `search_index_map_ui/app.py`
 - Remove any references to GOV.UK from your app's SCSS and JS files
-- Change `flask_skeleton_ui/custom_extensions/jinja_markdown_filter/main.py` to use `misaka.HtmlRenderer` instead of the custom `GovRenderer` and update the unit tests to suit.
-- Remove the references to GOV.UK from `flask_skeleton_ui/templates/layout.html` and implement your own base layout template.
+- Change `search_index_map_ui/custom_extensions/jinja_markdown_filter/main.py` to use `misaka.HtmlRenderer` instead of the custom `GovRenderer` and update the unit tests to suit.
+- Remove the references to GOV.UK from `search_index_map_ui/templates/layout.html` and implement your own base layout template.
 - Remove `govuk-frontend` and `land-registry-elements` from `package.json` and regenerate your `package-lock.json`
 - Remove `govuk-elements-jinja-macros` and `land-registry-elements` dependencies from `pipcompilewrapper.sh`
 - Tweak the Content-Security-Policy to suit your new needs
@@ -211,7 +211,7 @@ In order to use the toolkit elsewhere you therefore need to stop using these. Th
   ```
 
 
-- Create a new favicon for your app in `flask_skeleton_ui/assets/src/images` and re-point the shortcut icon to point to it as follows:
+- Create a new favicon for your app in `search_index_map_ui/assets/src/images` and re-point the shortcut icon to point to it as follows:
 
   ```
   <link rel="shortcut icon" href="{{ url_for('static', filename='images/app/favicon.ico') }}" type="image/x-icon" />
@@ -262,7 +262,7 @@ There are important differences to bear in mind though, as follows:
 
 [Flask-WTForms](https://flask-wtf.readthedocs.io/en/stable/) is included and should be used for all forms.
 
-This has been extended by the use of custom widgets which make it extremely easy to generate GOV.UK style forms. See [flask_skeleton_ui/custom_extensions/wtforms_helpers](flask_skeleton_ui/custom_extensions/wtforms_helpers) for detailed usage instructions.
+This has been extended by the use of custom widgets which make it extremely easy to generate GOV.UK style forms. See [search_index_map_ui/custom_extensions/wtforms_helpers](search_index_map_ui/custom_extensions/wtforms_helpers) for detailed usage instructions.
 
 #### CSRF protection
 
@@ -271,7 +271,7 @@ Forms are protected with the CSRF protection built in to Flask-WTF. This is cust
 If you need to exempt a view from CSRF, you need to import the csrf instance from the csrf extension as follows:
 
 ```
-from flask_skeleton_ui.custom_extensions.csrf.main import csrf
+from search_index_map_ui.custom_extensions.csrf.main import csrf
 
 @csrf.exempt
 @my_blueprint.route("/")
@@ -284,7 +284,7 @@ def index_page():
 Basic Google Analytics support is included out the box. Simply set the `GOOGLE_ANALYTICS_KEY` environment variable and you will get the following for free:
 
 - Pageviews logged (The most basic, standard Google Analytics feature)
-- Form validation errors logged as events (A custom implementation built into flask-skeleton-ui)
+- Form validation errors logged as events (A custom implementation built into flask-search_index_map_ui-ui)
 
 If you don't want google analytics, simply remove the env var, and remove the entry in config.py. It will then default to False and be disabled.
 
@@ -305,7 +305,7 @@ Action:   FormClassName: field_name
 Label:    Please enter a valid email address
 ```
 
-Then you will need to go to `flask_skeleton_ui/assets/src/javascripts/modules/google-analytics/form-errors.js` and uncomment the line which says `'event_label': error`.
+Then you will need to go to `search_index_map_ui/assets/src/javascripts/modules/google-analytics/form-errors.js` and uncomment the line which says `'event_label': error`.
 
 🐉🐉 **HERE BE DRAGONS!** 🐉🐉
 
@@ -327,7 +327,7 @@ The ApplicationError class contains a code parameter when raising exceptions, su
 raise ApplicationError('Friendly message here', 'E102', 400)
 ```
 
-If this exception goes uncaught in your code, it will bubble up to the application  error handler. At this point, it will try to find a template named `E102.html` in the `flask-skeleton-ui/templates/errors/application` folder to allow you to write custom error pages on a per error code basis.
+If this exception goes uncaught in your code, it will bubble up to the application  error handler. At this point, it will try to find a template named `E102.html` in the `flask-search_index_map_ui-ui/templates/errors/application` folder to allow you to write custom error pages on a per error code basis.
 
 If it cannot find this template, it will fall back to `application.html` and show a generic message.
 
@@ -335,7 +335,7 @@ Do not feel you have to make custom templates for every error code. This is an _
 
 ### Markdown
 
-`flask_skeleton_ui/custom_extensions/jinja_markdown_filter` exposes a jinja template filter which can be used to render markdown to GOV.UK compatible html. It's well suited to things like Terms and conditions pages which could be written in markdown and rendered to HTML on the fly.
+`search_index_map_ui/custom_extensions/jinja_markdown_filter` exposes a jinja template filter which can be used to render markdown to GOV.UK compatible html. It's well suited to things like Terms and conditions pages which could be written in markdown and rendered to HTML on the fly.
 
 ```
   {{ my_variable_containing_some_markdown_content|markdown }}
@@ -427,7 +427,7 @@ var lng = document.getElementById('lng').value
 
 #### Gotcha #2: Referencing scripts via CDN
 
-Another feature of CSPs is that they block external JavaScript and CSS loading from domains that are not in the approved list. If you need to add a new external stylesheet, you will need to add the domain to the `script-src` or `style-src` declarations in the CSP in flask_skeleton_ui/custom_extensions/content_security_policy/main.py.
+Another feature of CSPs is that they block external JavaScript and CSS loading from domains that are not in the approved list. If you need to add a new external stylesheet, you will need to add the domain to the `script-src` or `style-src` declarations in the CSP in search_index_map_ui/custom_extensions/content_security_policy/main.py.
 
 When doing this however **it is vital that you include a Sub Resource Integrity (SRI) hash on the script tag**. See https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity for details on how to do this. This is essential in order to mitigate against the possibility of malicious code being injected if the CDN were compromised, or someone managed to achieve a man in the middle attack. When SRI is used, the browser will not run the script if the contents do not match the hash.
 

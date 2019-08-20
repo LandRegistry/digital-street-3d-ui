@@ -1,9 +1,9 @@
 import json
 import unittest
 from unittest import mock
-from flask_skeleton_ui.main import app
-from flask_skeleton_ui.custom_extensions.content_security_policy.main import ContentSecurityPolicy
-from flask_skeleton_ui.custom_extensions.content_security_policy.main import ResponseWithoutCSP
+from search_index_map_ui.main import app
+from search_index_map_ui.custom_extensions.content_security_policy.main import ContentSecurityPolicy
+from search_index_map_ui.custom_extensions.content_security_policy.main import ResponseWithoutCSP
 
 
 class TestContentSecurityPolicy(unittest.TestCase):
@@ -11,7 +11,7 @@ class TestContentSecurityPolicy(unittest.TestCase):
     def setup_method(self, method):
         self.app = app.test_client()
 
-    @mock.patch('flask_skeleton_ui.custom_extensions.content_security_policy.main.ContentSecurityPolicy.init_app')
+    @mock.patch('search_index_map_ui.custom_extensions.content_security_policy.main.ContentSecurityPolicy.init_app')
     def test_extension_alternative_init(self, mock_init_app):
         ContentSecurityPolicy('foo')
         mock_init_app.assert_called_once_with('foo')
@@ -28,7 +28,7 @@ class TestContentSecurityPolicy(unittest.TestCase):
         response = self.app.get('/')
         self.assertIn('script-src', response.headers['Content-Security-Policy'])
 
-    @mock.patch('flask_skeleton_ui.custom_extensions.content_security_policy.reporting.logger.error')
+    @mock.patch('search_index_map_ui.custom_extensions.content_security_policy.reporting.logger.error')
     def test_report_route(self, mock_logger):
         response = self.app.post('/content-security-policy-report/?trace_id=Hello',
                                  data=json.dumps({'csp-report': {'foo': 'bar'}}),

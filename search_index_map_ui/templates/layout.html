@@ -11,8 +11,19 @@
 {% block head %}
   <!--[if gt IE 8]><!--><link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/main.css') }}" /><!--<![endif]-->
   <!--[if IE 8]><link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/main-ie8.css') }}" /><![endif]-->
+  <style>
+    #floorButtons {
+      position: absolute;
+      z-index: 20;
+    }
+
+    #floorButtons button {
+      display: block;
+      width: 100%;
+    }
+  </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script> 
+  <script src="https://cdn-webgl.eegeo.com/eegeojs/api/v0.1.780/eegeo.js"></script>
 
   {% if google_analytics_key %}
     <!-- Global site tag (gtag.js) - Google Analytics -->

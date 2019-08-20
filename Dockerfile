@@ -56,7 +56,8 @@ ENV APP_NAME=search-index-map-ui \
   SECRET_KEY='ABC' \
   FLASK_DEBUG=1 \
   CONTENT_SECURITY_POLICY_MODE='report-only' \
-  STATIC_ASSETS_MODE='development'
+  STATIC_ASSETS_MODE='development' \
+  EEGEO_API_KEY="7bd03da4576d0bb5bedd239896276911"
 
 # When creating files inside the docker container, this prevents the files being created
 # as the root user on linux hosts

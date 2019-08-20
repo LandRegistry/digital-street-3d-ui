@@ -1,4 +1,4 @@
-from flask_skeleton_ui.custom_extensions.wtforms_helpers.wtforms_widgets import (GovCheckboxesInput,
+from search_index_map_ui.custom_extensions.wtforms_helpers.wtforms_widgets import (GovCheckboxesInput,
                                                                                  GovCheckboxInput,
                                                                                  GovFileInput,
                                                                                  GovPasswordInput,
