@@ -12,3 +12,11 @@ index = Blueprint('index', __name__)
 @index.route("/")
 def index_page():
     return render_template('app/index.html')
+
+@index.route("/leaflet")
+def leaflet_page():
+    return render_template('app/leaflet.html')
+
+@index.route("/mapbox")
+def mapbox_page():
+    return render_template('app/mapbox.html')

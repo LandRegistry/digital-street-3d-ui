@@ -2,6 +2,16 @@
 
 {% from 'app/vendor/govuk-frontend/components/footer/macro.html' import govukFooter %}
 
+{% block head %}
+    {{ super() }}
+
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.2.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.2.1/mapbox-gl.css' rel='stylesheet'/>
+    <!-- <style>
+    body { margin:0; padding:0; }
+    #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style> -->
+{% endblock %}
 
 {% block title %}Index{% endblock %}
 
@@ -10,17 +20,61 @@
 # Search the Index Map
   {% endfilter %}
 
-  <ul class="govuk-list">
-    <li>
-      <a href="/leaflet" class="govuk-link">Leaflet/eeGeo</a>
-    </li>
-    <li>
-      <a href="/mapbox" class="govuk-link">Mapbox GL</a>
-    </li>
-  </ul>
-   
+  <div id="map" style="width: 900px; height: 600px;"></div>
 
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoibWF0dGdpcmRsZXIiLCJhIjoiY2lteW85cm5lMDBmcnY5bTFxY2Zsc3c2OCJ9.VvO2DhAhOVrcjJ0Usw8JIA';
+        var map = new mapboxgl.Map({
+        style: 'mapbox://styles/mattgirdler/cjznu3ztu06m31clp2j37yybz',
+        center: [-3.52841649197765, 50.7242226667005],
+        zoom: 15.5,
+        pitch: 45,
+        bearing: -17.6,
+        container: 'map',
+        antialias: true
+    });
 
+    // The 'building' layer in the mapbox-streets vector source contains building-height
+    // data from OpenStreetMap.
+    map.on('load', function() {
+        // Insert the layer beneath any symbol layer.
+        var layers = map.getStyle().layers;
+        
+        var labelLayerId;
+        for (var i = 0; i < layers.length; i++) {
+            if (layers[i].type === 'symbol' && layers[i].layout['text-field']) {
+                labelLayerId = layers[i].id;
+                break;
+            }
+        }
+        
+        map.addLayer({
+        'id': '3d-buildings',
+        'source': 'composite',
+        'source-layer': 'building',
+        'filter': ['==', 'extrude', 'true'],
+        'type': 'fill-extrusion',
+        'minzoom': 15,
+        'paint': {
+        'fill-extrusion-color': '#aaa',
+        
+        // use an 'interpolate' expression to add a smooth transition effect to the
+        // buildings as the user zooms in
+        'fill-extrusion-height': [
+        "interpolate", ["linear"], ["zoom"],
+        15, 0,
+        15.05, ["get", "height"]
+        ],
+        'fill-extrusion-base': [
+        "interpolate", ["linear"], ["zoom"],
+        15, 0,
+        15.05, ["get", "min_height"]
+        ],
+        'fill-extrusion-opacity': .6
+        }
+        }, labelLayerId);
+    });
+  </script>
 {% endblock %}
 
 {% block footer %}

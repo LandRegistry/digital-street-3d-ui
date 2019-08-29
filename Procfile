@@ -1,1 +1,1 @@
-web: gunicorn search_index_map_ui:app --log-file -
+web: gunicorn manage:manager --log-file -
