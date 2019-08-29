@@ -54,3 +54,6 @@ STATIC_ASSETS_MODE = os.environ['STATIC_ASSETS_MODE']
 # GOOGLE_ANALYTICS_KEY = os.environ['GOOGLE_ANALYTICS_KEY']
 
 # EEGEO_API_KEY = os.environ['EEGEO_API_KEY']
+USE_AUTH = os.environ.get('USE_AUTH')
+USERNAME = os.environ.get('USERNAME')
+PASSWORD = os.environ.get('PASSWORD')
