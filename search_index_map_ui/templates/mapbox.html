@@ -7,10 +7,20 @@
 
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.2.1/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.2.1/mapbox-gl.css' rel='stylesheet'/>
-    <!-- <style>
-    body { margin:0; padding:0; }
-    #map { position:absolute; top:0; bottom:0; width:100%; }
-    </style> -->
+    <style>
+    .map-overlay {
+        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        background-color: #fff;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+        border-radius: 3px;
+        position: absolute;
+        width: 25%;
+        top: 10px;
+        left: 10px;
+        padding: 10px;
+        display: none;
+    }
+    </style>
 {% endblock %}
 
 {% block title %}Index{% endblock %}
@@ -20,11 +30,12 @@
 # Search the Index Map
   {% endfilter %}
 
-  <div id="map" style="width: 900px; height: 600px;"></div>
+    <div id="map" style="width: 900px; height: 600px;"></div>
+    <div id="map-overlay" class="map-overlay"></div>
 
   <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoibWF0dGdpcmRsZXIiLCJhIjoiY2lteW85cm5lMDBmcnY5bTFxY2Zsc3c2OCJ9.VvO2DhAhOVrcjJ0Usw8JIA';
-        var map = new mapboxgl.Map({
+        let map = new mapboxgl.Map({
         style: 'mapbox://styles/mattgirdler/cjznu3ztu06m31clp2j37yybz',
         center: [-3.52841649197765, 50.7242226667005],
         zoom: 15.5,
@@ -34,46 +45,54 @@
         antialias: true
     });
 
-    // The 'building' layer in the mapbox-streets vector source contains building-height
-    // data from OpenStreetMap.
+    
     map.on('load', function() {
-        // Insert the layer beneath any symbol layer.
-        var layers = map.getStyle().layers;
         
-        var labelLayerId;
-        for (var i = 0; i < layers.length; i++) {
-            if (layers[i].type === 'symbol' && layers[i].layout['text-field']) {
-                labelLayerId = layers[i].id;
-                break;
-            }
+        const layers = [
+            {layer: 'princesshay-level-gf-leasehold', sourceLayer: 'princesshay_level_gf-7sbp65'}, 
+            {layer: 'princesshay-level-1-leasehold', sourceLayer: 'princesshay_level_1-9ntddt'}
+        ]
+
+        for (let i = 0; i < layers.length; i++) {
+            const features = map.querySourceFeatures('composite', {sourceLayer: layers[i].sourceLayer});
+            const buildingId = features[0].properties.fid;
+            const buildingFeature = map.querySourceFeatures('composite', {
+                sourceLayer: 'exeter_buildings_with_height-0ygi87',
+                filter: ["==", 'fid', buildingId]
+            })[0]
+            const buildingHeight = buildingFeature.properties.RelHmax;
+            const floorHeight = buildingHeight / features[0].properties.num_floors;
+            const extrusionHeight = floorHeight * (features[0].properties.floor + 1);
+            const baseHeight = floorHeight*features[0].properties.floor;
+
+            map.setPaintProperty(layers[i].layer, 'fill-extrusion-base', baseHeight, {validate: true})
+            map.setPaintProperty(layers[i].layer, 'fill-extrusion-height', extrusionHeight, {validate: true})
         }
-        
-        map.addLayer({
-        'id': '3d-buildings',
-        'source': 'composite',
-        'source-layer': 'building',
-        'filter': ['==', 'extrude', 'true'],
-        'type': 'fill-extrusion',
-        'minzoom': 15,
-        'paint': {
-        'fill-extrusion-color': '#aaa',
-        
-        // use an 'interpolate' expression to add a smooth transition effect to the
-        // buildings as the user zooms in
-        'fill-extrusion-height': [
-        "interpolate", ["linear"], ["zoom"],
-        15, 0,
-        15.05, ["get", "height"]
-        ],
-        'fill-extrusion-base': [
-        "interpolate", ["linear"], ["zoom"],
-        15, 0,
-        15.05, ["get", "min_height"]
-        ],
-        'fill-extrusion-opacity': .6
+
+        // map.setPaintProperty('princesshay-level-gf-leasehold', 'fill-extrusion-height', floor_height, {validate: true})
+        // map.setPaintProperty('princesshay-level-gf-leasehold', 'fill-extrusion-base', floor_height*ground_floor_features[0].properties.floor, {validate: true})
+        // map.setPaintProperty('princesshay-level-1-leasehold', 'fill-extrusion-height', floor_height*(first_floor_features[0].properties.floor+1), {validate: true})
+        // map.setPaintProperty('princesshay-level-1-leasehold', 'fill-extrusion-base', floor_height*first_floor_features[0].properties.floor, {validate: true})
+    
+        let overlay = document.getElementById('map-overlay');
+    
+        // Create a popup, but don't add it to the map yet.
+        let popup = new mapboxgl.Popup({
+            closeButton: false
+        });
+    })
+
+    map.on('click', 'exeter-buildings-with-height', function (e) {
+        const features = map.queryRenderedFeatures(e.point);
+        const feature = features[0];
+        if (map.getFeatureState({id: feature.id, source: 'composite', sourceLayer: 'exeter_buildings_with_height-0ygi87'}).hide) {
+            map.removeFeatureState({id: feature.id, source: 'composite', sourceLayer: 'exeter_buildings_with_height-0ygi87'}, 'hide')
+        } else {
+            map.setFeatureState({id: feature.id, source: 'composite', sourceLayer: 'exeter_buildings_with_height-0ygi87'}, {'hide': true})
         }
-        }, labelLayerId);
     });
+
+
   </script>
 {% endblock %}
 
