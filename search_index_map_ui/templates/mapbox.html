@@ -17,8 +17,10 @@
         width: 25%;
         top: 10px;
         left: 10px;
+        opacity: 0.8;
         padding: 10px;
         display: none;
+        z-index: 2;
     }
     </style>
 {% endblock %}
@@ -26,13 +28,16 @@
 {% block title %}Index{% endblock %}
 
 {% block inner_content %}
-  {% filter markdown %}
-# Search the Index Map
-  {% endfilter %}
 
-    <div id="map" style="width: 900px; height: 600px;"></div>
-    <div id="map-overlay" class="map-overlay"></div>
+  <div class="govuk-grid-row">
 
+    <div class="govuk-grid-column">
+        <h1 class="govuk-heading-xl">Search the Index Map</h1>
+        <div id="map" style="width: 100%; height: 600px;">
+            <div id="map-overlay" class="map-overlay"></div>
+        </div>
+    </div>
+</div>
   <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoibWF0dGdpcmRsZXIiLCJhIjoiY2lteW85cm5lMDBmcnY5bTFxY2Zsc3c2OCJ9.VvO2DhAhOVrcjJ0Usw8JIA';
         let map = new mapboxgl.Map({
@@ -44,53 +49,186 @@
         container: 'map',
         antialias: true
     });
-
     
     map.on('load', function() {
-        
-        const layers = [
+
+        const buildingHeightSourceLayer = "exeter_buildings_with_height-0ygi87";
+        const floorplanLayers = [
             {layer: 'princesshay-level-gf-leasehold', sourceLayer: 'princesshay_level_gf-7sbp65'}, 
-            {layer: 'princesshay-level-1-leasehold', sourceLayer: 'princesshay_level_1-9ntddt'}
-        ]
+            {layer: 'princesshay-level-gf-freehold', sourceLayer: 'princesshay_level_gf-7sbp65'},
+            {layer: 'princesshay-level-1-leasehold', sourceLayer: 'princesshay_level_1-9ntddt'},
+            {layer: 'princesshay-level-1-freehold', sourceLayer: 'princesshay_level_1-9ntddt'}
+        ];
 
-        for (let i = 0; i < layers.length; i++) {
-            const features = map.querySourceFeatures('composite', {sourceLayer: layers[i].sourceLayer});
-            const buildingId = features[0].properties.fid;
-            const buildingFeature = map.querySourceFeatures('composite', {
-                sourceLayer: 'exeter_buildings_with_height-0ygi87',
-                filter: ["==", 'fid', buildingId]
-            })[0]
-            const buildingHeight = buildingFeature.properties.RelHmax;
-            const floorHeight = buildingHeight / features[0].properties.num_floors;
-            const extrusionHeight = floorHeight * (features[0].properties.floor + 1);
-            const baseHeight = floorHeight*features[0].properties.floor;
-
-            map.setPaintProperty(layers[i].layer, 'fill-extrusion-base', baseHeight, {validate: true})
-            map.setPaintProperty(layers[i].layer, 'fill-extrusion-height', extrusionHeight, {validate: true})
+        // Create array of building IDs with boundary/floorplan data
+        const buildingIdsWithFloorplans = [];
+        for (let i in floorplanLayers) {
+            const features = map.querySourceFeatures('composite', {
+                sourceLayer: floorplanLayers[i].sourceLayer,
+            });
+            for (let j in features) {
+                if (!buildingIdsWithFloorplans.includes(features[j].properties.fid)) {
+                    buildingIdsWithFloorplans.push(features[j].properties.fid);
+                }
+            }
         }
 
-        // map.setPaintProperty('princesshay-level-gf-leasehold', 'fill-extrusion-height', floor_height, {validate: true})
-        // map.setPaintProperty('princesshay-level-gf-leasehold', 'fill-extrusion-base', floor_height*ground_floor_features[0].properties.floor, {validate: true})
-        // map.setPaintProperty('princesshay-level-1-leasehold', 'fill-extrusion-height', floor_height*(first_floor_features[0].properties.floor+1), {validate: true})
-        // map.setPaintProperty('princesshay-level-1-leasehold', 'fill-extrusion-base', floor_height*first_floor_features[0].properties.floor, {validate: true})
-    
+        // Hide any buildings that have boundary/floorplan data 
+        let buildingFilter = ["in", "fid"].concat(buildingIdsWithFloorplans)
+        console.log("Building filter: ")
+        console.log(buildingFilter);
+        const buildingFeatures = map.querySourceFeatures('composite', {
+            sourceLayer: buildingHeightSourceLayer,
+            filter: buildingFilter
+        });
+
+        for (let i in buildingFeatures) {
+            map.setFeatureState({id: buildingFeatures[i].id, source: 'composite', sourceLayer: buildingHeightSourceLayer}, {'hide': true})
+            displayFloorplan(buildingFeatures[i].properties.fid);
+        }
+
+        // Create an overlay
         let overlay = document.getElementById('map-overlay');
-    
         // Create a popup, but don't add it to the map yet.
         let popup = new mapboxgl.Popup({
             closeButton: false
         });
+
+        // Display interior floorplans after hiding external geometry
+        function displayFloorplan(buildingId) {
+            for (let i in floorplanLayers) {
+                const features = map.querySourceFeatures('composite', {
+                    sourceLayer: floorplanLayers[i].sourceLayer, 
+                    filter: ["==", 'fid', buildingId]
+                });
+                if (features.length > 0) {
+                    const buildingId = features[0].properties.fid;
+                    const buildingFeature = map.querySourceFeatures('composite', {
+                        sourceLayer: buildingHeightSourceLayer,
+                        filter: ["==", 'fid', buildingId]
+                    })[0]
+                    const buildingHeight = buildingFeature.properties.RelHmax;
+                    const floorHeight = buildingHeight / features[0].properties.num_floors;
+                    const extrusionHeight = floorHeight * (features[0].properties.floor + 1);
+                    const baseHeight = floorHeight*features[0].properties.floor;
+    
+                    map.setPaintProperty(floorplanLayers[i].layer, 'fill-extrusion-base', baseHeight, {validate: true})
+                    map.setPaintProperty(floorplanLayers[i].layer, 'fill-extrusion-height', extrusionHeight, {validate: true})
+                }
+            }
+        }
+
+        function hideFloorplan(buildingId) {
+            for (let i in floorplanLayers) {
+                const features = map.querySourceFeatures('composite', {
+                    sourceLayer: floorplanLayers[i].sourceLayer, 
+                    filter: ["==", 'fid', buildingId]
+                });
+                if (features.length > 0) {
+                    console.log(features);
+                    map.setPaintProperty(floorplanLayers[i].layer, 'fill-extrusion-base', 0, {validate: true});
+                    map.setPaintProperty(floorplanLayers[i].layer, 'fill-extrusion-height', 0, {validate: true});
+                }
+            }
+        }
+
+        function highlightTitle(titleNo) {
+            for (let i in floorplanLayers) {
+                const features = map.querySourceFeatures('composite', { 
+                    sourceLayer: floorplanLayers[i].sourceLayer,
+                    filter: ['==', 'title_no', titleNo ] 
+                });
+                for (let j in features) {
+                    map.setFeatureState({id: features[j].id, source: 'composite', sourceLayer: floorplanLayers[i].sourceLayer}, {'highlight': true})
+                }
+            }
+        }
+
+        function disableHighlightTitle() {
+            for (let i in floorplanLayers) {
+                map.removeFeatureState({source: 'composite', sourceLayer: floorplanLayers[i].sourceLayer})
+            }
+        }
+
+        // Toggle building polygons on/off
+        map.on('click', 'exeter-buildings-with-height', function (e) {
+            const features = map.queryRenderedFeatures(e.point);
+            const feature = features[0];
+            if (map.getFeatureState({id: feature.id, source: 'composite', sourceLayer: buildingHeightSourceLayer}).hide) {
+                hideFloorplan(feature.properties.fid);
+                map.removeFeatureState({id: feature.id, source: 'composite', sourceLayer: buildingHeightSourceLayer}, 'hide')
+            } else {
+                map.setFeatureState({id: feature.id, source: 'composite', sourceLayer: buildingHeightSourceLayer}, {'hide': true})
+                displayFloorplan(feature.properties.fid);
+            }
+        });
+        
+    
+        // for (let i in floorplanLayers) {
+        //     map.on('click', floorplanLayers[i].layer, function(e) {
+                // console.log(e)
+            // });
+            // map.on('mouseleave', floorplanLayers[i].layer, function(e) {
+            //     disableHighlightTitle();
+            // });
+        // }
+
+        // Display title information from floorplans
+        map.on('mousemove', function(e) {
+            // Create array of floorplan style layers for filtering
+            const layers = []
+            for (let i in floorplanLayers) {
+                layers.push(floorplanLayers[i].layer)
+            }
+
+            // Check if mouseover is on a floorplan layer
+            const features = map.queryRenderedFeatures(e.point, { layers: layers });
+            if (features.length > 0) {
+                const currentFeature = features[0];
+
+                disableHighlightTitle();
+                highlightTitle(currentFeature.properties.title_no);
+    
+                // Create HTML for title details 
+                overlay.innerHTML = '';
+
+                // Title number
+                let titleNumber = document.createElement('strong');
+                titleNumber.textContent = currentFeature.properties.title_no;
+
+                // Tenure
+                let tenureDiv = document.createElement('div');
+                let tenure = document.createElement('strong');
+                tenure.textContent = currentFeature.properties.tenure;
+                tenureDiv.appendChild(tenure);
+
+                // Price paid
+                let pricePaidDiv = document.createElement('div');
+                let pricePaidLabel = document.createElement('strong');
+                pricePaidLabel.textContent = "Price paid: ";
+                let pricePaidText = document.createElement('span');
+                pricePaidText.textContent = currentFeature.properties.price_paid;
+                pricePaidDiv.appendChild(pricePaidLabel);
+                pricePaidDiv.appendChild(pricePaidText);
+
+                // Proprietor
+                let proprietorDiv = document.createElement('div');
+                let proprietorLabel = document.createElement('strong');
+                proprietorLabel.textContent = "Proprietor: ";
+                let proprietorText = document.createElement('span');
+                proprietorText.textContent = currentFeature.properties.proprietor;
+                proprietorDiv.appendChild(proprietorLabel);
+                proprietorDiv.appendChild(proprietorText);
+
+                overlay.appendChild(titleNumber);
+                overlay.appendChild(tenureDiv);
+                overlay.appendChild(pricePaidDiv);
+                overlay.appendChild(proprietorDiv);
+                overlay.style.display = 'block';
+            }
+        })
     })
 
-    map.on('click', 'exeter-buildings-with-height', function (e) {
-        const features = map.queryRenderedFeatures(e.point);
-        const feature = features[0];
-        if (map.getFeatureState({id: feature.id, source: 'composite', sourceLayer: 'exeter_buildings_with_height-0ygi87'}).hide) {
-            map.removeFeatureState({id: feature.id, source: 'composite', sourceLayer: 'exeter_buildings_with_height-0ygi87'}, 'hide')
-        } else {
-            map.setFeatureState({id: feature.id, source: 'composite', sourceLayer: 'exeter_buildings_with_height-0ygi87'}, {'hide': true})
-        }
-    });
 
 
   </script>
