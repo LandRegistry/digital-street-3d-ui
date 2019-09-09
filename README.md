@@ -1,11 +1,11 @@
-# flask-search_index_map_ui-ui
+# search_index_map_ui
 
 This repository contains a flask application structured in the way that all Land Registry flask user interfaces should be structured going forwards.
 
 ## Usage
 
 You can use this to create your own app.
-Take a copy of all the files, and change all occurences of `flask-search_index_map_ui-ui` and `search_index_map_ui` to your app name - including folders! There will be other places to tweak too such as the exposed port in docker-compose-fragment, so please look through every file before starting to extend it for your own use. There is a [more comprehensive guide](http://192.168.250.79/index.php/Diary_-_Creating_a_New_Application) available on TechDocs.
+Take a copy of all the files, and change all occurences of `flask-skeleton-ui` and `flask_skeleton_ui` to your app name - including folders! There will be other places to tweak too such as the exposed port in docker-compose-fragment, so please look through every file before starting to extend it for your own use. There is a [more comprehensive guide](http://192.168.250.79/index.php/Diary_-_Creating_a_New_Application) available on TechDocs.
 
 ## Quick start
 
@@ -14,8 +14,8 @@ Take a copy of all the files, and change all occurences of `flask-search_index_m
 This app supports the [universal dev-env](http://gitlab.service.dev.ctp.local/common/dev-env) so adding the following to your dev-env config file is enough:
 
 ```YAML
-  flask-search_index_map_ui-ui:
-    repo: git@gitlab.service.dev.ctp.local:search_index_map_uis/flask-search_index_map_ui-ui.git
+  search-index-map-ui:
+    repo: git@gitlab.service.dev.ctp.local:search_index_map_uis/search-index-map-ui.git
     branch: master
 ```
 
@@ -67,7 +67,7 @@ make report="true" unittest
 
 These files get added to a test-output folder. The test-output folder is created if doesn't exist.
 
-You can run these commands in the app's running container via `docker-compose exec flask-search_index_map_ui-ui <command>` or `exec flask-search_index_map_ui-ui <command>`. There is also an alias: `unit-test flask-search_index_map_ui-ui` and `unit-test flask-search_index_map_ui-ui -r` will run tests and generate reports respectively.
+You can run these commands in the app's running container via `docker-compose exec search_index_map_ui <command>` or `exec flask-search_index_map_ui-ui <command>`. There is also an alias: `unit-test flask-search_index_map_ui-ui` and `unit-test flask-search_index_map_ui-ui -r` will run tests and generate reports respectively.
 
 ### Integration tests
 
