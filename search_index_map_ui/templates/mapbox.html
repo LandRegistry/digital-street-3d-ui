@@ -8,7 +8,7 @@
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.2.1/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.2.1/mapbox-gl.css' rel='stylesheet'/>
     <style>
-    .map-overlay {
+    .title-information-overlay {
         font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
         background-color: #fff;
         box-shadow: 0 1px 2px rgba(0,0,0,0.10);
@@ -22,6 +22,22 @@
         display: none;
         z-index: 2;
     }
+
+    .toggle-layers-overlay {
+      font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+      background-color: #fff;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+      border-radius: 3px;
+      position: absolute;
+      width: 20%;
+      top: 10px;
+      right: 10px;
+      opacity: 0.8;
+      padding: 10px;
+      display: none;
+      z-index: 2;
+    }
+    
     </style>
 {% endblock %}
 
@@ -34,7 +50,18 @@
     <div class="govuk-grid-column">
         <h1 class="govuk-heading-xl">Search the Index Map</h1>
         <div id="map" style="width: 100%; height: 600px;">
-            <div id="map-overlay" class="map-overlay"></div>
+            <div id="title-information-overlay" class="title-information-overlay"></div>
+            <div id="toggle-layers-overlay" class="toggle-layers-overlay">
+              <strong>Filter</strong>
+              <div>
+                <input type="checkbox" name="filter" id="leasehold-filter" value="leasehold" checked>
+                <label for="leasehold-filter">Leasehold</label>
+              </div>
+              <div>
+                <input type="checkbox" name="filter" id="freehold-filter" value="freehold" checked>
+                <label for="freehold-filter">Freehold</label>
+              </div>
+            </div>  
         </div>
     </div>
 </div>
@@ -49,16 +76,16 @@
         container: 'map',
         antialias: true
     });
-    
-    map.on('load', function() {
 
-        const buildingHeightSourceLayer = "exeter_buildings_with_height-0ygi87";
-        const floorplanLayers = [
-            {layer: 'princesshay-level-gf-leasehold', sourceLayer: 'princesshay_level_gf-7sbp65'}, 
-            {layer: 'princesshay-level-gf-freehold', sourceLayer: 'princesshay_level_gf-7sbp65'},
-            {layer: 'princesshay-level-1-leasehold', sourceLayer: 'princesshay_level_1-9ntddt'},
-            {layer: 'princesshay-level-1-freehold', sourceLayer: 'princesshay_level_1-9ntddt'}
-        ];
+    const buildingHeightSourceLayer = "exeter_buildings_with_height-0ygi87";
+    const floorplanLayers = [
+        {layer: 'princesshay-level-gf-leasehold', sourceLayer: 'princesshay-level-gf-8yagcd'},
+        {layer: 'princesshay-level-gf-freehold', sourceLayer: 'princesshay-level-gf-8yagcd'},
+        {layer: 'princesshay-level-1-leasehold', sourceLayer: 'princesshay-level-1-90cnib'},
+        {layer: 'princesshay-level-1-freehold', sourceLayer: 'princesshay-level-1-90cnib'}
+    ];
+
+    map.on('load', function() {
 
         // Create array of building IDs with boundary/floorplan data
         const buildingIdsWithFloorplans = [];
@@ -75,8 +102,6 @@
 
         // Hide any buildings that have boundary/floorplan data 
         let buildingFilter = ["in", "fid"].concat(buildingIdsWithFloorplans)
-        console.log("Building filter: ")
-        console.log(buildingFilter);
         const buildingFeatures = map.querySourceFeatures('composite', {
             sourceLayer: buildingHeightSourceLayer,
             filter: buildingFilter
@@ -88,7 +113,9 @@
         }
 
         // Create an overlay
-        let overlay = document.getElementById('map-overlay');
+        let titleInformationOverlay = document.getElementById('title-information-overlay');
+        let toggleLayersOverlay = document.getElementById('toggle-layers-overlay');
+        toggleLayersOverlay.style.display = 'block';
         // Create a popup, but don't add it to the map yet.
         let popup = new mapboxgl.Popup({
             closeButton: false
@@ -97,6 +124,7 @@
         // Display interior floorplans after hiding external geometry
         function displayFloorplan(buildingId) {
             for (let i in floorplanLayers) {
+                map.setLayoutProperty(floorplanLayers[i].layer, 'visibility', 'visible');
                 const features = map.querySourceFeatures('composite', {
                     sourceLayer: floorplanLayers[i].sourceLayer, 
                     filter: ["==", 'fid', buildingId]
@@ -111,9 +139,10 @@
                     const floorHeight = buildingHeight / features[0].properties.num_floors;
                     const extrusionHeight = floorHeight * (features[0].properties.floor + 1);
                     const baseHeight = floorHeight*features[0].properties.floor;
-    
+
+                    // Add +1 to freehold heights to avoid clipping effect with containing leaseholds 
+                    map.setPaintProperty(floorplanLayers[i].layer, 'fill-extrusion-height', (floorplanLayers[i].layer.includes('freehold') ? extrusionHeight+1 : extrusionHeight), {validate: true})
                     map.setPaintProperty(floorplanLayers[i].layer, 'fill-extrusion-base', baseHeight, {validate: true})
-                    map.setPaintProperty(floorplanLayers[i].layer, 'fill-extrusion-height', extrusionHeight, {validate: true})
                 }
             }
         }
@@ -125,7 +154,6 @@
                     filter: ["==", 'fid', buildingId]
                 });
                 if (features.length > 0) {
-                    console.log(features);
                     map.setPaintProperty(floorplanLayers[i].layer, 'fill-extrusion-base', 0, {validate: true});
                     map.setPaintProperty(floorplanLayers[i].layer, 'fill-extrusion-height', 0, {validate: true});
                 }
@@ -162,19 +190,12 @@
                 displayFloorplan(feature.properties.fid);
             }
         });
-        
-    
-        // for (let i in floorplanLayers) {
-        //     map.on('click', floorplanLayers[i].layer, function(e) {
-                // console.log(e)
-            // });
-            // map.on('mouseleave', floorplanLayers[i].layer, function(e) {
-            //     disableHighlightTitle();
-            // });
-        // }
 
         // Display title information from floorplans
         map.on('mousemove', function(e) {
+
+            disableHighlightTitle();
+
             // Create array of floorplan style layers for filtering
             const layers = []
             for (let i in floorplanLayers) {
@@ -186,11 +207,10 @@
             if (features.length > 0) {
                 const currentFeature = features[0];
 
-                disableHighlightTitle();
                 highlightTitle(currentFeature.properties.title_no);
     
                 // Create HTML for title details 
-                overlay.innerHTML = '';
+                titleInformationOverlay.innerHTML = '';
 
                 // Title number
                 let titleNumber = document.createElement('strong');
@@ -198,14 +218,23 @@
 
                 // Tenure
                 let tenureDiv = document.createElement('div');
-                let tenure = document.createElement('strong');
-                tenure.textContent = currentFeature.properties.tenure;
-                tenureDiv.appendChild(tenure);
+                let tenureLabel = document.createElement('strong');
+                tenureLabel.textContent = 'Tenure: '
+                let tenureText = document.createElement('span');
+                tenureText.textContent = currentFeature.properties.tenure;
+                tenureDiv.appendChild(tenureLabel);
+                tenureDiv.appendChild(tenureText);
+
+                // Address
+                let addressDiv = document.createElement('div');
+                let address = document.createElement('strong');
+                address.textContent = currentFeature.properties.address;
+
 
                 // Price paid
                 let pricePaidDiv = document.createElement('div');
                 let pricePaidLabel = document.createElement('strong');
-                pricePaidLabel.textContent = "Price paid: ";
+                pricePaidLabel.textContent = 'Price paid: ';
                 let pricePaidText = document.createElement('span');
                 pricePaidText.textContent = currentFeature.properties.price_paid;
                 pricePaidDiv.appendChild(pricePaidLabel);
@@ -214,22 +243,47 @@
                 // Proprietor
                 let proprietorDiv = document.createElement('div');
                 let proprietorLabel = document.createElement('strong');
-                proprietorLabel.textContent = "Proprietor: ";
+                proprietorLabel.textContent = 'Proprietor: ';
                 let proprietorText = document.createElement('span');
                 proprietorText.textContent = currentFeature.properties.proprietor;
                 proprietorDiv.appendChild(proprietorLabel);
                 proprietorDiv.appendChild(proprietorText);
 
-                overlay.appendChild(titleNumber);
-                overlay.appendChild(tenureDiv);
-                overlay.appendChild(pricePaidDiv);
-                overlay.appendChild(proprietorDiv);
-                overlay.style.display = 'block';
+                titleInformationOverlay.appendChild(titleNumber);
+                titleInformationOverlay.appendChild(tenureDiv);
+                titleInformationOverlay.appendChild(pricePaidDiv);
+                titleInformationOverlay.appendChild(proprietorDiv);
+                titleInformationOverlay.style.display = 'block';
             }
         })
     })
 
+    function toggleLayers(filter) {
+      for (let i in floorplanLayers) {
+        if (floorplanLayers[i].layer.includes(filter)) {
+          let visibility = map.getLayoutProperty(floorplanLayers[i].layer, 'visibility');
 
+          if (visibility === 'visible') {
+            map.setLayoutProperty(floorplanLayers[i].layer, 'visibility', 'none');
+            this.className = '';
+          } else {  
+            this.className = 'active';
+            map.setLayoutProperty(floorplanLayers[i].layer, 'visibility', 'visible');
+          }
+        }
+      }
+    }
+
+    let filterCheckboxes = document.getElementsByName('filter');
+    for (let i = 0; i<filterCheckboxes.length; i++) {
+      filterCheckboxes[i].addEventListener('change', function(e) {
+        let filter = e.target.value;
+        e.preventDefault();
+        e.stopPropagation();
+        
+        toggleLayers(filter);  
+      });
+    }
 
   </script>
 {% endblock %}
