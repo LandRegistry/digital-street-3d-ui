@@ -57,3 +57,5 @@ STATIC_ASSETS_MODE = os.environ['STATIC_ASSETS_MODE']
 USE_AUTH = os.environ.get('USE_AUTH')
 USERNAME = os.environ.get('USERNAME')
 PASSWORD = os.environ.get('PASSWORD')
+
+INDEX_MAP_API_URL = os.environ.get('3D_API_URL')
