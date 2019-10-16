@@ -8,39 +8,6 @@
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.2.1/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.2.1/mapbox-gl.css' rel='stylesheet'/>
     <link rel='stylesheet' href="{{ url_for('static', filename='stylesheets/mapbox.css') }}" />
-  
-    <style>
-    .title-information-overlay {
-        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-        background-color: #fff;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.10);
-        border-radius: 3px;
-        position: absolute;
-        width: 25%;
-        top: 10px;
-        left: 10px;
-        opacity: 0.8;
-        padding: 10px;
-        display: none;
-        z-index: 2;
-    }
-
-    .toggle-layers-overlay {
-      font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-      background-color: #fff;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.10);
-      border-radius: 3px;
-      position: absolute;
-      width: 20%;
-      top: 10px;
-      right: 10px;
-      opacity: 0.8;
-      padding: 10px;
-      display: none;
-      z-index: 2;
-    }
-    
-    </style>
 {% endblock %}
 
 {% block title %}Index{% endblock %}
@@ -57,19 +24,21 @@
       <p class="govuk-body">Click on a feature to see its properties</p> -->
       <!-- </div> -->
       <!-- <div class="govuk-grid-column-two-thirds"> -->
-        <div id="map" style="width: 100%; height: 750px;">
-          <div id="title-information-overlay" class="title-information-overlay"></div>
-          <div id="toggle-layers-overlay" class="toggle-layers-overlay">
-            <strong>Filter</strong>
-            <div>
-              <input type="checkbox" name="filter" id="leasehold-filter" value="leasehold" checked>
-              <label for="leasehold-filter">Leasehold</label>
-            </div>
-            <div>
-              <input type="checkbox" name="filter" id="freehold-filter" value="freehold" checked>
-              <label for="freehold-filter">Freehold</label>
-            </div>
-          </div>  
+        <div class="full-screen-map-container">
+          <div id="map" style="width: 100%; height: 100%;">
+            <div id="title-information-overlay" class="title-information-overlay"></div>
+            <div id="toggle-layers-overlay" class="toggle-layers-overlay">
+              <strong>Filter</strong>
+              <div>
+                <input type="checkbox" name="filter" id="leasehold-filter" value="leasehold" checked>
+                <label for="leasehold-filter">Leasehold</label>
+              </div>
+              <div>
+                <input type="checkbox" name="filter" id="freehold-filter" value="freehold" checked>
+                <label for="freehold-filter">Freehold</label>
+              </div>
+            </div>  
+          </div>
         </div>
       </div>
     </div>

@@ -110,6 +110,7 @@
 
         function disableHighlightTitle() {
             for (let i in floorplanLayers) {
+                titleInformationOverlay.style.display = 'none'
                 map.removeFeatureState({source: 'composite', sourceLayer: floorplanLayers[i].sourceLayer})
             }
         }
@@ -158,7 +159,9 @@
                     
                     for (let BAUnit in spatialUnit['ba_units']) {
                         let currentBAUnit = spatialUnit['ba_units'][BAUnit]
+
                         console.log(currentBAUnit)
+
                         let title = { 
                             address: spatialUnit.address,
                             titleNumber: currentBAUnit['name'],
@@ -235,83 +238,223 @@
                         BAUnits.push(title)
                     }
                 } 
-                // else {
-                    
-                // }
+
     
                 // Create HTML for title details 
                 titleInformationOverlay.innerHTML = ''
 
-                // Title number
-                // let titleNumber = document.createElement('strong')
-                // titleNumber.textContent = currentFeature.properties.title_no
-
-                // // Tenure
-                // let tenureDiv = document.createElement('div')
-                // let tenureLabel = document.createElement('strong')
-                // tenureLabel.textContent = 'Tenure: '
-                // let tenureText = document.createElement('span')
-                // tenureText.textContent = currentFeature.properties.tenure
-                // tenureDiv.appendChild(tenureLabel)
-                // tenureDiv.appendChild(tenureText)
-
-                // // Address
-                // let addressDiv = document.createElement('div')
-                // let address = document.createElement('strong')
-                // address.textContent = currentFeature.properties.address
-
-
-                // // Price paid
-                // let pricePaidDiv = document.createElement('div')
-                // let pricePaidLabel = document.createElement('strong')
-                // pricePaidLabel.textContent = 'Price paid: '
-                // let pricePaidText = document.createElement('span')
-                // pricePaidText.textContent = currentFeature.properties.price_paid
-                // pricePaidDiv.appendChild(pricePaidLabel)
-                // pricePaidDiv.appendChild(pricePaidText)
-
-                // // Proprietor
-                // let proprietorDiv = document.createElement('div')
-                // let proprietorLabel = document.createElement('strong')
-                // proprietorLabel.textContent = 'Proprietor: '
-                // let proprietorText = document.createElement('span')
-                // proprietorText.textContent = currentFeature.properties.proprietor
-                // proprietorDiv.appendChild(proprietorLabel)
-                // proprietorDiv.appendChild(proprietorText)
-                
-                // titleInformationOverlay.appendChild(tenureDiv)
-                // titleInformationOverlay.appendChild(pricePaidDiv)
-                // titleInformationOverlay.appendChild(proprietorDiv)
-                
-                // New code
                 // titleInformationOverlay.innerHTML = JSON.stringify(spatialUnit)
                 let titleNumber = document.createElement('strong')
                 titleNumber.textContent = BAUnits[0]['titleNumber']
                 titleInformationOverlay.appendChild(titleNumber)
+                titleInformationOverlay.appendChild(document.createElement('hr'))
 
-                let titleData = document.createElement('div')
-                titleData.textContent = JSON.stringify(BAUnits[0])
-
+                // Rights data
                 let rightsDiv = document.createElement('div')
-                if (BAUnits[0]['rights']) {
+                if (BAUnits[0]['rights'].length > 0) {
                     let rightsLabel = document.createElement('strong')
-                    rightsLabel.textContext = 'Rights:'
+                    rightsLabel.textContent = 'Rights:'
                     rightsDiv.appendChild(rightsLabel)
                     for (right in BAUnits[0]['rights']) {
+                        let rightDiv = document.createElement('div')
+                        rightDiv.style = "margin-left: 10px;"
+
+                        // Right Type
                         let rightTypeLabel  = document.createElement('strong')
-                        rightTypeLabel.textContext = 'Type:'
-                        rightsDiv.appendChild(rightTypeLabel)
+                        rightTypeLabel.textContent = 'Type: '
+                        rightDiv.appendChild(rightTypeLabel)
 
                         let rightTypeText = document.createElement('span')
                         rightTypeText.textContent = BAUnits[0]['rights'][right]['type']
-                        rightsDiv.appendChild(rightTypeText)
+                        rightDiv.appendChild(rightTypeText)
+                        rightDiv.appendChild(document.createElement('br'))
+
+                        // Right description
+                        if (BAUnits[0]['rights'][right]['description']) {
+                            let rightDescriptionLabel  = document.createElement('strong')
+                            rightDescriptionLabel.textContent = 'Description: '
+                            rightDiv.appendChild(rightDescriptionLabel)
+    
+                            let rightDescriptionText = document.createElement('span')
+                            rightDescriptionText.textContent = BAUnits[0]['rights'][right]['description']
+                            rightDiv.appendChild(rightDescriptionText)
+                            rightDiv.appendChild(document.createElement('br'))
+                        }
+
+                        // Right Party
+                        let partyLabel  = document.createElement('strong')
+                        partyLabel.textContent = 'Party: '
+                        rightDiv.appendChild(partyLabel)
+
+                        let partyDiv = document.createElement('div')
+                        partyDiv.style = "margin-left: 10px;"
+
+                        //// Party name
+                        let partyNameLabel  = document.createElement('strong')
+                        partyNameLabel.textContent = 'Name: '
+                        partyDiv.appendChild(partyNameLabel)
+
+                        let partyNameText = document.createElement('span')
+                        partyNameText.textContent = BAUnits[0]['rights'][right]['party']['name']
+                        partyDiv.appendChild(partyNameText)
+                        partyDiv.appendChild(document.createElement('br'))
+
+                        //// Party type
+                        let partyTypeLabel  = document.createElement('strong')
+                        partyTypeLabel.textContent = 'Type: '
+                        partyDiv.appendChild(partyTypeLabel)
+
+                        let partyTypeText = document.createElement('span')
+                        partyTypeText.textContent = BAUnits[0]['rights'][right]['party']['type']
+                        partyDiv.appendChild(partyTypeText)
+                        partyDiv.appendChild(document.createElement('br'))
+
+                        rightDiv.appendChild(partyDiv)
+                        rightDiv.appendChild(document.createElement('hr'))
+
+                        rightsDiv.appendChild(rightDiv)
                     }
                     titleInformationOverlay.appendChild(rightsDiv)
                 }
 
-                titleInformationOverlay.appendChild(titleData)
-                titleInformationOverlay.style.display = 'block'
+                // Restrictions data
+                let restrictionsDiv = document.createElement('div')
+                if (BAUnits[0]['restrictions'].length > 0) {
+                    let restrictionsLabel = document.createElement('strong')
+                    restrictionsLabel.textContent = 'Restrictions:'
+                    restrictionsDiv.appendChild(restrictionsLabel)
+                    for (restriction in BAUnits[0]['restrictions']) {
+                        let restrictionDiv = document.createElement('div')
+                        restrictionDiv.style = "margin-left: 10px;"
 
+                        // Restriction Type
+                        let restrictionTypeLabel  = document.createElement('strong')
+                        restrictionTypeLabel.textContent = 'Type: '
+                        restrictionDiv.appendChild(restrictionTypeLabel)
+
+                        let restrictionTypeText = document.createElement('span')
+                        restrictionTypeText.textContent = BAUnits[0]['restrictions'][restriction]['type']
+                        restrictionDiv.appendChild(restrictionTypeText)
+                        restrictionDiv.appendChild(document.createElement('br'))
+
+                        // Restriction description
+                        if (BAUnits[0]['restrictions'][restriction]['description']) {
+                            let restrictionDescriptionLabel  = document.createElement('strong')
+                            restrictionDescriptionLabel.textContent = 'Description: '
+                            restrictionDiv.appendChild(restrictionDescriptionLabel)
+    
+                            let restrictionDescriptionText = document.createElement('span')
+                            restrictionDescriptionText.textContent = BAUnits[0]['restrictions'][restriction]['description']
+                            restrictionDiv.appendChild(restrictionDescriptionText)
+                            restrictionDiv.appendChild(document.createElement('br'))
+                        }
+
+                        // Restriction Party
+                        let partyLabel  = document.createElement('strong')
+                        partyLabel.textContent = 'Party: '
+                        restrictionDiv.appendChild(partyLabel)
+
+                        let partyDiv = document.createElement('div')
+                        partyDiv.style = "margin-left: 10px;"
+
+                        //// Party name
+                        let partyNameLabel  = document.createElement('strong')
+                        partyNameLabel.textContent = 'Name: '
+                        partyDiv.appendChild(partyNameLabel)
+
+                        let partyNameText = document.createElement('span')
+                        partyNameText.textContent = BAUnits[0]['restrictions'][restriction]['party']['name']
+                        partyDiv.appendChild(partyNameText)
+                        partyDiv.appendChild(document.createElement('br'))
+
+                        //// Party type
+                        let partyTypeLabel  = document.createElement('strong')
+                        partyTypeLabel.textContent = 'Type: '
+                        partyDiv.appendChild(partyTypeLabel)
+
+                        let partyTypeText = document.createElement('span')
+                        partyTypeText.textContent = BAUnits[0]['restrictions'][restriction]['party']['type']
+                        partyDiv.appendChild(partyTypeText)
+                        partyDiv.appendChild(document.createElement('br'))
+
+                        restrictionDiv.appendChild(partyDiv)
+                        restrictionDiv.appendChild(document.createElement('hr'))
+
+                        restrictionsDiv.appendChild(restrictionDiv)
+                    }
+                    titleInformationOverlay.appendChild(restrictionsDiv)
+                }
+
+                // Responsibilities data
+                let responsibilitiesDiv = document.createElement('div')
+                if (BAUnits[0]['responsibilities'].length > 0) {
+                    let responsibilitiesLabel = document.createElement('strong')
+                    responsibilitiesLabel.textContent = 'Responsibilities:'
+                    responsibilitiesDiv.appendChild(responsibilitiesLabel)
+                    for (responsibility in BAUnits[0]['responsibilities']) {
+                        let responsibilityDiv = document.createElement('div')
+                        responsibilityDiv.style = "margin-left: 10px;"
+
+                        // Responsibility Type
+                        let responsibilityTypeLabel  = document.createElement('strong')
+                        responsibilityTypeLabel.textContent = 'Type: '
+                        responsibilityDiv.appendChild(responsibilityTypeLabel)
+
+                        let responsibilityTypeText = document.createElement('span')
+                        responsibilityTypeText.textContent = BAUnits[0]['responsibilities'][responsibility]['type']
+                        responsibilityDiv.appendChild(responsibilityTypeText)
+                        responsibilityDiv.appendChild(document.createElement('br'))
+
+                        // Responsibility description
+                        if (BAUnits[0]['responsibilities'][responsibility]['description']) {
+                            let responsibilityDescriptionLabel  = document.createElement('strong')
+                            responsibilityDescriptionLabel.textContent = 'Description: '
+                            responsibilityDiv.appendChild(responsibilityDescriptionLabel)
+    
+                            let responsibilityDescriptionText = document.createElement('span')
+                            responsibilityDescriptionText.textContent = BAUnits[0]['responsibilities'][responsibility]['description']
+                            responsibilityDiv.appendChild(responsibilityDescriptionText)
+                            responsibilityDiv.appendChild(document.createElement('br'))
+                        }
+
+                        // Responsibility Party
+                        let partyLabel  = document.createElement('strong')
+                        partyLabel.textContent = 'Party: '
+                        responsibilityDiv.appendChild(partyLabel)
+
+                        let partyDiv = document.createElement('div')
+                        partyDiv.style = "margin-left: 10px;"
+
+                        //// Party name
+                        let partyNameLabel  = document.createElement('strong')
+                        partyNameLabel.textContent = 'Name: '
+                        partyDiv.appendChild(partyNameLabel)
+
+                        let partyNameText = document.createElement('span')
+                        partyNameText.textContent = BAUnits[0]['responsibilities'][responsibility]['party']['name']
+                        partyDiv.appendChild(partyNameText)
+                        partyDiv.appendChild(document.createElement('br'))
+
+                        //// Party type
+                        let partyTypeLabel  = document.createElement('strong')
+                        partyTypeLabel.textContent = 'Type: '
+                        partyDiv.appendChild(partyTypeLabel)
+
+                        let partyTypeText = document.createElement('span')
+                        partyTypeText.textContent = BAUnits[0]['responsibilities'][responsibility]['party']['type']
+                        partyDiv.appendChild(partyTypeText)
+                        partyDiv.appendChild(document.createElement('br'))
+
+                        responsibilityDiv.appendChild(partyDiv)
+                        responsibilityDiv.appendChild(document.createElement('hr'))
+
+                        responsibilitiesDiv.appendChild(responsibilityDiv)
+                    }
+                    titleInformationOverlay.appendChild(responsibilitiesDiv)
+                }
+
+                // Display overlay
+                titleInformationOverlay.style.display = 'block'
 
             }
         })
