@@ -2,8 +2,9 @@
     mapboxgl.accessToken = 'pk.eyJ1IjoibWF0dGdpcmRsZXIiLCJhIjoiY2lteW85cm5lMDBmcnY5bTFxY2Zsc3c2OCJ9.VvO2DhAhOVrcjJ0Usw8JIA'
         let map = new mapboxgl.Map({
         style: 'mapbox://styles/mattgirdler/cjznu3ztu06m31clp2j37yybz',
-        center: [-3.52841649197765, 50.7242226667005],
-        zoom: 16.5,
+        // center: [-3.52841649197765, 50.7242226667005],
+        center:[-3.5208657, 50.7227184],
+        zoom: 17.5,
         pitch: 45,
         bearing: -17.6,
         container: 'map',
@@ -11,15 +12,22 @@
     })
 
     const buildingHeightSourceLayer = "exeter_buildings_with_height-0ygi87"
+    const airspaceSourceLayer = "airspace-leasehold-a6g827"
     const floorplanLayers = [
-        {layer: 'princesshay-level-gf-leasehold', sourceLayer: 'princesshay-level-gf-8yagcd'},
-        {layer: 'princesshay-level-gf-freehold', sourceLayer: 'princesshay-level-gf-8yagcd'},
-        {layer: 'princesshay-level-1-leasehold', sourceLayer: 'princesshay-level-1-90cnib'},
-        {layer: 'princesshay-level-1-freehold', sourceLayer: 'princesshay-level-1-90cnib'}
+        // {layer: 'princesshay-level-gf-leasehold', sourceLayer: 'princesshay-level-gf-8yagcd'},
+        // {layer: 'princesshay-level-gf-freehold', sourceLayer: 'princesshay-level-gf-8yagcd'},
+        // {layer: 'princesshay-level-1-leasehold', sourceLayer: 'princesshay-level-1-90cnib'},
+        // {layer: 'princesshay-level-1-freehold', sourceLayer: 'princesshay-level-1-90cnib'},
+        // {layer: 'airspace-leasehold-a6g827', sourceLayer: 'airspace-a6g827'},
+        {layer: 'freehold-diumk5', sourceLayer: 'osgb1000012317615-freehold-diumk5'},
+        {layer: 'leasehold-0-83okhj', sourceLayer: 'osgb1000012317615-0-83okhj'},
+        {layer: 'leasehold-1-54g9gf', sourceLayer: 'osgb1000012317615-1-54g9gf'},
+        {layer: 'leasehold-2-ccs62k', sourceLayer: 'osgb1000012317615-2-ccs62k'},
+        {layer: 'leasehold-3-8aah9q', sourceLayer: 'osgb1000012317615-3-8aah9q'}
     ]
 
     const spatialUnitsDiv = document.getElementById('spatial-units')
-    const spatialUnits = JSON.parse(spatialUnitsDiv.innerHTML)
+    const spatialUnits = JSON.parse(spatialUnitsDiv.innerHTML)[0]
 
     map.on('load', function() {
 
@@ -52,33 +60,48 @@
         let titleInformationOverlay = document.getElementById('title-information-overlay')
         let toggleLayersOverlay = document.getElementById('toggle-layers-overlay')
         toggleLayersOverlay.style.display = 'block'
-        // Create a popup, but don't add it to the map yet.
-        let popup = new mapboxgl.Popup({
-            closeButton: false
-        })
 
         // Display interior floorplans after hiding external geometry
         function displayFloorplan(buildingId) {
             for (let i in floorplanLayers) {
                 map.setLayoutProperty(floorplanLayers[i].layer, 'visibility', 'visible')
-                const features = map.querySourceFeatures('composite', {
-                    sourceLayer: floorplanLayers[i].sourceLayer, 
-                    filter: ["==", 'fid', buildingId]
-                })
-                if (features.length > 0) {
-                    const buildingId = features[0].properties.fid
-                    const buildingFeature = map.querySourceFeatures('composite', {
-                        sourceLayer: buildingHeightSourceLayer,
-                        filter: ["==", 'fid', buildingId]
-                    })[0]
-                    const buildingHeight = buildingFeature.properties.RelHmax
-                    const floorHeight = buildingHeight / features[0].properties.num_floors
-                    const extrusionHeight = floorHeight * (features[0].properties.floor + 1)
-                    const baseHeight = floorHeight*features[0].properties.floor
 
-                    // Add +1 to freehold heights to avoid clipping effect with containing leaseholds 
-                    map.setPaintProperty(floorplanLayers[i].layer, 'fill-extrusion-height', (floorplanLayers[i].layer.includes('freehold') ? extrusionHeight+1 : extrusionHeight), {validate: true})
-                    map.setPaintProperty(floorplanLayers[i].layer, 'fill-extrusion-base', baseHeight, {validate: true})
+                // Don't worry about extruding the airspace layer, this is extruded by default
+                if (!floorplanLayers[i].layer.includes('airspace')) {
+                    // Get the features within the layer
+                    const features = map.querySourceFeatures('composite', {
+                        sourceLayer: floorplanLayers[i].sourceLayer, 
+                        filter: ["==", 'fid', buildingId]
+                    })
+     
+                    for (let j in features) {
+
+                        let baseHeight = 0
+                        let extrusionHeight = 0
+
+                        // TODO - if it's a freehold, extrude up to the sky
+                        if (!floorplanLayers[i].layer.includes('freehold')) {
+                            extrusionHeight = 100
+                        } else {
+                            const buildingId = features[j].properties.fid
+                            // Get building height from OS dataset
+                            const buildingFeature = map.querySourceFeatures('composite', {
+                                sourceLayer: buildingHeightSourceLayer,
+                                filter: ["==", 'fid', buildingId]
+                            })[0]
+                            const buildingHeight = buildingFeature.properties.RelHmax 
+        
+                            // Generate feature height values based on building height
+                            const floorHeight = buildingHeight / features[j].properties.num_floors
+                            extrusionHeight = floorHeight * (features[j].properties.floor + 1)
+                            baseHeight = floorHeight*features[j].properties.floor
+                        }
+
+                        // Add +1 to freehold heights to avoid clipping effect with containing leaseholds 
+                        // map.setPaintProperty(floorplanLayers[i].layer, 'fill-extrusion-height', (floorplanLayers[i].layer.includes('freehold') ? extrusionHeight+1 : extrusionHeight), {validate: true})
+                        map.setPaintProperty(floorplanLayers[i].layer, 'fill-extrusion-height', extrusionHeight, {validate: true})
+                        map.setPaintProperty(floorplanLayers[i].layer, 'fill-extrusion-base', baseHeight, {validate: true})
+                    }
                 }
             }
         }
@@ -96,14 +119,22 @@
             }
         }
 
-        function highlightTitle(titleNo) {
+        function highlightTitle(featureId) {
+
+            let spatialUnit = getSpatialUnitById(featureId)
+            let spatialUnitTitleNumber = spatialUnit['ba_units'][0]['name']
+            let titleFeatureIds = getFeatureIdsByTitleNumber(spatialUnitTitleNumber)
+
             for (let i in floorplanLayers) {
-                const features = map.querySourceFeatures('composite', { 
-                    sourceLayer: floorplanLayers[i].sourceLayer,
-                    filter: ['==', 'title_no', titleNo ] 
-                })
-                for (let j in features) {
-                    map.setFeatureState({id: features[j].id, source: 'composite', sourceLayer: floorplanLayers[i].sourceLayer}, {'highlight': true})
+                for (let j in titleFeatureIds) {
+                    const features = map.querySourceFeatures('composite', { 
+                        sourceLayer: floorplanLayers[i].sourceLayer,
+                        filter: ['==', 'id', titleFeatureIds[j]] 
+                    })
+
+                    for (let k in features) {
+                        map.setFeatureState({id: features[k].id, source: 'composite', sourceLayer: floorplanLayers[i].sourceLayer}, {'highlight': true})
+                    }
                 }
             }
         }
@@ -113,6 +144,23 @@
                 titleInformationOverlay.style.display = 'none'
                 map.removeFeatureState({source: 'composite', sourceLayer: floorplanLayers[i].sourceLayer})
             }
+        }
+
+        function getFeatureIdsByTitleNumber(titleNumber) {
+            let featureIds = []
+            for (let i in spatialUnits) {
+                if (spatialUnits[i]['ba_units'][0]['name'] == titleNumber) {
+                    featureIds.push(spatialUnits[i]['id'])
+                }
+            }
+            return featureIds
+        }
+
+        function getSpatialUnitById(featureId) {
+            let result = spatialUnits.find(function(element) {
+                return element.id == featureId
+            })
+            return result
         }
 
         // Toggle building polygons on/off
@@ -144,14 +192,11 @@
             if (features.length > 0) {
                 const currentFeature = features[0]
 
-                highlightTitle(currentFeature.properties.title_no)
+                highlightTitle(currentFeature.properties.id)
                 
-                // New properties code
                 let featureId = currentFeature.properties.id
 
-                let spatialUnit = spatialUnits[0].find(function(element) {
-                    return element.id == featureId
-                })
+                let spatialUnit = getSpatialUnitById(featureId)
 
                 let BAUnits = []
 
@@ -159,8 +204,6 @@
                     
                     for (let BAUnit in spatialUnit['ba_units']) {
                         let currentBAUnit = spatialUnit['ba_units'][BAUnit]
-
-                        console.log(currentBAUnit)
 
                         let title = { 
                             address: spatialUnit.address,
@@ -461,18 +504,21 @@
     })
 
     function toggleLayers(filter) {
+        console.log(filter)
         for (let i in floorplanLayers) {
-        if (floorplanLayers[i].layer.includes(filter)) {
-            let visibility = map.getLayoutProperty(floorplanLayers[i].layer, 'visibility')
-
-            if (visibility === 'visible') {
-            map.setLayoutProperty(floorplanLayers[i].layer, 'visibility', 'none')
-            this.className = ''
-            } else {  
-            this.className = 'active'
-            map.setLayoutProperty(floorplanLayers[i].layer, 'visibility', 'visible')
+            console.log(floorplanLayers[i].layer)
+            console.log(floorplanLayers[i].layer.includes(filter))
+            if (floorplanLayers[i].layer.includes(filter)) {
+                let visibility = map.getLayoutProperty(floorplanLayers[i].layer, 'visibility')
+                console.log(visibility)
+                if (visibility === 'visible') {
+                    map.setLayoutProperty(floorplanLayers[i].layer, 'visibility', 'none')
+                    this.className = ''
+                } else {  
+                    this.className = 'active'
+                    map.setLayoutProperty(floorplanLayers[i].layer, 'visibility', 'visible')
+                }
             }
-        }
         }
     }
     
