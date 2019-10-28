@@ -1,6 +1,3 @@
-
-console.log(turf)
-
 mapboxgl.accessToken = 'pk.eyJ1IjoibWF0dGdpcmRsZXIiLCJhIjoiY2lteW85cm5lMDBmcnY5bTFxY2Zsc3c2OCJ9.VvO2DhAhOVrcjJ0Usw8JIA'
     let map = new mapboxgl.Map({
     style: 'mapbox://styles/mattgirdler/cjznu3ztu06m31clp2j37yybz',
@@ -13,7 +10,6 @@ mapboxgl.accessToken = 'pk.eyJ1IjoibWF0dGdpcmRsZXIiLCJhIjoiY2lteW85cm5lMDBmcnY5b
 })
 
 const buildingHeightSourceLayer = "exeter_buildings_with_height-0ygi87"
-const airspaceSourceLayer = "airspace-leasehold-a6g827"
 const floorplanLayers = [
     // {layer: 'princesshay-level-gf-leasehold', sourceLayer: 'princesshay-level-gf-8yagcd'},
     // {layer: 'princesshay-level-gf-freehold', sourceLayer: 'princesshay-level-gf-8yagcd'},
@@ -54,7 +50,6 @@ map.on('load', function() {
         sourceLayer: buildingHeightSourceLayer,
         filter: buildingFilter
     })
-
     for (let i in buildingFeatures) {
         map.setFeatureState({id: buildingFeatures[i].id, source: 'composite', sourceLayer: buildingHeightSourceLayer}, {'hide': true})
         displayFloorplan(buildingFeatures[i].properties.fid)
@@ -74,36 +69,35 @@ map.on('load', function() {
             if (!floorplanLayers[i].layer.includes('airspace')) {
                 // Get the features within the layer
                 const features = map.querySourceFeatures('composite', {
-                    sourceLayer: floorplanLayers[i].sourceLayer, 
-                    filter: ["==", 'fid', buildingId]
+                    sourceLayer: floorplanLayers[i].sourceLayer
                 })
 
                 for (let j in features) {
                     let baseHeight = 0
                     let extrusionHeight = 0
 
-                    // if (!floorplanLayers[i].layer.includes('airspace')) {
-                        if (floorplanLayers[i].layer.includes('freehold')) {
-                            extrusionHeight = 120
-                        } else {
-                            const buildingId = features[j].properties.fid
-                            // Get building height from OS dataset
-                            const buildingFeature = map.querySourceFeatures('composite', {
-                                sourceLayer: buildingHeightSourceLayer,
-                                filter: ["==", 'fid', buildingId]
-                            })[0]
-                            const buildingHeight = buildingFeature.properties.RelHmax 
-        
-                            // Generate feature height values based on building height
-                            const floorHeight = buildingHeight / features[j].properties.num_floors
-                            extrusionHeight = floorHeight * (features[j].properties.floor + 1)
-                            baseHeight = floorHeight*features[j].properties.floor
-                        }
+                    if (floorplanLayers[i].layer.includes('freehold')) {
+                        extrusionHeight = 120
 
-                        // Add +1 to freehold heights to avoid clipping effect with containing leaseholds 
-                        map.setPaintProperty(floorplanLayers[i].layer, 'fill-extrusion-height', extrusionHeight, {validate: true})
-                        map.setPaintProperty(floorplanLayers[i].layer, 'fill-extrusion-base', baseHeight, {validate: true})
-                    // }
+                        // TODO - Add a buffer to the freehold to avoid clipping
+                    } else {
+                        const buildingId = features[j].properties.fid
+                        // Get building height from OS dataset
+                        const buildingFeature = map.querySourceFeatures('composite', {
+                            sourceLayer: buildingHeightSourceLayer,
+                            filter: ["==", 'fid', buildingId]
+                        })[0]
+                        const buildingHeight = buildingFeature.properties.RelHmax 
+    
+                        // Generate feature height values based on building height
+                        const floorHeight = buildingHeight / features[j].properties.num_floors
+                        extrusionHeight = floorHeight * (features[j].properties.floor + 1)
+                        baseHeight = floorHeight*features[j].properties.floor
+                    }
+
+                    // Extrude the features
+                    map.setPaintProperty(floorplanLayers[i].layer, 'fill-extrusion-height', extrusionHeight, {validate: true})
+                    map.setPaintProperty(floorplanLayers[i].layer, 'fill-extrusion-base', baseHeight, {validate: true})
                 }
             } 
         }
@@ -167,17 +161,17 @@ map.on('load', function() {
     }
 
     // Toggle building polygons on/off
-    map.on('click', 'exeter-buildings-with-height', function (e) {
-        const features = map.queryRenderedFeatures(e.point)
-        const feature = features[0]
-        if (map.getFeatureState({id: feature.id, source: 'composite', sourceLayer: buildingHeightSourceLayer}).hide) {
-            hideFloorplan(feature.properties.fid)
-            map.removeFeatureState({id: feature.id, source: 'composite', sourceLayer: buildingHeightSourceLayer}, 'hide')
-        } else {
-            map.setFeatureState({id: feature.id, source: 'composite', sourceLayer: buildingHeightSourceLayer}, {'hide': true})
-            displayFloorplan(feature.properties.fid)
-        }
-    })
+    // map.on('click', 'exeter-buildings-with-height', function (e) {
+    //     const features = map.queryRenderedFeatures(e.point)
+    //     const feature = features[0]
+    //     if (map.getFeatureState({id: feature.id, source: 'composite', sourceLayer: buildingHeightSourceLayer}).hide) {
+    //         hideFloorplan(feature.properties.fid)
+    //         map.removeFeatureState({id: feature.id, source: 'composite', sourceLayer: buildingHeightSourceLayer}, 'hide')
+    //     } else {
+    //         map.setFeatureState({id: feature.id, source: 'composite', sourceLayer: buildingHeightSourceLayer}, {'hide': true})
+    //         displayFloorplan(feature.properties.fid)
+    //     }
+    // })
 
     // Display title information from floorplans
     map.on('mousemove', function(e) {
@@ -209,11 +203,21 @@ map.on('load', function() {
                     let currentBAUnit = spatialUnit['ba_units'][BAUnit]
 
                     let title = { 
-                        address: spatialUnit.address,
+                        address: spatialUnit['address'],
                         titleNumber: currentBAUnit['name'],
+                        pricePaid: [],
                         rights: [],
                         restrictions: [],
                         responsibilities: []
+                    }
+
+                    // Prices Paid
+                    for (let pricePaid in spatialUnit['price_paid']) {
+                        let currentPricePaid = spatialUnit['price_paid'][pricePaid]
+                        title['pricePaid'].push({
+                            amount: currentPricePaid['amount'],
+                            date: currentPricePaid['date']
+                        })
                     }
 
                     // Rights
@@ -292,7 +296,62 @@ map.on('load', function() {
             let titleNumber = document.createElement('strong')
             titleNumber.textContent = BAUnits[0]['titleNumber']
             titleInformationOverlay.appendChild(titleNumber)
+            
+            // Address data
+            if (BAUnits[0]['address']) {
+                let addressDiv = document.createElement('div')
+                let addressLabel = document.createElement('strong')
+                addressLabel.textContent = 'Address: '
+                addressDiv.append(addressLabel)
+    
+                let addressText = document.createElement('span')
+                addressText.textContent = BAUnits[0]['address']
+                addressDiv.append(addressText)
+                titleInformationOverlay.appendChild(addressDiv)
+            }
+
             titleInformationOverlay.appendChild(document.createElement('hr'))
+
+            // Price Paid data
+            let pricesPaidDiv = document.createElement('div')
+            if (BAUnits[0]['pricePaid'].length > 0) {
+                let pricesPaidLabel = document.createElement('strong')
+                pricesPaidLabel.textContent = 'Prices Paid:'
+                pricesPaidDiv.appendChild(pricesPaidLabel)
+
+                for (let pricePaid in BAUnits[0]['pricePaid']) {
+                    let pricePaidDiv = document.createElement('div')
+                    pricePaidDiv.style = "margin-left: 10px;"
+
+                    if (pricePaid > 0) {
+                        pricePaidDiv.appendChild(document.createElement('hr'))
+                    }
+
+                    // Price Paid date
+                    let pricePaidDateLabel = document.createElement('strong')
+                    pricePaidDateLabel.textContent = 'Date: '
+                    pricePaidDiv.appendChild(pricePaidDateLabel)
+
+                    let pricePaidDateText = document.createElement('span')
+                    pricePaidDateText.textContent = BAUnits[0]['pricePaid'][pricePaid]['date']
+                    pricePaidDiv.appendChild(pricePaidDateText)
+                    pricePaidDiv.appendChild(document.createElement('br'))
+
+                    // Price Paid amount
+                    let pricePaidAmountLabel = document.createElement('strong')
+                    pricePaidAmountLabel.textContent = 'Amount: '
+                    pricePaidDiv.appendChild(pricePaidAmountLabel)
+
+                    let pricePaidAmountText = document.createElement('span')
+                    pricePaidAmountText.textContent = BAUnits[0]['pricePaid'][pricePaid]['amount']
+                    pricePaidDiv.appendChild(pricePaidAmountText)
+                    pricePaidDiv.appendChild(document.createElement('br'))
+
+                    pricesPaidDiv.appendChild(pricePaidDiv)
+                }
+                titleInformationOverlay.appendChild(pricesPaidDiv)
+                titleInformationOverlay.appendChild(document.createElement('hr'))
+            }
 
             // Rights data
             let rightsDiv = document.createElement('div')
@@ -300,7 +359,7 @@ map.on('load', function() {
                 let rightsLabel = document.createElement('strong')
                 rightsLabel.textContent = 'Rights:'
                 rightsDiv.appendChild(rightsLabel)
-                for (right in BAUnits[0]['rights']) {
+                for (let right in BAUnits[0]['rights']) {
                     let rightDiv = document.createElement('div')
                     rightDiv.style = "margin-left: 10px;"
 

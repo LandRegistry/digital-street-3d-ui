@@ -20,6 +20,7 @@
     "url": "git@192.168.249.38:search_index_map_uis/search-index-map-ui.git"
   },
   "dependencies": {
+    "@turf/turf": "^5.1.6",
     "govuk-frontend": "2.10.0"
   },
   "devDependencies": {
