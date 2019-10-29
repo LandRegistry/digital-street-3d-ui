@@ -60,7 +60,8 @@ ENV APP_NAME=search-index-map-ui \
   EEGEO_API_KEY="7bd03da4576d0bb5bedd239896276911" \
   USE_AUTH='true' \
   USERNAME="test" \
-  PASSWORD="test"
+  PASSWORD="test" \
+  3D_API_URL="http://index-map-3d-api:8080"
 
 # When creating files inside the docker container, this prevents the files being created
 # as the root user on linux hosts
