@@ -293,9 +293,16 @@ map.on('load', function() {
             titleInformationOverlay.innerHTML = ''
 
             // titleInformationOverlay.innerHTML = JSON.stringify(spatialUnit)
-            let titleNumber = document.createElement('strong')
-            titleNumber.textContent = BAUnits[0]['titleNumber']
-            titleInformationOverlay.appendChild(titleNumber)
+            let tenureTypeHeading = document.createElement('h1')
+            tenureTypeHeading.textContent = BAUnits[0]['rights'][0]['type']
+            titleInformationOverlay.appendChild(tenureTypeHeading)
+
+            let titleNumberLabel = document.createElement('strong')
+            titleNumberLabel.textContent = "Title number: "
+            titleInformationOverlay.append(titleNumberLabel)
+            let titleNumberText = document.createElement('span')
+            titleNumberText.append(BAUnits[0]['titleNumber'])
+            titleInformationOverlay.appendChild(titleNumberText)
             
             // Address data
             if (BAUnits[0]['address']) {
@@ -303,7 +310,7 @@ map.on('load', function() {
                 let addressLabel = document.createElement('strong')
                 addressLabel.textContent = 'Address: '
                 addressDiv.append(addressLabel)
-    
+
                 let addressText = document.createElement('span')
                 addressText.textContent = BAUnits[0]['address']
                 addressDiv.append(addressText)
@@ -323,28 +330,9 @@ map.on('load', function() {
                     let pricePaidDiv = document.createElement('div')
                     pricePaidDiv.style = "margin-left: 10px;"
 
-                    if (pricePaid > 0) {
-                        pricePaidDiv.appendChild(document.createElement('hr'))
-                    }
-
-                    // Price Paid date
-                    let pricePaidDateLabel = document.createElement('strong')
-                    pricePaidDateLabel.textContent = 'Date: '
-                    pricePaidDiv.appendChild(pricePaidDateLabel)
-
-                    let pricePaidDateText = document.createElement('span')
-                    pricePaidDateText.textContent = BAUnits[0]['pricePaid'][pricePaid]['date']
-                    pricePaidDiv.appendChild(pricePaidDateText)
-                    pricePaidDiv.appendChild(document.createElement('br'))
-
-                    // Price Paid amount
-                    let pricePaidAmountLabel = document.createElement('strong')
-                    pricePaidAmountLabel.textContent = 'Amount: '
-                    pricePaidDiv.appendChild(pricePaidAmountLabel)
-
-                    let pricePaidAmountText = document.createElement('span')
-                    pricePaidAmountText.textContent = BAUnits[0]['pricePaid'][pricePaid]['amount']
-                    pricePaidDiv.appendChild(pricePaidAmountText)
+                    let pricePaidText = document.createElement('span')
+                    pricePaidText.textContent = BAUnits[0]['pricePaid'][pricePaid]['date'] + " - " + BAUnits[0]['pricePaid'][pricePaid]['amount']
+                    pricePaidDiv.appendChild(pricePaidText)
                     pricePaidDiv.appendChild(document.createElement('br'))
 
                     pricesPaidDiv.appendChild(pricePaidDiv)
@@ -390,30 +378,10 @@ map.on('load', function() {
                     partyLabel.textContent = 'Party: '
                     rightDiv.appendChild(partyLabel)
 
-                    let partyDiv = document.createElement('div')
-                    partyDiv.style = "margin-left: 10px;"
+                    let partyText = document.createElement('span')
+                    partyText.textContent = BAUnits[0]['rights'][right]['party']['name'] + " (" + BAUnits[0]['rights'][right]['party']['type'] + ")"
 
-                    //// Party name
-                    let partyNameLabel  = document.createElement('strong')
-                    partyNameLabel.textContent = 'Name: '
-                    partyDiv.appendChild(partyNameLabel)
-
-                    let partyNameText = document.createElement('span')
-                    partyNameText.textContent = BAUnits[0]['rights'][right]['party']['name']
-                    partyDiv.appendChild(partyNameText)
-                    partyDiv.appendChild(document.createElement('br'))
-
-                    //// Party type
-                    let partyTypeLabel  = document.createElement('strong')
-                    partyTypeLabel.textContent = 'Type: '
-                    partyDiv.appendChild(partyTypeLabel)
-
-                    let partyTypeText = document.createElement('span')
-                    partyTypeText.textContent = BAUnits[0]['rights'][right]['party']['type']
-                    partyDiv.appendChild(partyTypeText)
-                    partyDiv.appendChild(document.createElement('br'))
-
-                    rightDiv.appendChild(partyDiv)
+                    rightDiv.appendChild(partyText)
                     rightDiv.appendChild(document.createElement('hr'))
 
                     rightsDiv.appendChild(rightDiv)
@@ -458,30 +426,10 @@ map.on('load', function() {
                     partyLabel.textContent = 'Party: '
                     restrictionDiv.appendChild(partyLabel)
 
-                    let partyDiv = document.createElement('div')
-                    partyDiv.style = "margin-left: 10px;"
+                    let partyText = document.createElement('span')
+                    partyText.textContent = BAUnits[0]['restrictions'][restriction]['party']['name'] + " (" + BAUnits[0]['restrictions'][restriction]['party']['type'] + ")"
 
-                    //// Party name
-                    let partyNameLabel  = document.createElement('strong')
-                    partyNameLabel.textContent = 'Name: '
-                    partyDiv.appendChild(partyNameLabel)
-
-                    let partyNameText = document.createElement('span')
-                    partyNameText.textContent = BAUnits[0]['restrictions'][restriction]['party']['name']
-                    partyDiv.appendChild(partyNameText)
-                    partyDiv.appendChild(document.createElement('br'))
-
-                    //// Party type
-                    let partyTypeLabel  = document.createElement('strong')
-                    partyTypeLabel.textContent = 'Type: '
-                    partyDiv.appendChild(partyTypeLabel)
-
-                    let partyTypeText = document.createElement('span')
-                    partyTypeText.textContent = BAUnits[0]['restrictions'][restriction]['party']['type']
-                    partyDiv.appendChild(partyTypeText)
-                    partyDiv.appendChild(document.createElement('br'))
-
-                    restrictionDiv.appendChild(partyDiv)
+                    restrictionDiv.appendChild(partyText)
                     restrictionDiv.appendChild(document.createElement('hr'))
 
                     restrictionsDiv.appendChild(restrictionDiv)
@@ -526,30 +474,10 @@ map.on('load', function() {
                     partyLabel.textContent = 'Party: '
                     responsibilityDiv.appendChild(partyLabel)
 
-                    let partyDiv = document.createElement('div')
-                    partyDiv.style = "margin-left: 10px;"
+                    let partyText = document.createElement('span')
+                    partyText.textContent = BAUnits[0]['responsibilities'][responsibility]['party']['name'] + " (" + BAUnits[0]['responsibilities'][responsibility]['party']['type'] + ")"
 
-                    //// Party name
-                    let partyNameLabel  = document.createElement('strong')
-                    partyNameLabel.textContent = 'Name: '
-                    partyDiv.appendChild(partyNameLabel)
-
-                    let partyNameText = document.createElement('span')
-                    partyNameText.textContent = BAUnits[0]['responsibilities'][responsibility]['party']['name']
-                    partyDiv.appendChild(partyNameText)
-                    partyDiv.appendChild(document.createElement('br'))
-
-                    //// Party type
-                    let partyTypeLabel  = document.createElement('strong')
-                    partyTypeLabel.textContent = 'Type: '
-                    partyDiv.appendChild(partyTypeLabel)
-
-                    let partyTypeText = document.createElement('span')
-                    partyTypeText.textContent = BAUnits[0]['responsibilities'][responsibility]['party']['type']
-                    partyDiv.appendChild(partyTypeText)
-                    partyDiv.appendChild(document.createElement('br'))
-
-                    responsibilityDiv.appendChild(partyDiv)
+                    responsibilityDiv.appendChild(partyText)
                     responsibilityDiv.appendChild(document.createElement('hr'))
 
                     responsibilitiesDiv.appendChild(responsibilityDiv)
