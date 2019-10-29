@@ -323,7 +323,7 @@ map.on('load', function() {
             let pricesPaidDiv = document.createElement('div')
             if (BAUnits[0]['pricePaid'].length > 0) {
                 let pricesPaidLabel = document.createElement('strong')
-                pricesPaidLabel.textContent = 'Prices Paid:'
+                pricesPaidLabel.textContent = 'Prices paid:'
                 pricesPaidDiv.appendChild(pricesPaidLabel)
 
                 for (let pricePaid in BAUnits[0]['pricePaid']) {
