@@ -1,9 +1,7 @@
 import os
 import requests
 import json
-from flask import Blueprint
-from flask import render_template
-from flask import current_app
+from flask import Blueprint, render_template, current_app, redirect, url_for
 from flask_httpauth import HTTPBasicAuth
 from search_index_map_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovTextInput
 from flask_wtf import FlaskForm
@@ -27,12 +25,12 @@ index = Blueprint('index', __name__)
 @index.route("/")
 @auth.login_required
 def index_page():
-    return render_template('app/index.html')
+    return redirect(url_for('index.mapbox_page'))
 
-@index.route("/leaflet")
-@auth.login_required
-def leaflet_page():
-    return render_template('app/leaflet.html')
+# @index.route("/leaflet")
+# @auth.login_required
+# def leaflet_page():
+#     return render_template('app/leaflet.html')
 
 @index.route("/mapbox")
 @auth.login_required
