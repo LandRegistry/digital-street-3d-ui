@@ -176,8 +176,6 @@ map.on('load', function() {
     // Display title information from floorplans
     map.on('mousemove', function(e) {
 
-        disableHighlightTitle()
-
         // Create array of floorplan style layers for filtering
         const layers = []
         for (let i in floorplanLayers) {
@@ -187,6 +185,9 @@ map.on('load', function() {
         // Check if mouseover is on a floorplan layer
         const features = map.queryRenderedFeatures(e.point, { layers: layers })
         if (features.length > 0) {
+
+            disableHighlightTitle()
+
             const currentFeature = features[0]
 
             highlightTitle(currentFeature.properties.id)
