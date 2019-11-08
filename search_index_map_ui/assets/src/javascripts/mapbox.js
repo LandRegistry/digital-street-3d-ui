@@ -225,29 +225,22 @@ map.on('load', function() {
                     for (let right in currentBAUnit['rights']) {
                         let currentRight = currentBAUnit['rights'][right]
                         let newRight = {
-                        rightId: currentRight['right_id'],
-                        type: currentRight['type'],
-                        description: currentRight['description'],
-                        mortgages: []
+                            rightId: currentRight['right_id'],
+                            type: currentRight['type'],
+                            description: currentRight['description'],
+                            mortgages: [],
+                            startDate: currentRight['start_date'],
+                            endDate: currentRight['end_date']
                         }
 
                         if (currentRight['party']) {
-                        newRight['party'] = {
-                            name: currentRight['party']['name'],
-                            type: currentRight['party']['type'],
-                            partyId: currentRight['party']
-                        }
+                            newRight['party'] = {
+                                name: currentRight['party']['name'],
+                                type: currentRight['party']['type'],
+                                partyId: currentRight['party']
+                            }
                         }
 
-                        for (let mortgage in currentRight['mortgages']) {
-                        let currentMortgage = currentRight['mortgages'][mortgage]
-                        let newMortgage = {
-                            type: currentMortgage['type'],
-                            amount: currentMortgage['amount'],
-                            interestRate: currentMortgage['interest_rate']
-                        }
-                        newRight['mortgages'].push(newMortgage)
-                        } 
                         title['rights'].push(newRight)
                     }
 
@@ -255,16 +248,18 @@ map.on('load', function() {
                     for (let restriction in currentBAUnit['restrictions']) {
                         let currentRestriction = currentBAUnit['restrictions'][restriction]
                         let newRestriction = {
-                        type: currentRestriction['type'],
-                        description: currentRestriction['description']
+                            type: currentRestriction['type'],
+                            description: currentRestriction['description'],
+                            startDate: currentRestriction['start_date'],
+                            endDate: currentRestriction['end_date']
                         }
 
                         if (currentRestriction['party']) {
-                        newRestriction['party'] = {
-                            name: currentRestriction['party']['name'],
-                            type: currentRestriction['party']['type'],
-                            partyId: currentRestriction['party']
-                        }
+                            newRestriction['party'] = {
+                                name: currentRestriction['party']['name'],
+                                type: currentRestriction['party']['type'],
+                                partyId: currentRestriction['party']
+                            }
                         }
                         title['restrictions'].push(newRestriction)
                     }
@@ -273,16 +268,18 @@ map.on('load', function() {
                     for (let responsibility in currentBAUnit['responsibilities']) {
                         let currentResponsibility = currentBAUnit['responsibilities'][responsibility]
                         let newResponsibility = {
-                        type: currentResponsibility['type'],
-                        description: currentResponsibility['description']
+                            type: currentResponsibility['type'],
+                            description: currentResponsibility['description'],
+                            startDate: currentResponsibility['start_date'],
+                            endDate: currentResponsibility['end_date']
                         }
 
                         if (currentResponsibility['party']) {
-                        newResponsibility['party'] = {
-                            name: currentResponsibility['party']['name'],
-                            type: currentResponsibility['party']['type'],
-                            partyId: currentResponsibility['party']
-                        }
+                            newResponsibility['party'] = {
+                                name: currentResponsibility['party']['name'],
+                                type: currentResponsibility['party']['type'],
+                                partyId: currentResponsibility['party']
+                            }
                         }
                         title['responsibilities'].push(newResponsibility)
                     }
@@ -371,6 +368,19 @@ map.on('load', function() {
                         let rightDescriptionText = document.createElement('span')
                         rightDescriptionText.textContent = BAUnits[0]['rights'][right]['description']
                         rightDiv.appendChild(rightDescriptionText)
+                        rightDiv.appendChild(document.createElement('br'))
+                    }
+
+                    // If right is a leasehold, display the end date
+                    console.log(BAUnits[0]['rights'][right])
+                    if (BAUnits[0]['rights'][right]['endDate'] && BAUnits[0]['rights'][right]['type'].toLowerCase().includes('leasehold')) {
+                        let rightEndLabel  = document.createElement('strong')
+                        rightEndLabel.textContent = 'End date: '
+                        rightDiv.appendChild(rightEndLabel)
+
+                        let rightEndText = document.createElement('span')
+                        rightEndText.textContent = BAUnits[0]['rights'][right]['endDate']
+                        rightDiv.appendChild(rightEndText)
                         rightDiv.appendChild(document.createElement('br'))
                     }
 
