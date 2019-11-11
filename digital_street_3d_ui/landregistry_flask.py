@@ -1,6 +1,6 @@
 from flask import Flask
 import os
-from search_index_map_ui import config
+from digital_street_3d_ui import config
 
 
 class LandRegistryFlask(Flask):

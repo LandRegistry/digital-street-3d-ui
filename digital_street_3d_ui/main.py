@@ -1,9 +1,9 @@
 # This file is the entry point.
 # First we import the app object, which will get initialised as we do it. Then import methods we're about to use.
-from search_index_map_ui.app import app
-from search_index_map_ui.blueprints import register_blueprints
-from search_index_map_ui.exceptions import register_exception_handlers
-from search_index_map_ui.extensions import register_extensions
+from digital_street_3d_ui.app import app
+from digital_street_3d_ui.blueprints import register_blueprints
+from digital_street_3d_ui.exceptions import register_exception_handlers
+from digital_street_3d_ui.extensions import register_extensions
 
 # Now we register any extensions we use into the app
 register_extensions(app)

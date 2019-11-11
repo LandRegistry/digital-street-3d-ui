@@ -1,7 +1,7 @@
 var config = {
-  'applicationPath': './search_index_map_ui',
-  'sourcePath': './search_index_map_ui/assets/src',
-  'destinationPath': './search_index_map_ui/assets/dist',
+  'applicationPath': './digital_street_3d_ui',
+  'sourcePath': './digital_street_3d_ui/assets/src',
+  'destinationPath': './digital_street_3d_ui/assets/dist',
   'sassPath': 'scss/*.scss',
   'sassIncludePaths': [
     'node_modules'

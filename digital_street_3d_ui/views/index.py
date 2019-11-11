@@ -3,7 +3,7 @@ import requests
 import json
 from flask import Blueprint, render_template, current_app, redirect, url_for
 from flask_httpauth import HTTPBasicAuth
-from search_index_map_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovTextInput
+from digital_street_3d_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovTextInput
 from flask_wtf import FlaskForm
 from wtforms.fields import StringField
 from wtforms.validators import InputRequired

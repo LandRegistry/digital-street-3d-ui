@@ -1,6 +1,6 @@
 # Import every blueprint file
-from search_index_map_ui.views import general
-from search_index_map_ui.views import index
+from digital_street_3d_ui.views import general
+from digital_street_3d_ui.views import index
 
 
 def register_blueprints(app):

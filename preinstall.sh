@@ -31,7 +31,7 @@ If you are:
 ${BOLD}1)${NORMAL} Trying to install a new package:
   * Abort this command now by pressing '${BOLD}n${NORMAL}'
   * From the host, run ${BOLD}npm install --package-lock-only packageName${NORMAL}
-  * Inside the virtual machine, run ${BOLD}rebuild search-index-map-ui${NORMAL}
+  * Inside the virtual machine, run ${BOLD}rebuild digital-street-3d-ui${NORMAL}
     to fetch the new modules
 
 

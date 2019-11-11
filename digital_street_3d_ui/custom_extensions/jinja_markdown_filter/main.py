@@ -1,6 +1,6 @@
 import misaka
 from jinja2 import Markup
-from search_index_map_ui.custom_extensions.jinja_markdown_filter.gov_renderer import GovRenderer
+from digital_street_3d_ui.custom_extensions.jinja_markdown_filter.gov_renderer import GovRenderer
 
 
 class JinjaMarkdownFilter(object):

@@ -2,11 +2,11 @@ from unittest import mock
 import logging
 import json
 from freezegun import freeze_time
-from search_index_map_ui.main import app
-from search_index_map_ui.custom_extensions.enhanced_logging.main import EnhancedLogging
+from digital_street_3d_ui.main import app
+from digital_street_3d_ui.custom_extensions.enhanced_logging.main import EnhancedLogging
 from werkzeug import Headers
 
-logger = logging.getLogger('search-index-map-ui')
+logger = logging.getLogger('digital-street-3d-ui')
 client = app.test_client()
 
 
@@ -94,7 +94,7 @@ def test_exc_info_in_log_entries_when_passed(pytestconfig):
     assert 'Exception: Hello' in ' '.join(record['exception'])
 
 
-@mock.patch('search_index_map_ui.custom_extensions.enhanced_logging.main.EnhancedLogging.init_app')
+@mock.patch('digital_street_3d_ui.custom_extensions.enhanced_logging.main.EnhancedLogging.init_app')
 def test_extension_alternative_init(mock_init_app):
     EnhancedLogging('foo')
     mock_init_app.assert_called_once_with('foo')

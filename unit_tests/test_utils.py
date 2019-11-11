@@ -1,5 +1,5 @@
-from search_index_map_ui.main import app
-from search_index_map_ui.utils.content_negotiation_utils import request_wants_json
+from digital_street_3d_ui.main import app
+from digital_street_3d_ui.utils.content_negotiation_utils import request_wants_json
 import unittest
 
 

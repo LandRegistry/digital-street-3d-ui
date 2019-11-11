@@ -3,10 +3,10 @@ from unittest import mock
 import os
 from freezegun import freeze_time
 
-from search_index_map_ui.main import app
+from digital_street_3d_ui.main import app
 from flask import render_template_string
-from search_index_map_ui.custom_extensions.cachebust_static_assets.main import md5_for_file
-from search_index_map_ui.custom_extensions.cachebust_static_assets.main import CachebustStaticAssets
+from digital_street_3d_ui.custom_extensions.cachebust_static_assets.main import md5_for_file
+from digital_street_3d_ui.custom_extensions.cachebust_static_assets.main import CachebustStaticAssets
 
 
 class TestCachebustStaticAssets(unittest.TestCase):
@@ -14,7 +14,7 @@ class TestCachebustStaticAssets(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client()
 
-    @mock.patch('search_index_map_ui.custom_extensions.cachebust_static_assets.main.CachebustStaticAssets.init_app')
+    @mock.patch('digital_street_3d_ui.custom_extensions.cachebust_static_assets.main.CachebustStaticAssets.init_app')
     def test_extension_alternative_init(self, mock_init_app):
         CachebustStaticAssets('foo')
         mock_init_app.assert_called_once_with('foo')
@@ -46,7 +46,7 @@ class TestCachebustStaticAssets(unittest.TestCase):
         os.remove(filename)
 
     def test_url_for_adds_cache_query_string(self):
-        filename = 'search_index_map_ui/assets/dist/test.txt'
+        filename = 'digital_street_3d_ui/assets/dist/test.txt'
         with open(filename, 'w+') as file:
             file.write('Hello')
 
@@ -59,9 +59,9 @@ class TestCachebustStaticAssets(unittest.TestCase):
 
         os.remove(filename)
 
-    @mock.patch('search_index_map_ui.custom_extensions.cachebust_static_assets.main.md5_for_file', wraps=md5_for_file)
+    @mock.patch('digital_street_3d_ui.custom_extensions.cachebust_static_assets.main.md5_for_file', wraps=md5_for_file)
     def test_repeated_url_for_calls_hits_cache_not_disk(self, mock_md5_for_file):
-        filename = 'search_index_map_ui/assets/dist/test.txt'
+        filename = 'digital_street_3d_ui/assets/dist/test.txt'
         with open(filename, 'w+') as file:
             file.write('Hello')
 
@@ -85,7 +85,7 @@ class TestCachebustStaticAssets(unittest.TestCase):
 
     @freeze_time("2017-01-18")
     def test_far_future_expiry_headers_for_css_file(self):
-        filename = 'search_index_map_ui/assets/dist/test.css'
+        filename = 'digital_street_3d_ui/assets/dist/test.css'
         with open(filename, 'w+') as file:
             file.write('Hello')
 
@@ -100,7 +100,7 @@ class TestCachebustStaticAssets(unittest.TestCase):
 
     @freeze_time("2017-01-18")
     def test_far_future_expiry_headers_for_txt_file(self):
-        filename = 'search_index_map_ui/assets/dist/test.txt'
+        filename = 'digital_street_3d_ui/assets/dist/test.txt'
         with open(filename, 'w+') as file:
             file.write('Hello')
 

@@ -1,4 +1,4 @@
-from search_index_map_ui.custom_extensions.content_security_policy import reporting
+from digital_street_3d_ui.custom_extensions.content_security_policy import reporting
 from flask import url_for
 from flask import g
 from flask.wrappers import Response

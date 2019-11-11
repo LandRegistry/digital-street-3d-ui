@@ -1,4 +1,4 @@
-from search_index_map_ui.custom_extensions.wtforms_helpers.wtforms_widgets import (GovCheckboxesInput,
+from digital_street_3d_ui.custom_extensions.wtforms_helpers.wtforms_widgets import (GovCheckboxesInput,
                                                                                  GovCheckboxInput,
                                                                                  GovFileInput,
                                                                                  GovPasswordInput,

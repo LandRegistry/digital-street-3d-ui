@@ -11,10 +11,6 @@ mapboxgl.accessToken = 'pk.eyJ1IjoibWF0dGdpcmRsZXIiLCJhIjoiY2lteW85cm5lMDBmcnY5b
 
 const buildingHeightSourceLayer = "exeter_buildings_with_height-0ygi87"
 const floorplanLayers = [
-    // {layer: 'princesshay-level-gf-leasehold', sourceLayer: 'princesshay-level-gf-8yagcd'},
-    // {layer: 'princesshay-level-gf-freehold', sourceLayer: 'princesshay-level-gf-8yagcd'},
-    // {layer: 'princesshay-level-1-leasehold', sourceLayer: 'princesshay-level-1-90cnib'},
-    // {layer: 'princesshay-level-1-freehold', sourceLayer: 'princesshay-level-1-90cnib'},
     {layer: 'airspace-leasehold-a6g827', sourceLayer: 'airspace-a6g827'},
     {layer: 'freehold-diumk5', sourceLayer: 'osgb1000012317615-freehold-diumk5'},
     {layer: 'leasehold-0-83okhj', sourceLayer: 'osgb1000012317615-0-83okhj'},

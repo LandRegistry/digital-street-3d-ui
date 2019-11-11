@@ -2,7 +2,7 @@
 
 [Flask-WTF](https://flask-wtf.readthedocs.io/) is used for building HTML forms, making things like form validation and rendering of errors much easier than having to build this yourself. The [Flask-WTF documentation](https://flask-wtf.readthedocs.io/) covers the standard use cases and you should refer to this.
 
-In addition to the standard use case however, flask-search_index_map_ui-ui includes custom widgets that can be used to render Flask-WTF forms in the GOV.​UK style. These widgets automatically render error messages in the appropriate places as well as showing an error summary at the top of the page in a fully GOV.​UK compliant manner.
+In addition to the standard use case however, flask-digital_street_3d_ui-ui includes custom widgets that can be used to render Flask-WTF forms in the GOV.​UK style. These widgets automatically render error messages in the appropriate places as well as showing an error summary at the top of the page in a fully GOV.​UK compliant manner.
 
 ## Defining a GOV.​UK style form
 
@@ -13,7 +13,7 @@ _(Excerpt from [unit_tests/fixtures/wtf_macros_example_form.py](unit_tests/fixtu
 from flask_wtf import FlaskForm
 from wtforms.fields import StringField
 from wtforms.validators import InputRequired
-from search_index_map_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovTextInput
+from digital_street_3d_ui.custom_extensions.wtforms_helpers.wtforms_widgets import GovTextInput
 
 
 class ExampleForm(FlaskForm):
@@ -47,7 +47,7 @@ By passing a dict in via the `params` argument, this will be passed along to the
 
 The available widgets and their corresponding Flask-WTF field types are as follows:
 
-| WTForms field type<br><small>wtforms.fields.[TYPE]</small> | GOV.​UK styled widget<br><small>search_index_map_ui.custom_extensions.wtforms_helpers.wtforms_widgets.[WIDGET]</small> | Notes |
+| WTForms field type<br><small>wtforms.fields.[TYPE]</small> | GOV.​UK styled widget<br><small>digital_street_3d_ui.custom_extensions.wtforms_helpers.wtforms_widgets.[WIDGET]</small> | Notes |
 | -------------------- | --------------------------- | ---------- |
 | StringField          | GovTextInput                |            |
 | FloatField           | GovTextInput                |            |

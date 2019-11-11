@@ -1,8 +1,8 @@
 import unittest
 from unittest import mock
-from search_index_map_ui.main import app
+from digital_street_3d_ui.main import app
 from flask import render_template_string
-from search_index_map_ui.custom_extensions.jinja_markdown_filter.main import JinjaMarkdownFilter
+from digital_street_3d_ui.custom_extensions.jinja_markdown_filter.main import JinjaMarkdownFilter
 
 
 class TestJinjaMarkdownFilter(unittest.TestCase):
@@ -16,7 +16,7 @@ class TestJinjaMarkdownFilter(unittest.TestCase):
                 assert render_template_string('{{contents|markdown}}',
                                               contents=markdown).strip() == markdown_to_html.get(markdown)
 
-    @mock.patch('search_index_map_ui.custom_extensions.jinja_markdown_filter.main.JinjaMarkdownFilter.init_app')
+    @mock.patch('digital_street_3d_ui.custom_extensions.jinja_markdown_filter.main.JinjaMarkdownFilter.init_app')
     def test_extension_alternative_init(self, mock_init_app):
         JinjaMarkdownFilter('foo')
         mock_init_app.assert_called_once_with('foo')

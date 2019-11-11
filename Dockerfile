@@ -50,7 +50,7 @@ RUN pip3 install -q -r requirements.txt && \
 
 # Put your app-specific stuff here (extra yum installs etc).
 # Any unique environment variables your config.py needs should also be added as ENV entries here
-ENV APP_NAME=search-index-map-ui \
+ENV APP_NAME=digital-street-3d-ui \
   MAX_HEALTH_CASCADE=6 \
   LOG_LEVEL=DEBUG \
   SECRET_KEY='ABC' \
@@ -61,7 +61,7 @@ ENV APP_NAME=search-index-map-ui \
   USE_AUTH='true' \
   USERNAME="test" \
   PASSWORD="test" \
-  3D_API_URL="http://index-map-3d-api:8080"
+  3D_API_URL="http://digital-street-3d-api:8080"
 
 # When creating files inside the docker container, this prevents the files being created
 # as the root user on linux hosts
