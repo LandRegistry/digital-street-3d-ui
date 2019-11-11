@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 # digital-street-3d-ui
-=======
-# digital_street_3d_ui
->>>>>>> 873ed82bd022554f8811f6905c893d2fe66313d4
 
 This repository contains a flask application structured in the way that all Land Registry flask user interfaces should be structured going forwards.
 
@@ -18,13 +14,8 @@ Take a copy of all the files, and change all occurences of `flask-skeleton-ui` a
 This app supports the [universal dev-env](http://gitlab.service.dev.ctp.local/common/dev-env) so adding the following to your dev-env config file is enough:
 
 ```YAML
-<<<<<<< HEAD
-  flask-skeleton-ui:
-    repo: git@gitlab.service.dev.ctp.local:skeletons/flask-skeleton-ui.git
-=======
   digital-street-3d-ui:
     repo: git@gitlab.service.dev.ctp.local:digital_street_3d_uis/digital-street-3d-ui.git
->>>>>>> 873ed82bd022554f8811f6905c893d2fe66313d4
     branch: master
 ```
 
@@ -76,11 +67,7 @@ make report="true" unittest
 
 These files get added to a test-output folder. The test-output folder is created if doesn't exist.
 
-<<<<<<< HEAD
-You can run these commands in the app's running container via `docker-compose exec flask-skeleton-ui <command>` or `exec flask-skeleton-ui <command>`. There is also an alias: `unit-test flask-skeleton-ui` and `unit-test flask-skeleton-ui -r` will run tests and generate reports respectively.
-=======
 You can run these commands in the app's running container via `docker-compose exec digital_street_3d_ui <command>` or `exec flask-digital_street_3d_ui-ui <command>`. There is also an alias: `unit-test flask-digital_street_3d_ui-ui` and `unit-test flask-digital_street_3d_ui-ui -r` will run tests and generate reports respectively.
->>>>>>> 873ed82bd022554f8811f6905c893d2fe66313d4
 
 ### Integration tests
 
