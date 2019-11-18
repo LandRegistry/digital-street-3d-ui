@@ -11,12 +11,18 @@ mapboxgl.accessToken = 'pk.eyJ1IjoibWF0dGdpcmRsZXIiLCJhIjoiY2lteW85cm5lMDBmcnY5b
 
 const buildingHeightSourceLayer = "exeter_buildings_with_height-0ygi87"
 const floorplanLayers = [
-    {layer: 'airspace-leasehold-a6g827', sourceLayer: 'airspace-a6g827'},
-    {layer: 'freehold-diumk5', sourceLayer: 'osgb1000012317615-freehold-diumk5'},
-    {layer: 'leasehold-0-83okhj', sourceLayer: 'osgb1000012317615-0-83okhj'},
-    {layer: 'leasehold-1-54g9gf', sourceLayer: 'osgb1000012317615-1-54g9gf'},
-    {layer: 'leasehold-2-ccs62k', sourceLayer: 'osgb1000012317615-2-ccs62k'},
-    {layer: 'leasehold-3-8aah9q', sourceLayer: 'osgb1000012317615-3-8aah9q'}
+    {layer: 'airspace-leasehold-a6g827', sourceLayer: 'airspace-a6g827'}, // First building
+    // {layer: 'freehold-diumk5', sourceLayer: 'osgb1000012317615-freehold-diumk5'},
+    // {layer: 'leasehold-0-83okhj', sourceLayer: 'osgb1000012317615-0-83okhj'},
+    // {layer: 'leasehold-1-54g9gf', sourceLayer: 'osgb1000012317615-1-54g9gf'},
+    // {layer: 'leasehold-2-ccs62k', sourceLayer: 'osgb1000012317615-2-ccs62k'},
+    // {layer: 'leasehold-3-8aah9q', sourceLayer: 'osgb1000012317615-3-8aah9q'},
+    {layer: 'freehold-osgb1000012317615', sourceLayer: 'osgb1000012317615-7r44n6'},
+    {layer: 'leasehold-0-osgb1000012317615', sourceLayer: 'osgb1000012317615-7r44n6'},
+    {layer: 'leasehold-1-osgb1000012317615', sourceLayer: 'osgb1000012317615-7r44n6'},
+    {layer: 'leasehold-2-osgb1000012317615', sourceLayer: 'osgb1000012317615-7r44n6'},
+    {layer: 'leasehold-3-osgb1000012317615', sourceLayer: 'osgb1000012317615-7r44n6'},
+    {layer: 'freehold-osgb1000012316884', sourceLayer: 'osgb1000012316884-7dl2di'} // Second building
 ]
 
 const spatialUnitsDiv = document.getElementById('spatial-units')
@@ -63,32 +69,39 @@ map.on('load', function() {
 
             // Don't worry about extruding the airspace layer, this is extruded by default
             if (!floorplanLayers[i].layer.includes('airspace')) {
-                // Get the features within the layer
-                const features = map.querySourceFeatures('composite', {
-                    sourceLayer: floorplanLayers[i].sourceLayer
+
+                const renderedFeatures = map.queryRenderedFeatures(options={
+                    layers: [floorplanLayers[i].layer]
                 })
 
-                for (let j in features) {
+                for (let j in renderedFeatures) {
                     let baseHeight = 0
                     let extrusionHeight = 0
 
                     if (floorplanLayers[i].layer.includes('freehold')) {
                         extrusionHeight = 120
 
-                        // TODO - Add a buffer to the freehold to avoid clipping
                     } else {
-                        const buildingId = features[j].properties.fid
+                        const buildingId = renderedFeatures[j].properties.fid
                         // Get building height from OS dataset
                         const buildingFeature = map.querySourceFeatures('composite', {
                             sourceLayer: buildingHeightSourceLayer,
                             filter: ["==", 'fid', buildingId]
                         })[0]
                         const buildingHeight = buildingFeature.properties.RelHmax 
+
+                        console.log(floorplanLayers[i].layer)
+                        console.log("Building height ", buildingHeight)
     
                         // Generate feature height values based on building height
-                        const floorHeight = buildingHeight / features[j].properties.num_floors
-                        extrusionHeight = floorHeight * (features[j].properties.floor + 1)
-                        baseHeight = floorHeight*features[j].properties.floor
+                        let floorNumber = parseInt(renderedFeatures[j].properties.floor)
+                        console.log("Floor properties ", renderedFeatures[j].properties)
+                        const floorHeight = buildingHeight / renderedFeatures[j].properties.num_floors
+                        console.log("Floor height ", floorHeight)
+                        extrusionHeight = floorHeight * (floorNumber)
+                        console.log("Extrusion height ", extrusionHeight)
+                        baseHeight = floorHeight*(floorNumber-1)
+                        console.log("Base height ", baseHeight)
                     }
 
                     // Extrude the features
@@ -120,9 +133,9 @@ map.on('load', function() {
 
         for (let i in floorplanLayers) {
             for (let j in titleFeatureIds) {
-                const features = map.querySourceFeatures('composite', { 
-                    sourceLayer: floorplanLayers[i].sourceLayer,
-                    filter: ['==', 'id', titleFeatureIds[j]] 
+                const features = map.queryRenderedFeatures(options={
+                    layers: [floorplanLayers[i].layer],
+                    filter: ['==', 'id', titleFeatureIds[j]]
                 })
 
                 for (let k in features) {
@@ -368,7 +381,6 @@ map.on('load', function() {
                     }
 
                     // If right is a leasehold, display the end date
-                    console.log(BAUnits[0]['rights'][right])
                     if (BAUnits[0]['rights'][right]['endDate'] && BAUnits[0]['rights'][right]['type'].toLowerCase().includes('leasehold')) {
                         let rightEndLabel  = document.createElement('strong')
                         rightEndLabel.textContent = 'End date: '
@@ -445,52 +457,53 @@ map.on('load', function() {
             }
 
             // Responsibilities data
-            let responsibilitiesDiv = document.createElement('div')
-            if (BAUnits[0]['responsibilities'].length > 0) {
-                let responsibilitiesLabel = document.createElement('strong')
-                responsibilitiesLabel.textContent = 'Responsibilities:'
-                responsibilitiesDiv.appendChild(responsibilitiesLabel)
-                for (responsibility in BAUnits[0]['responsibilities']) {
-                    let responsibilityDiv = document.createElement('div')
-                    responsibilityDiv.style = "margin-left: 10px;"
+            // let responsibilitiesDiv = document.createElement('div')
+            // if (BAUnits[0]['responsibilities'].length > 0) {
+            //     let responsibilitiesLabel = document.createElement('strong')
+            //     responsibilitiesLabel.textContent = 'Responsibilities:'
+            //     responsibilitiesDiv.appendChild(responsibilitiesLabel)
+            //     for (responsibility in BAUnits[0]['responsibilities']) {
+            //         let responsibilityDiv = document.createElement('div')
+            //         responsibilityDiv.style = "margin-left: 10px;"
 
-                    // Responsibility Type
-                    let responsibilityTypeLabel  = document.createElement('strong')
-                    responsibilityTypeLabel.textContent = 'Type: '
-                    responsibilityDiv.appendChild(responsibilityTypeLabel)
+            //         // Responsibility Type
+            //         let responsibilityTypeLabel  = document.createElement('strong')
+            //         responsibilityTypeLabel.textContent = 'Type: '
+            //         responsibilityDiv.appendChild(responsibilityTypeLabel)
 
-                    let responsibilityTypeText = document.createElement('span')
-                    responsibilityTypeText.textContent = BAUnits[0]['responsibilities'][responsibility]['type']
-                    responsibilityDiv.appendChild(responsibilityTypeText)
-                    responsibilityDiv.appendChild(document.createElement('br'))
+            //         let responsibilityTypeText = document.createElement('span')
+            //         responsibilityTypeText.textContent = BAUnits[0]['responsibilities'][responsibility]['type']
+            //         responsibilityDiv.appendChild(responsibilityTypeText)
+            //         responsibilityDiv.appendChild(document.createElement('br'))
 
-                    // Responsibility description
-                    if (BAUnits[0]['responsibilities'][responsibility]['description']) {
-                        let responsibilityDescriptionLabel  = document.createElement('strong')
-                        responsibilityDescriptionLabel.textContent = 'Description: '
-                        responsibilityDiv.appendChild(responsibilityDescriptionLabel)
+            //         // Responsibility description
+            //         if (BAUnits[0]['responsibilities'][responsibility]['description']) {
+            //             let responsibilityDescriptionLabel  = document.createElement('strong')
+            //             responsibilityDescriptionLabel.textContent = 'Description: '
+            //             responsibilityDiv.appendChild(responsibilityDescriptionLabel)
 
-                        let responsibilityDescriptionText = document.createElement('span')
-                        responsibilityDescriptionText.textContent = BAUnits[0]['responsibilities'][responsibility]['description']
-                        responsibilityDiv.appendChild(responsibilityDescriptionText)
-                        responsibilityDiv.appendChild(document.createElement('br'))
-                    }
+            //             let responsibilityDescriptionText = document.createElement('span')
+            //             responsibilityDescriptionText.textContent = BAUnits[0]['responsibilities'][responsibility]['description']
+            //             responsibilityDiv.appendChild(responsibilityDescriptionText)
+            //             responsibilityDiv.appendChild(document.createElement('br'))
+            //         }
 
-                    // Responsibility Party
-                    let partyLabel  = document.createElement('strong')
-                    partyLabel.textContent = 'Party: '
-                    responsibilityDiv.appendChild(partyLabel)
+            //         // Responsibility Party
+            //         let partyLabel  = document.createElement('strong')
+            //         partyLabel.textContent = 'Party: '
+            //         responsibilityDiv.appendChild(partyLabel)
 
-                    let partyText = document.createElement('span')
-                    partyText.textContent = BAUnits[0]['responsibilities'][responsibility]['party']['name'] + " (" + BAUnits[0]['responsibilities'][responsibility]['party']['type'] + ")"
+            //         let partyText = document.createElement('span')
+            //         partyText.textContent = BAUnits[0]['responsibilities'][responsibility]['party']['name'] + " (" + BAUnits[0]['responsibilities'][responsibility]['party']['type'] + ")"
 
-                    responsibilityDiv.appendChild(partyText)
-                    responsibilityDiv.appendChild(document.createElement('hr'))
+            //         responsibilityDiv.appendChild(partyText)
+            //         responsibilityDiv.appendChild(document.createElement('hr'))
 
-                    responsibilitiesDiv.appendChild(responsibilityDiv)
-                }
-                titleInformationOverlay.appendChild(responsibilitiesDiv)
-            }
+            //         responsibilitiesDiv.appendChild(responsibilityDiv)
+            //     }
+            //     titleInformationOverlay.appendChild(responsibilitiesDiv)
+            // }
+
             // Display overlay
             titleInformationOverlay.style.display = 'block'
         }
