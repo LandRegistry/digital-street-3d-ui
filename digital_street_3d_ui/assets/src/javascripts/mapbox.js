@@ -1,6 +1,6 @@
 mapboxgl.accessToken = 'pk.eyJ1IjoibWF0dGdpcmRsZXIiLCJhIjoiY2lteW85cm5lMDBmcnY5bTFxY2Zsc3c2OCJ9.VvO2DhAhOVrcjJ0Usw8JIA'
     let map = new mapboxgl.Map({
-    style: 'mapbox://styles/mattgirdler/cjznu3ztu06m31clp2j37yybz',
+    style: 'mapbox://styles/mattgirdler/ck34ln49b424e1cm78reaz1vs',
     center:[-3.5208657, 50.7227184],
     zoom: 17.5,
     pitch: 45,
@@ -12,17 +12,21 @@ mapboxgl.accessToken = 'pk.eyJ1IjoibWF0dGdpcmRsZXIiLCJhIjoiY2lteW85cm5lMDBmcnY5b
 const buildingHeightSourceLayer = "exeter_buildings_with_height-0ygi87"
 const floorplanLayers = [
     {layer: 'airspace-leasehold-a6g827', sourceLayer: 'airspace-a6g827'}, // First building
-    // {layer: 'freehold-diumk5', sourceLayer: 'osgb1000012317615-freehold-diumk5'},
-    // {layer: 'leasehold-0-83okhj', sourceLayer: 'osgb1000012317615-0-83okhj'},
-    // {layer: 'leasehold-1-54g9gf', sourceLayer: 'osgb1000012317615-1-54g9gf'},
-    // {layer: 'leasehold-2-ccs62k', sourceLayer: 'osgb1000012317615-2-ccs62k'},
-    // {layer: 'leasehold-3-8aah9q', sourceLayer: 'osgb1000012317615-3-8aah9q'},
     {layer: 'freehold-osgb1000012317615', sourceLayer: 'osgb1000012317615-7r44n6'},
     {layer: 'leasehold-0-osgb1000012317615', sourceLayer: 'osgb1000012317615-7r44n6'},
     {layer: 'leasehold-1-osgb1000012317615', sourceLayer: 'osgb1000012317615-7r44n6'},
     {layer: 'leasehold-2-osgb1000012317615', sourceLayer: 'osgb1000012317615-7r44n6'},
     {layer: 'leasehold-3-osgb1000012317615', sourceLayer: 'osgb1000012317615-7r44n6'},
-    {layer: 'freehold-osgb1000012316884', sourceLayer: 'osgb1000012316884-7dl2di'} // Second building
+    {layer: 'freehold-osgb1000012316884', sourceLayer: 'osgb1000012316884-7dl2di'}, // Second building
+    {layer: 'leasehold-0-osgb1000012316884', sourceLayer: 'osgb1000012316884-7dl2di'},
+    {layer: 'leasehold-1-osgb1000012316884', sourceLayer: 'osgb1000012316884-7dl2di'},
+    {layer: 'leasehold-2-osgb1000012316884', sourceLayer: 'osgb1000012316884-7dl2di'},
+    {layer: 'leasehold-3-osgb1000012316884', sourceLayer: 'osgb1000012316884-7dl2di'},
+    {layer: 'leasehold-4-osgb1000012316884', sourceLayer: 'osgb1000012316884-7dl2di'},
+    {layer: 'leasehold-5-osgb1000012316884', sourceLayer: 'osgb1000012316884-7dl2di'},
+    {layer: 'leasehold-6-osgb1000012316884', sourceLayer: 'osgb1000012316884-7dl2di'},
+    {layer: 'leasehold-7-osgb1000012316884', sourceLayer: 'osgb1000012316884-7dl2di'},
+    {layer: 'freehold-osgb1000012316876', sourceLayer: 'osgb1000012316876-14s2hz'} // Third building
 ]
 
 const spatialUnitsDiv = document.getElementById('spatial-units')
