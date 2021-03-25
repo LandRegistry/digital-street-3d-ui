@@ -3,4 +3,4 @@ pytest-cov==2.6.1
 coverage==4.5.3
 pip-tools==3.6.0
 freezegun==0.3.11
-pyyaml==5.1
+pyyaml==5.4
